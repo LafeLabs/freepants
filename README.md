@@ -4,6 +4,8 @@ SELF REPLICATING PANTS MADE OF TRASH!
 
 ![](https://raw.githubusercontent.com/LafeLabs/freepants/main/trashmagic/qrcode.png)
 
+![](https://raw.githubusercontent.com/LafeLabs/freepants/main/trashmagic/qrcode-array.png)
+
 ![](https://raw.githubusercontent.com/LafeLabs/freepants/main/trashmagic/replicator-set.png)
 
 ![](https://raw.githubusercontent.com/LafeLabs/freepants/main/trashmagic/zine.png)
