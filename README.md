@@ -1,3 +1,20 @@
+# FREE PANTS!
+
+SELF REPLICATING PANTS MADE OF TRASH!
+
+![](https://raw.githubusercontent.com/LafeLabs/freepants/main/trashmagic/qrcode.png)
+
+![](https://raw.githubusercontent.com/LafeLabs/freepants/main/trashmagic/replicator-set.png)
+
+![](https://raw.githubusercontent.com/LafeLabs/freepants/main/trashmagic/zine.png)
+
+![](https://raw.githubusercontent.com/LafeLabs/freepants/main/trashmagic/server.png)
+
+
+
+
+
+
 # [Trash Magic Squares](https://github.com/lafelabs/squares)
 
 ![](https://raw.githubusercontent.com/LafeLabs/squares/main/trashmagic/github-qrcode.png)
