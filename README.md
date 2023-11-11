@@ -13,6 +13,9 @@ SELF REPLICATING PANTS MADE OF TRASH!
 ![](https://raw.githubusercontent.com/LafeLabs/freepants/main/trashmagic/server.png)
 
 
+![](https://raw.githubusercontent.com/LafeLabs/freepants/main/trashmagic/virtual-cardboard.png)
+
+![](https://raw.githubusercontent.com/LafeLabs/freepants/main/trashmagic/square-set.png)
 
 
 
