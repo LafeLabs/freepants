@@ -18,6 +18,8 @@ SELF REPLICATING PANTS MADE OF TRASH!
 ![](https://raw.githubusercontent.com/LafeLabs/freepants/main/trashmagic/square-set.png)
 
 
+## [tiktok](https://www.tiktok.com/@quantum_trash/video/7300256295553191211)
+
 
 
 # [Trash Magic Squares](https://github.com/lafelabs/squares)
