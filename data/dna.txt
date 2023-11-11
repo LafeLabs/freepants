@@ -7,6 +7,7 @@
         "dtmf.html",
         "fft2svg.html",
         "fork.html",
+        "freepants.html",
         "gaussian.html",
         "geometron-tone.html",
         "geometron.html",

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+   <meta charset="utf-8">
+   <!--
+Trash magic is self-replicating media made of trash which forms an unenclosed digital commons outside of the system of private property.
+   -->
+   <!--Stop Google:-->
+   <META NAME="robots" CONTENT="noindex,nofollow">
+   <title>TRASH MAGIC NETWORK</title>    
+   <script src = "trashmagic.js"></script>
+   <link rel="stylesheet" href="trashmagic.css">
+   <script src = "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>    
+<div id = "mainscroll">
+    
+
+    <a href = "index.html">Home</a>
+    
+    <h1>FREE PANTS!</h1>
+    
+    <img src=  "https://raw.githubusercontent.com/LafeLabs/freepants/main/trashmagic/qrcode.png"/>
+    <img src=  "https://raw.githubusercontent.com/LafeLabs/freepants/main/trashmagic/replicator-set.png"/>
+    <img src=  "https://raw.githubusercontent.com/LafeLabs/freepants/main/trashmagic/zine.png"/>
+    <img src=  "https://raw.githubusercontent.com/LafeLabs/freepants/main/trashmagic/server.png"/>
+
+    
+</div>
+<script>
+
+
+
+titles = document.getElementsByTagName("H1");
+for(var index = 0;index < titles.length;index++){
+    rainbowstring(titles[index]);    
+}
+
+rainbow(document.getElementsByTagName("A"));
+googleyeyes(20);//20 eyes in my head!
+
+
+codesquaresize = 170;
+marginsize = 40;
+fontsize = 12;
+//globalurl = "http://www.trashrobot.org/qrcode.html";
+globalurl = window.location.href;
+qrcode = new QRCode(document.getElementById("qrcode"), {
+	text: globalurl,
+	width: codesquaresize,
+	height: codesquaresize,
+	colorDark : "#000000",
+	colorLight : "#ffffff",
+	correctLevel : QRCode.CorrectLevel.H
+});
+
+
+</script>
+<style>
+</style>
+</body>
+</html>
+
+
