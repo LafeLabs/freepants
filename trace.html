@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <!-- 
+
+        EVERYTHING IS PHYSICAL 
+        EVERYTHING IS FRACTAL
+        EVERYTHING IS RECURSIVE
+        NO MONEY 
+        MO MINING 
+        NO PROPERTY
+        LOOK AT THE INSECTS
+        LOOK AT THE FUNGI
+        LANGUAGE IS HOW THE MIND PARSES REALITY
+
+    -->
+    <title>SQUARES: AS ABOVE, SO BELOW.</title>
+
+
+<link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAZ4efAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEREREQEREREREREQABEREREQABEBEAARERABEQERABEREBARARAQEREREQEBAREREQEREAAREQEQAAAAAAAAABEBERAAEREBERERAQEBEREREBARARAQEREQAREBEQARERAAEQEQABERERERARERERERERAAEREREREREQEREREAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rel="icon" type="image/x-icon" />
+
+    <!--Stop Google:-->
+    <META NAME="robots" CONTENT="noindex,nofollow">
+<script src="trashmagic.js"></script>
+<script src="geometron.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/p5@1.7.0/lib/p5.js"></script>
+<script src = "https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.js"></script>
+    
+</head>
+<body>
+<div class = "topbutton" id = "deletebutton">DELETE</div>
+<div class = "topbutton" id = "clearbutton">CLEAR</div>
+<div class = "topbutton" id = "postbutton">POST</div>
+
+    <img id ="mainimage"/>
+    <table id = "inputtable">
+        <tr>
+            <td><a href = "index.html">HOME</a></td>
+        </tr>
+        <tr>
+            <td>image url</td>
+            <td><input id = "imageurlinput"/></td>
+        </tr>
+    </table>
+
+<div id ="panbox">
+    <canvas id = "pancanvas"></canvas>
+</div>
+
+<div id ="zoombox">
+    <canvas id = "zoomcanvas"></canvas>
+</div>
+
+<script>
+
+imageurl = "";
+
+lineArrayStack = [];
+lineArray =[];
+
+
+function setup() {
+
+    squareWidth = 100;
+
+    if(innerWidth > innerHeight){
+        squareWidth = innerHeight;
+        document.getElementById("clearbutton").style.right = (innerWidth - squareWidth).toString() + "px";
+
+    }
+    else{
+        squareWidth = innerWidth;
+
+    }
+
+
+    document.getElementById("mainimage").style.width = (squareWidth-50).toString() + "px";
+    
+    document.getElementById("postbutton").style.left = (squareWidth/2 - 100).toString() + "px";
+    
+    
+    createCanvas(squareWidth-50, squareWidth-70);
+   // background(159,135,103);
+    stroke(0);
+    strokeWeight(10);
+//      image(img, 0, 0,squareWidth-50,squareWidth-70);
+}
+
+inLine = false;
+
+newimage = false;
+
+function draw() {
+  
+  stroke(0);
+  if (mouseIsPressed === true) {
+    line(mouseX, mouseY, pmouseX, pmouseY);
+    inLine = true;
+    var r  ={};
+    r.x = mouseX;
+    r.y = mouseY;
+    lineArray.push(r);
+  }
+  else{
+      if(inLine){
+          lineArrayStack.push(lineArray);
+          lineArray = [];
+      }
+      inLine = false;
+  }
+}
+
+
+document.getElementById("deletebutton").onclick = function(){
+    lineArrayStack.pop();
+    lineArrayStack.pop();
+    clear();
+    background(159,135,103);
+    for(var lineindex = 0;lineindex < lineArrayStack.length;lineindex++){
+        for(var pointindex = 1;pointindex < lineArrayStack[lineindex].length;pointindex++){
+            line(lineArrayStack[lineindex][pointindex - 1].x,lineArrayStack[lineindex][pointindex - 1].y,lineArrayStack[lineindex][pointindex].x,lineArrayStack[lineindex][pointindex].y);
+        }
+    }
+}
+
+
+
+document.getElementById("clearbutton").onclick = function(){
+    lineArrayStack = [];
+    clear();
+//    background(159,135,103);
+}
+
+
+document.getElementById("postbutton").onclick = function(){
+            
+    clear();
+    background(159,135,103);
+    for(var lineindex = 0;lineindex < lineArrayStack.length;lineindex++){
+        for(var pointindex = 1;pointindex < lineArrayStack[lineindex].length;pointindex++){
+            line(lineArrayStack[lineindex][pointindex - 1].x,lineArrayStack[lineindex][pointindex - 1].y,lineArrayStack[lineindex][pointindex].x,lineArrayStack[lineindex][pointindex].y);
+        }
+    }
+    
+    png64 = document.getElementById("defaultCanvas0").toDataURL("image/png");
+    var timestamp = Math.round((new Date().getTime())/1000).toString();
+    var httpc = new XMLHttpRequest();
+    
+    var url = "pngsave.php";        
+    httpc.open("POST", url, true);
+    httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    httpc.send("data="+encodeURIComponent(png64.substring(22))+"&filename=trashmagic/square" + timestamp +  ".png");//send text to filesaver.php
+     //location.reload(); 
+     
+
+    newfilename = "trashmagic/square" + timestamp +  ".png";
+    
+    var newbox = document.createElement("DIV");
+    newbox.classList.add("imagebox");         
+    
+    var deletespan = document.createElement("SPAN");
+    deletespan.innerHTML = "X";
+    deletespan.classList.add("deletespan");
+    deletespan.onclick = function(){
+        //delete the parent div of the image
+        //delete the file
+        var filename = this.parentElement.getElementsByClassName("filelabel")[0].innerHTML; 
+        var httpc = new XMLHttpRequest();
+        var url = "deletefile.php";         
+        httpc.open("POST", url, true);
+        httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+        httpc.send("filename=trashmagic/" + filename);//send text to deletefile.php
+        this.parentElement.parentElement.removeChild(this.parentElement);
+    }
+    
+    newbox.appendChild(deletespan);
+
+    var newdiv = document.createElement("DIV");
+    newdiv.innerHTML = newfilename;
+    newdiv.className = "filelabel";
+    newbox.appendChild(newdiv);
+
+    var newimg = document.createElement("IMG");
+    newimg.src = png64;
+    newimg.classList.add("uploadimage");
+    newimg.classList.add("button");
+    newbox.appendChild(newimg);    
+
+
+    
+    loadImage(imageurl, img => {
+        image(img, 0, 0,squareWidth-50,squareWidth-70);
+    });    
+    clear();
+    background(159,135,103);
+    for(var lineindex = 0;lineindex < lineArrayStack.length;lineindex++){
+        for(var pointindex = 1;pointindex < lineArrayStack[lineindex].length;pointindex++){
+            line(lineArrayStack[lineindex][pointindex - 1].x,lineArrayStack[lineindex][pointindex - 1].y,lineArrayStack[lineindex][pointindex].x,lineArrayStack[lineindex][pointindex].y);
+        }
+    }
+    
+}
+
+document.getElementById("imageurlinput").value = "";
+document.getElementById("imageurlinput").onchange = function(){
+    document.getElementById("mainimage").src = this.value;
+}
+
+
+var zoomGVM = new GVM(document.getElementById("zoomcanvas"),400,100);
+zoomGVM.importbytecode(hypercube);
+zoomGVM.x0 = 200; 
+zoomGVM.y0 = 50; 
+zoomGVM.unit = 50; 
+zoomGVM.drawGlyph("0300,0331,0332,0337,0332,0336,0332,0337,0335,0362,0203,0203,0203,0203,0334,0203,0363,");
+
+var panGVM = new GVM(document.getElementById("pancanvas"),400,400);
+panGVM.importbytecode(hypercube);
+
+panGVM.x0 = 200; 
+panGVM.y0 = 200; 
+panGVM.unit = 73; 
+//panGVM.drawGlyph("0341,");
+
+panGVM.drawGlyph("0321,0336,0330,0332,0337,0362,0203,0336,0334,0203,0335,0310,0350,0335,0337,0203,0203,0335,0335,0203,0203,0335,0335,0335,0336,0203,0334,0334,0334,0335,0203,0203,0334,0334,0203,0203,0334,0334,0203,0335,0335,0335,0337,0203,0203,0335,0335,0203,0203,0335,0335,0335,0336,0203,0334,0334,0203,0203,0334,0334,0203,0203,0334,0334,0203,0335,0335,0335,0337,0203,0203,0335,0335,0203,0203,0335,0335,0335,0336,0203,0334,0334,0203,0203,0334,0334,0203,0203,0334,0334,0203,0335,0335,0335,0337,0203,0203,0335,0335,0203,0203,0335,0335,0335,0336,0203,0334,0334,0203,0203,0363,");
+
+  
+mc = new Hammer(document.getElementById("panbox"));
+mc.get('pan').set({ direction: Hammer.DIRECTION_ALL });
+mc.on("panleft panright panup pandown tap press rotate", function(ev) {
+    
+    document.getElementById("mainimage").style.left = (ev.deltaX).toString() +  "px";
+    document.getElementById("mainimage").style.top = (ev.deltaY).toString() +  "px";
+
+});  
+
+mczoom = new Hammer(document.getElementById("zoombox"));
+mczoom.get('pan').set({ direction: Hammer.DIRECTION_ALL });
+mczoom.on("panleft panright panup pandown tap press", function(ev) {
+
+    document.getElementById("mainimage").style.width = (squareWidth + 2*ev.deltaX).toString() +  "px";
+
+});   
+
+
+</script>
+<style>
+#mainimage{
+    position:absolute;
+    left:10px;
+    top:50px;
+}
+body{
+    overflow:hidden;
+    background-color:#9f8767;    
+}
+canvas{
+
+    
+}
+main{
+    position:absolute;
+    left:10px;
+    top:50px;
+}
+input,table{
+    background-color:#9f8767;    
+    font-family:COMIC SANS MS;
+}
+#defaultCanvas0{
+    border:solid;
+    border-radius:25px;
+    border-width:5px;
+}
+.imagebox{
+    margin-bottom:2em;
+    margin-top:2em;
+    padding-bottom:2em; 
+    padding-top:2em;
+    border-bottom:solid;
+}
+.deletespan{
+    color:red;
+    border:solid;
+    border-color:red;
+    border-radius:0.5em;
+    padding: 1em 1em 1em 1em;
+    cursor:pointer;
+}
+.deletespan:hover{
+    background-color:#ff000080;
+}
+.filelabel{
+    display:none;
+}
+.topbutton{
+    position:absolute;
+    top:0px;
+    cursor:pointer;
+    width:6em;
+    z-index:100;
+    border:solid;
+    text-align:center;
+    font-size:1.8em;
+    border-width:5px;
+    border-radius:10px;
+    font-family:COMIC SANS MS;
+}
+.topbutton:hover{
+    background-color:green;
+}
+.topbutton:active{
+    background-color:yellow;
+}
+.bottombutton{
+    position:absolute;
+    bottom:0px;
+    cursor:pointer;
+    width:6em;
+    z-index:100;
+    border:solid;
+    text-align:center;
+    font-size:1.8em;
+    border-width:5px;
+    border-radius:10px;
+    font-family:COMIC SANS MS;
+}
+.bottombutton:hover{
+    background-color:green;
+}
+.bottombutton:active{
+    background-color:yellow;
+}
+#deletebutton{
+    left:0px;
+}
+#clearbutton{
+    right:0px;
+}
+#inputtable{
+    position:absolute;
+    top:10px;
+    right:10px;
+    font-size:2em;
+}
+a{
+    color:blue;
+}
+#panbox{
+    position:absolute;
+    right:0px;
+    bottom:100px;
+    border:solid;
+}
+#zoombox{
+    position:absolute;
+    right:0px;
+    bottom:0px;
+    z-index:3;
+    border:solid;
+}
+</style>
+</body>
+</html>

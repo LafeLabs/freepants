@@ -1,0 +1,8 @@
+{
+  "w": 130,
+  "x": 20,
+  "y": 10,
+  "imageurl": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/M101_hires_STScI-PRC2006-10a.jpg/2560px-M101_hires_STScI-PRC2006-10a.jpg",
+  "f1": 110,
+  "f2": 90
+}

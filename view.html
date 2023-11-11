@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <!-- 
+
+        EVERYTHING IS PHYSICAL 
+        EVERYTHING IS FRACTAL
+        EVERYTHING IS RECURSIVE
+        NO MONEY 
+        MO MINING 
+        NO PROPERTY
+        LOOK AT THE INSECTS
+        LOOK AT THE FUNGI
+        LANGUAGE IS HOW THE MIND PARSES REALITY
+
+    -->
+    <title>SQUARES: AS ABOVE, SO BELOW.</title>
+
+
+<link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAZ4efAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEREREQEREREREREQABEREREQABEBEAARERABEQERABEREBARARAQEREREQEBAREREQEREAAREQEQAAAAAAAAABEBERAAEREBERERAQEBEREREBARARAQEREQAREBEQARERAAEQEQABERERERARERERERERAAEREREREREQEREREAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rel="icon" type="image/x-icon" />
+
+    <!--Stop Google:-->
+    <META NAME="robots" CONTENT="noindex,nofollow">
+<script src = "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+
+</head>
+<body>
+
+<div id = "feedscroll">
+    
+    <h1><a href = "index.html">HOME</a></h1>
+    <div id = "qrcode"></div>
+
+
+</div>
+
+<script>
+
+
+
+upuploadImages = [];
+var httpc9 = new XMLHttpRequest();
+    httpc9.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        upuploadImages = JSON.parse(this.responseText);
+        for(var index = upuploadImages.length - 1;index >= 0;index--) {
+            
+            var newbox = document.createElement("DIV");
+            newbox.classList.add("imagebox");         
+            
+            var newdiv = document.createElement("DIV");
+            newdiv.innerHTML = upuploadImages[index];
+            newdiv.className = "filelabel";
+            newbox.appendChild(newdiv);
+        
+            
+            document.getElementById("feedscroll").appendChild(newbox);
+            var newimg = document.createElement("IMG");
+            newimg.src = "trashmagic/" + upuploadImages[index];
+            newimg.classList.add("uploadimage");
+            newimg.classList.add("button");
+            newbox.appendChild(newimg);
+            
+
+        }
+    }
+};
+httpc9.open("GET", "dir.php?filename=trashmagic", true);
+httpc9.send();
+
+
+codesquaresize = 170;
+marginsize = 40;
+fontsize = 12;
+//globalurl = "http://www.trashrobot.org/qrcode.html";
+globalurl = window.location.href;
+qrcode = new QRCode(document.getElementById("qrcode"), {
+	text: globalurl,
+	width: codesquaresize,
+	height: codesquaresize,
+	colorDark : "#000000",
+	colorLight : "#ffffff",
+	correctLevel : QRCode.CorrectLevel.H
+});
+
+
+
+
+</script>
+<style>
+body{
+    overflow:hidden;
+    background-color:#9f8767;    
+}
+
+#feedscroll{
+    position:absolute;
+    right:10px;
+    bottom:10px;
+    left:10px;
+    top:10px;
+    overflow:scroll;
+    border:solid;
+    background-color:#9f8767;    
+    border-radius:25px;
+    border-width:5px;
+
+}
+.imagebox{
+    margin-bottom:2em;
+    margin-top:2em;
+    padding-bottom:2em; 
+    padding-top:2em;
+    border-bottom:solid;
+}
+
+#feedscroll img{
+    max-width:80%;
+    display:block;
+    margin:auto;
+    margin-top:1em;
+    border:solid;
+}
+.filelabel{
+    display:none;
+}
+h1,a{
+    color:blue;
+    font-family:Comic Sans MS;
+    font-size:3em;
+    text-align:center;
+}
+</style>
+</body>
+</html>

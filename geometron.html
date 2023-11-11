@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <!--
+
+        EVERYTHING IS PHYSICAL 
+        EVERYTHING IS FRACTAL
+        EVERYTHING IS RECURSIVE
+        NO MONEY 
+        MO MINING 
+        NO PROPERTY
+        LOOK AT THE INSECTS
+        LOOK AT THE FUNGI
+        LANGUAGE IS HOW THE MIND PARSES REALITY
+
+    -->
+        <title>GEOMETRON</title>
+
+<link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAZ4efAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEREREREREREREREREREREREAAAAAAAAREQEREREREBERAREREREQEREBEAAAARAREQEQEREBEBERARAQAQEQEREBEBABARAREQEQEREBEBERARAAAAEQEREBERERERAREQEREREREBERAAAAAAAAEREREREREREREREREREREREAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rel="icon" type="image/x-icon">
+
+
+    <!--Stop Google:-->
+    <META NAME="robots" CONTENT="noindex,nofollow">
+<!--geometron javascript library-->
+    <script src="geometron.js"></script>
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    
+</head>
+<body>
+<div id = "savebutton">POST</div>
+
+<div id = "mainbox">
+    <canvas id = "maincanvas"></canvas>
+</div>
+
+<div id = "spellcanvasbox">
+        <canvas id = "spellcanvas"></canvas>
+</div>
+
+<input id = "actioninput"/>
+<input id = "spellinput"/>
+
+<div id = "feedscroll">
+
+    <table id = "controltable"></table>
+    <div id = "qrcode"></div>
+
+    <h1><a style = "color:blue;text-align:center;font-family:Comic Sans MS;margin:auto" href = "index.html">HOME</a></h1>
+                    
+</div>
+
+<script>
+
+newfilename = "";
+document.getElementById("savebutton").onclick = function(){
+    
+    var timestamp = Math.round((new Date().getTime())/1000).toString();
+    newfilename = "trashmagic/square" + timestamp +  "-geometron.png";
+        
+    mainGVM.clean();
+    mainGVM.drawGlyph(mainGVM.cleanGlyph);
+        
+    var timestamp = Math.round((new Date().getTime())/1000).toString();
+    var httpc = new XMLHttpRequest();
+    var url = "pngsave.php";        
+    httpc.open("POST", url, true);
+    httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    httpc.send("data="+encodeURIComponent(mainGVM.pngcode().substring(22))+"&filename=" +  newfilename);//send text to filesaver.php        
+        
+
+    png64 = mainGVM.pngcode();
+    var newbox = document.createElement("DIV");
+    newbox.classList.add("imagebox");         
+    
+    var deletespan = document.createElement("SPAN");
+    deletespan.innerHTML = "X";
+    deletespan.classList.add("deletespan");
+    deletespan.onclick = function(){
+        //delete the parent div of the image
+        //delete the file
+        var filename = this.parentElement.getElementsByClassName("filelabel")[0].innerHTML; 
+        var httpc = new XMLHttpRequest();
+        var url = "deletefile.php";         
+        httpc.open("POST", url, true);
+        httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+        httpc.send("filename=trashmagic/" + filename);//send text to deletefile.php
+        this.parentElement.parentElement.removeChild(this.parentElement);
+    }
+    
+    newbox.appendChild(deletespan);
+
+    var newdiv = document.createElement("DIV");
+    newdiv.innerHTML = newfilename;
+    newdiv.className = "filelabel";
+    newbox.appendChild(newdiv);
+
+    var newimg = document.createElement("IMG");
+    newimg.src = png64;
+    newimg.classList.add("uploadimage");
+    newimg.classList.add("button");
+    newbox.appendChild(newimg);    
+
+
+    document.getElementById("feedscroll").insertBefore(newbox,document.getElementById("feedscroll").getElementsByClassName("imagebox")[0]);
+
+    document.getElementById("actioninput").select();
+
+    
+}
+
+function savesymbolfile(){
+
+
+}
+
+
+maincanvas = document.getElementById("maincanvas");
+square = innerWidth - 50;
+
+if(innerWidth > innerHeight){
+    square = innerHeight - 50;
+    document.getElementById("feedscroll").style.right =  square.toString()+ "px";    
+}
+else{
+    document.getElementById("feedscroll").style.right =  "0px";    
+    document.getElementById("feedscroll").style.top = square.toString() + "px";    
+}
+
+
+
+var mainGVM = new GVM(maincanvas,square,square);
+var spellGVM = new GVM(document.getElementById("spellcanvas"),square,square);
+
+mainGVM.importbytecode(hypercube);    
+spellGVM.importbytecode(hypercube);
+
+spellGVM.x0 = 5;
+spellGVM.y0 = 35;
+spellGVM.unit = 40;
+spellGVM.style.line0 = 3;
+
+mainGVM.glyph = "0207,";
+mainGVM.x0 = square/2;
+mainGVM.y0 = square/2;
+mainGVM.unit = square/3;
+mainGVM.style.line0 = 10;
+mainGVM.style.line1 = 5;
+mainGVM.style.line2 = 10;
+mainGVM.style.line3 = 10;
+mainGVM.style.line4 = 10;
+mainGVM.style.line5 = 10;
+mainGVM.style.line6 = 10;
+mainGVM.style.line7 = 10;
+  
+   
+drawmain();
+
+gvmArray = [];
+
+function drawmain(){
+    mainGVM.clean();
+    mainGVM.drawGlyph(mainGVM.glyph);
+    spellGVM.spellGlyph(mainGVM.glyph);
+    document.getElementById("spellinput").value = mainGVM.cleanGlyph;
+}
+
+mode = 0;
+
+document.getElementById("actioninput").onkeypress = function(a) {
+    var charCode = a.keyCode || a.which;
+    if(charCode != 015){
+        if(mode == 0 || mode == 3){
+            localCursorAction = parseInt(mainGVM.hypercube[charCode],8);   
+        }    
+        if(mode == 1){
+            localCursorAction = charCode + 01000;     
+        }    
+        if(mode == 2){
+            localCursorAction = charCode;     
+        }    
+        
+        mainGVM.cursorAction(localCursorAction);   
+            spellGVM.spellGlyph(mainGVM.glyph);
+        this.value = "";
+        mainGVM.clean();
+        document.getElementById("spellinput").value = mainGVM.cleanGlyph;
+    }
+
+}
+
+
+document.getElementById("actioninput").onkeydown = function(a) {
+    var charCode = a.keyCode || a.which;
+
+    if(charCode == 015) {
+        modeswitch();
+    }
+
+    if(charCode == 010) {
+        mainGVM.cursorAction(010);
+    }
+    if(charCode == 045){
+        mainGVM.cursorAction(020);             
+    }
+    if(charCode == 047){
+        mainGVM.cursorAction(021);   
+    }
+
+    if(charCode == 046){
+        //up arrow: prev symbol
+        mainGVM.clean();
+        mainGVM.glyph = "0207," + mainGVM.cleanGlyph;
+        mainGVM.drawGlyph(mainGVM.glyph);
+    }
+    if(charCode == 050){
+        //down arrow: next symbol
+        mainGVM.clean();
+        mainGVM.glyph = mainGVM.cleanGlyph + "0207,";
+        mainGVM.drawGlyph(mainGVM.glyph);
+
+    }
+    spellGVM.spellGlyph(mainGVM.glyph);
+    mainGVM.clean();
+    document.getElementById("spellinput").value = mainGVM.cleanGlyph;    
+}
+
+function modeswitch(){
+    mode++;
+    mode = mode%3;
+    document.getElementById("actioninput").select();   
+}
+
+if(innerWidth > innerHeight){
+    document.getElementById("actioninput").select();
+}
+
+
+
+upuploadImages = [];
+var httpc9 = new XMLHttpRequest();
+    httpc9.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        upuploadImages = JSON.parse(this.responseText);
+        for(var index = upuploadImages.length - 1;index >= 0;index--) {
+            
+            if(upuploadImages[index].includes("geometron")){
+            
+                var newbox = document.createElement("DIV");
+                newbox.classList.add("imagebox");         
+                
+                var deletespan = document.createElement("SPAN");
+                deletespan.innerHTML = "X";
+                deletespan.classList.add("deletespan");
+                deletespan.onclick = function(){
+                    //delete the parent div of the image
+                    //delete the file
+                    var filename = this.parentElement.getElementsByClassName("filelabel")[0].innerHTML; 
+                    var httpc = new XMLHttpRequest();
+                    var url = "deletefile.php";         
+                    httpc.open("POST", url, true);
+                    httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+                    httpc.send("filename=trashmagic/" + filename);//send text to deletefile.php
+                    this.parentElement.parentElement.removeChild(this.parentElement);
+                }
+                
+                newbox.appendChild(deletespan);
+        
+                var newdiv = document.createElement("DIV");
+                newdiv.innerHTML = upuploadImages[index];
+                newdiv.className = "filelabel";
+                newbox.appendChild(newdiv);
+            
+                
+                document.getElementById("feedscroll").appendChild(newbox);
+                var newimg = document.createElement("IMG");
+                newimg.src = "trashmagic/" + upuploadImages[index];
+                newimg.classList.add("uploadimage");
+                newimg.classList.add("button");
+                newbox.appendChild(newimg);
+                
+            }
+            
+        }
+    }
+};
+httpc9.open("GET", "dir.php?filename=trashmagic", true);
+httpc9.send();
+
+document.getElementById("spellinput").onchange = function(){
+    mainGVM.glyph = this.value + "0207,";
+    mainGVM.clean();
+    drawmain();
+    if(innerWidth>innerHeight){
+        document.getElementById("actioninput").select();
+    }
+}
+
+controls  = [
+    "020,010,021,011,0201,",
+    "0320,0321,0322,0323,0324,0325,0326,0327,",
+    "0310,0311,0312,0313,0304,0305,0306,0350,",
+    "030,031,032,033,036,037,",
+    "0334,0330,0335,",
+    "0332,0341,0333,",
+    "0336,0331,0337,",
+    "040,041,042,043,044,045,046,050,",
+    "051,052,053,054,055,056,057,060,",
+    "061,062,063,064,065,066,067,070,",
+    "071,072,073,074,075,076,077,0100,",
+    "0101,0102,0103,0104,0105,0106,0107,0110,",
+    "0111,0112,0113,0114,0115,0116,0117,0120,",
+    "0121,0122,0123,0124,0125,0126,0127,0130,",
+    "0131,0132,0133,0134,0135,0136,0137,0140,",
+    "0141,0142,0143,0144,0145,0146,0147,0150,",
+    "0151,0152,0153,0154,0155,0156,0157,0160,",
+    "0161,0162,0163,0164,0165,0166,0167,0170,",
+    "0171,0172,0173,0174,0175,0176,"
+];
+
+controlbuttonsize = 60;
+loadcontroltable();
+function loadcontroltable(){
+    document.getElementById("controltable").innerHTML = "";
+    for(var index = 0;index < controls.length;index++){
+        var newtr = document.createElement("TR");
+        document.getElementById("controltable").appendChild(newtr);
+        rowarray = controls[index].split(",");
+        for(var rowindex = 0;rowindex < rowarray.length;rowindex++){
+            if(rowarray[rowindex].length > 0){
+                var newtd = document.createElement("TD");
+                newtr.appendChild(newtd);
+                var newcan = document.createElement("CANVAS");
+                newtd.appendChild(newcan);
+                var datadiv = document.createElement("div");
+                datadiv.innerHTML = rowarray[rowindex];
+                datadiv.className = "data";
+                newtd.appendChild(datadiv);
+                var newGVM = new GVM(newcan,controlbuttonsize,controlbuttonsize);
+                newGVM.unit = controlbuttonsize - 2;
+                newGVM.x0 = 1;
+                newGVM.y0 = controlbuttonsize-1;
+                newGVM.importbytecode(hypercube);
+                newGVM.action(0300);
+                if(parseInt(rowarray[rowindex],8) >= 040 && parseInt(rowarray[rowindex],8) < 0177){
+                    newGVM.drawGlyph("0300,0336,0336,0330,0333,0337,");
+                }
+                newGVM.action(parseInt(rowarray[rowindex],8)+01000);
+
+                newtd.onclick = function(){
+                    var localaction = parseInt(this.getElementsByClassName("data")[0].innerHTML,8);
+                    if(localaction != 022 && localaction != 023){
+                        if(localaction >= 040 && localaction < 0177){
+                            localaction += 01000;
+                        }
+                        mainGVM.cursorAction(localaction);
+                    }
+                    if(localaction == 022){
+                        previous();
+                    }
+                    if(localaction == 023){
+                        next();
+                    }
+                                                        
+                    mainGVM.clean();
+                    spellGVM.spellGlyph(mainGVM.glyph);
+                    document.getElementById("spellinput").value = mainGVM.cleanGlyph;
+                    savejson();
+
+                }
+                newcan.classList.add("button");
+            }
+        }
+    }
+}
+
+codesquaresize = 120;
+marginsize = 40;
+fontsize = 12;
+//globalurl = "http://www.trashrobot.org/qrcode.html";
+globalurl = window.location.href;
+qrcode = new QRCode(document.getElementById("qrcode"), {
+	text: globalurl,
+	width: codesquaresize,
+	height: codesquaresize,
+	colorDark : "#000000",
+	colorLight : "#ffffff",
+	correctLevel : QRCode.CorrectLevel.H
+});
+
+
+</script>
+<style>
+body{
+    overflow:hidden;
+    background-color:#9f8767;    
+}
+#savebutton{
+    position:absolute;
+    top:2em;
+    left:5px;
+    font-family:Comic Sans MS;
+    font-size:1.5em;
+    border:solid;
+    border-radius:10px;
+    text-align:center;
+    border-width:5px;
+    width:8em;
+    cursor:pointer;
+}
+#savebutton:hover{
+    
+}
+#actioninput{
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:1em;
+    background-color:#9f8767;    
+    font-family:Comic Sans MS;
+}
+#spellinput{
+    position:absolute;
+    left:3em;
+    top:0px;
+    width:20em;
+    background-color:#9f8767;    
+    font-family:Comic Sans MS;
+    z-index:3;
+}
+#mainbox{
+    position:absolute;
+    right:25px;
+    top:25px;
+    border-left:solid;
+    border-width:10px
+}
+#spellcanvasbox{
+    position:absolute;
+    right:25px;
+    top:25px;
+    border-left:solid;
+    border-width:10px;
+}
+#feedscroll img{
+    max-width:80%;
+    display:block;
+    margin:auto;
+    margin-top:1em;
+}
+#feedscroll{
+    position:absolute;
+    left:0px;
+    bottom:0px;
+    top:6em;
+    z-index:-2;
+    overflow:scroll;
+    background-color:#9f8767;    
+}
+.deletespan{
+    color:red;
+    border:solid;
+    border-color:red;
+    border-radius:0.5em;
+    padding: 1em 1em 1em 1em;
+    cursor:pointer;
+}
+.deletespan:hover{
+    background-color:#ff000080;
+}
+.filelabel{
+    display:none;
+}
+.button{
+    cursor:pointer;
+}
+.button:hover{
+    background-color:green;
+}
+.button:active{
+    background-color:yellow;
+}
+.data{
+    display:none;
+}
+</style>
+</body>
+</html>

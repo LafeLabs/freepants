@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <!-- 
+
+        EVERYTHING IS PHYSICAL 
+        EVERYTHING IS FRACTAL
+        EVERYTHING IS RECURSIVE
+        NO MONEY 
+        MO MINING 
+        NO PROPERTY
+        LOOK AT THE INSECTS
+        LOOK AT THE FUNGI
+        LANGUAGE IS HOW THE MIND PARSES REALITY
+
+    -->
+    <title>TRASH MAGIC CUBE WORLD</title>
+
+
+<link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAZ4efAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEREREQEREREREREQABEREREQABEBEAARERABEQERABEREBARARAQEREREQEBAREREQEREAAREQEQAAAAAAAAABEBERAAEREBERERAQEBEREREBARARAQEREQAREBEQARERAAEQEQABERERERARERERERERAAEREREREREQEREREAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rel="icon" type="image/x-icon" />
+
+    <!--Stop Google:-->
+    <META NAME="robots" CONTENT="noindex,nofollow">
+<script src="trashmagic.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/p5@1.7.0/lib/p5.js"></script>
+<script src = "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+</head>
+<body>
+<div id = "postbutton">POST</div>
+
+<a id = "homelink" href = "index.html">HOME</a>
+
+<script>
+
+// draw a spinning box
+// with width, height and depth of 50
+function setup() {
+  createCanvas(innerWidth, innerHeight, WEBGL);
+  describe('a white box rotating in 3D space');
+  background(159,135,103);
+}
+
+
+x = 0;
+y = 0;
+z = 0;
+unit = 100;
+side = unit;
+glyph = "";
+
+omegaX = 0;
+omegaY = 0;
+omegaZ = 0;
+theta = 0;
+phi = 0;
+psi = 0;
+
+function draw() {
+  side = unit;
+  background(159,135,103);
+  rotateX(theta + frameCount * omegaX);
+  rotateY(phi + frameCount * omegaY);
+  rotateZ(psi + frameCount * omegaZ);
+
+  box(side);
+  for(var index = 0;index < glyph.length;index++){
+      if(glyph.charAt(index) == 'a'){
+          translate(-side, 0, 0);
+      }
+      if(glyph.charAt(index) == 'd'){
+          translate(side, 0, 0);
+      }
+      if(glyph.charAt(index) == 'w'){
+          translate(0,-side, 0);
+      }
+      if(glyph.charAt(index) == 's'){
+          translate(0,side, 0);
+      }
+      if(glyph.charAt(index) == 'i'){
+          translate(0, 0,-side);
+      }
+      if(glyph.charAt(index) == 'k'){
+          translate(0, 0,side);
+      }
+      if(glyph.charAt(index) == 'j'){
+            side *= 2;
+      }
+      if(glyph.charAt(index) == 'l'){
+            side /= 2;
+      }
+
+      box(side);
+  }
+
+  noFill();
+  strokeWeight(10);
+
+}
+
+function keyPressed() {
+
+    if(keyCode >= 050 && keyCode < 0200){
+        glyph += key;
+    }
+    if(keyCode == 010){
+        glyph = glyph.substr(0,glyph.length-1);
+    }
+    if(key == 'u'){
+        unit *= 2;
+    }
+    if(key == 'o'){
+        unit /= 2;
+    }
+
+    if(key == '1'){
+        omegaX += 0.001;
+    }
+    if(key == '2'){
+        omegaX -= 0.001;
+    }
+    if(key == '3'){
+        omegaY += 0.001;
+    }
+    if(key == '4'){
+        omegaY -= 0.001;
+    }
+    if(key == '0'){
+        omegaY = 0;
+        omegaX = 0;
+    }
+    if(key == '5'){
+        theta += Math.PI/10;
+    }
+    if(key == '6'){
+        theta -= Math.PI/10;
+    }
+    if(key == '7'){
+        phi += Math.PI/10;
+    }
+    if(key == '8'){
+        phi -= Math.PI/10;
+    }
+
+}
+
+document.getElementById("postbutton").onclick = function(){
+    png64 = document.getElementById("defaultCanvas0").toDataURL("image/png");
+    var timestamp = Math.round((new Date().getTime())/1000).toString();
+    var httpc = new XMLHttpRequest();
+    var url = "pngsave.php";        
+    httpc.open("POST", url, true);
+    httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    httpc.send("data="+encodeURIComponent(png64.substring(22))+"&filename=trashmagic/square" + timestamp +  ".png");//send text to filesaver.php
+     //location.reload(); 
+
+}
+
+</script>
+<style>
+body{
+    overflow:hidden;
+}
+main{
+    overflow:hidden;
+}
+#postbutton{
+    position:absolute;
+    z-index:3;
+    left:20px;
+    top:20px;
+    width:7em;
+    text-align:center;
+    border:solid;
+    font-family:Comic Sans MS;    
+    font-size:2em;
+    border-width:5px;
+    border-radius:10px;
+    cursor:pointer;
+}
+#postbutton:hover{
+    background-color:green;
+}
+#postbutton:active{
+    background-color:yellow;
+}
+
+#homelink{
+    color:blue;
+    font-family:Comic Sans MS;    
+    position:absolute;
+    z-index:1;
+    top:10px;
+    right:10px;
+    font-size:2em;
+}
+</style>
+</body>
+</html>

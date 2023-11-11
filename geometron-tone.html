@@ -1,0 +1,546 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <!--
+
+        EVERYTHING IS PHYSICAL 
+        EVERYTHING IS FRACTAL
+        EVERYTHING IS RECURSIVE
+        NO MONEY 
+        MO MINING 
+        NO PROPERTY
+        LOOK AT THE INSECTS
+        LOOK AT THE FUNGI
+        LANGUAGE IS HOW THE MIND PARSES REALITY
+
+    -->
+        <title>GEOMETRON TONE GENERATOR</title>
+
+<link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAZ4efAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEREREREREREREREREREREREAAAAAAAAREQEREREREBERAREREREQEREBEAAAARAREQEQEREBEBERARAQAQEQEREBEBABARAREQEQEREBEBERARAAAAEQEREBERERERAREQEREREREBERAAAAAAAAEREREREREREREREREREREREAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rel="icon" type="image/x-icon">
+
+
+    <!--Stop Google:-->
+    <META NAME="robots" CONTENT="noindex,nofollow">
+<!--geometron javascript library-->
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.7.0/lib/p5.js"></script>
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/addons/p5.sound.js"></script>
+    <script src="geometron.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script>
+            MathJax.Hub.Config({
+                tex2jax: {
+                inlineMath: [['$','$'], ['\\(','\\)']],
+                processEscapes: true,
+                processClass: "mathjax",
+                ignoreClass: "no-mathjax"
+                }
+            });//			MathJax.Hub.Typeset();//tell Mathjax to update the math
+        </script>
+
+</head>
+<body>
+    <table id = "actiontable">
+        <tr>
+            <td>
+                <input id = "actioninput"/>
+            </td>
+            <td>
+                <input id = "spellinput"/>
+            </td>
+        </tr>
+    </table>
+
+<a id = "homelink" href = "index.html">HOME</a>
+<div id = "mainbox">
+    <canvas id = "maincanvas"></canvas>
+</div>
+
+<script>
+
+//toneglyph = "0434,0422,0422,0425,0425,0425,0435,0436,0420,0435,0436,0420,0435,0436,0420,0435,0436,0420,0435,0420,0435,0420,0435,0420,0435,0420,0435,0420,0435,0420,0435,";
+toneglyph = "0434,0425,0422,0422,0435,0420,0435,0420,0435,0420,0435,0420,0435,0420,0435,0420,0435,0420,0435,0420,0435,";
+
+var mainGVM = new GVM(maincanvas,innerWidth-200,innerHeight-200);
+mainGVM.importbytecode(hypercube);
+for(var index = 040;index < 0177;index++){
+    mainGVM.hypercube[index] = "";
+}
+
+mainGVM.hypercube[0161] = "0420,";//q
+mainGVM.hypercube[0167] = "0421,";//w
+mainGVM.hypercube[0145] = "0422,";//e
+mainGVM.hypercube[0162] = "0423,";//r
+mainGVM.hypercube[0164] = "0424,";//t
+mainGVM.hypercube[0171] = "0425,";//y
+mainGVM.hypercube[0165] = "0426,";//u
+mainGVM.hypercube[0151] = "0427,";//i
+
+mainGVM.hypercube[0141] = "0430,";//a
+mainGVM.hypercube[0163] = "0431,";//s
+mainGVM.hypercube[0144] = "0432,";//d
+mainGVM.hypercube[0146] = "0433,";//f
+mainGVM.hypercube[0147] = "0434,";//g
+mainGVM.hypercube[0150] = "0435,";//h
+mainGVM.hypercube[0152] = "0436,";//j
+mainGVM.hypercube[0153] = "0437,";//k
+
+
+mainGVM.glyph = toneglyph + "0207,";
+mainGVM.x0 = 200;
+mainGVM.y0 = 200;
+mainGVM.unit = 50;
+
+mainGVM.spellGlyph(mainGVM.glyph);
+
+
+oscon = false;
+
+let osc, fft;
+let mic;
+
+f0 = 666.69;
+freq = f0;//frequency of sine wave in Hz
+amp = 0.25;//max amplitude
+sweepframes = 30;
+sweepindex = 0;
+
+glyphindex = 0;
+toneindex = 0;
+inatone = false;
+
+glyphindex = 0;
+deltaf = 120.6;
+deltaa = 0.1;
+T = 16;
+deltaT = 4;
+
+colorwheel = [];
+angles = [];
+spingain = 0.002;
+spinradius = 100;
+xgain = 6;
+n = 34;
+binsize = 5;
+
+
+
+for(var index = 0;index < n;index++){
+    H = index*360/n;
+    z = 255*(1 - Math.abs((H/60)%2 - 1));
+    
+    if(H < 60){
+        red = 255;
+        green = Math.round(z);
+        blue = 0;
+    }
+    if(H >= 60 && H < 120){
+        red = Math.round(z);
+        green = 255;
+        blue = 0;
+    }
+    if(H >= 120 && H < 180){
+        red = 0;
+        green = 255;
+        blue = Math.round(z);
+    }
+    if(H >= 180 && H < 240){
+        red = 0;    
+        green = Math.round(z);
+        blue = 255;
+    }
+    if(H >= 240 && H < 300){
+        red = Math.round(z);    
+        green = 0;
+        blue = 255;
+    }
+    if(H >= 300 && H < 360){
+        red = 255;    
+        green = 0;
+        blue = Math.round(z);
+    }
+        
+    redstring = red.toString(16);
+    if(redstring.length < 2){
+        redstring = "0" + redstring;    
+    }
+    greenstring = green.toString(16);
+    if(greenstring.length < 2){
+        greenstring = "0" + greenstring; 
+    }
+    bluestring = blue.toString(16);
+    if(bluestring.length < 2){
+        bluestring = "0" + bluestring; 
+    }
+    color = "#" + redstring + greenstring + bluestring;
+    colorwheel.push(color);
+    angles.push(0);
+}
+
+
+actions = [];
+toneglypharray = toneglyph.split(",");
+for(var index = 0;index > toneglypharray.length;index++){
+    actions.push(parseInt(toneglypharray[index],8));
+}
+
+function setup() {
+
+   createCanvas(innerWidth, 0.5*innerHeight);    
+  mic = new p5.AudioIn();
+  mic.start();
+   osc = new p5.SinOsc(); // set frequency and type
+   osc.amp(amp);
+
+  fft = new p5.FFT();
+   fft.setInput(mic); 
+  osc.start();
+
+
+}
+
+
+
+function draw(){
+
+  frameRate(30);
+
+  osc.freq(freq);
+  osc.amp(amp);
+  mainGVM.clean();
+  actions = [];
+  toneglypharray = mainGVM.cleanGlyph.split(",");  
+  if(toneglypharray.length > 64){
+      mainGVM.glyph = "0434,0435,0207,";
+      mainGVM.clean();
+      toneglypharray = [0434,0435];
+  }
+  for(var index = 0;index < toneglypharray.length;index++){
+      if(parseInt(toneglypharray[index],8) != 0207){
+         actions.push(parseInt(toneglypharray[index],8));
+      }
+  }
+
+  mainGVM.spellGlyph(mainGVM.glyph);
+  document.getElementById("spellinput").value = mainGVM.cleanGlyph;    
+  document.getElementById("actioninput").value = "";
+  
+  if(inatone){
+      if(toneindex < T){
+            toneindex++;   
+      }
+      else{
+          inatone = false;//when the tone index reaches the end, stop tone
+          osc.stop();
+      }
+  }
+  else{
+      action(actions[glyphindex]);
+      glyphindex++; 
+     // console.log(glyphindex);
+  }
+  if(glyphindex >= actions.length){
+      glyphindex = 0;
+      osc.stop();//everybody off the bus, its the end of the line
+  }
+  
+   let spectrum = fft.analyze(); 
+     nyquistFreq = sampleRate() / 2;
+  binFreq = nyquistFreq / (spectrum.length);
+  i1000 = Math.round(1000/binFreq);
+  
+    background(159,135,103);
+    
+  
+  noFill();
+  
+  beginShape();
+  vertex(0,height);
+  strokeWeight(4);
+  for(var i = 0; i < spectrum.length; i++) {
+     vertex(i*xgain, map(spectrum[i], 0, 255, height, 0));
+  }
+  vertex(width,height);
+  endShape();
+
+
+  stroke("red");
+  line(xgain*i1000,0,xgain*i1000,height);
+  stroke("green");
+  line(xgain*2*i1000,0,xgain*2*i1000,height);
+  stroke("blue");
+  line(xgain*3*i1000,0,xgain*3*i1000,height);
+  stroke("purple");
+  line(xgain*4*i1000,0,xgain*4*i1000,height);
+
+  strokeWeight(1);
+  stroke("red");
+  text("1 kHz",xgain*i1000 + 10,100);
+  stroke("green");
+  text("2 kHz",xgain*2*i1000 + 10,100);
+  stroke("blue");
+  text("3 kHz",xgain*3*i1000 + 10,100);
+  stroke("purple");
+  text("4 kHz",xgain*4*i1000 + 10,100);
+
+  for(var index = 0;index < n;index++){
+      strokeWeight(10);
+      stroke(colorwheel[index]);
+      for(var subindex = 1;subindex < binsize;subindex++){
+          line(xgain*((index + 1)*binsize + subindex - 1),map(spectrum[(index + 1)*binsize + subindex - 1], 0, 255, height, 0),xgain*((index + 1)*binsize + subindex),map(spectrum[(index + 1)*binsize + subindex], 0, 255, height, 0));
+      }
+      power = 0;
+      for(var subindex = 0;subindex < binsize;subindex++){
+         power += spectrum[(index + 1)*binsize + subindex];
+      }
+      power /= binsize;
+      angles[index] -= spingain*power;
+      line((index + 1)*binsize*xgain,0.5*height,(index + 1)*binsize*xgain + spinradius*Math.sin(angles[index]+Math.PI),0.5*height + spinradius*Math.cos(angles[index]+Math.PI));
+      fill(colorwheel[index] + "80");
+      circle((index + 1.5)*binsize*xgain,map(power, 0, 255, height, 0),50);
+      if(-angles[index] > 2*Math.PI){
+//          glyph += (index).toString(64);
+          angles[index] += 2*Math.PI;
+          if(index == 0){
+            mainGVM.cursorAction(0420);          
+          }
+          if(index == 1){
+            mainGVM.cursorAction(0421);          
+          }
+          if(index == 2){
+            mainGVM.cursorAction(0435);          
+          }
+          if(index == 3){
+            mainGVM.cursorAction(0436);          
+          }
+          if(index == 4){
+            mainGVM.cursorAction(020);          
+          }
+          if(index == 5){
+            mainGVM.cursorAction(010);          
+          }
+          if(index == 6){
+            mainGVM.cursorAction(021);          
+          }
+          if(index == 7){
+            mainGVM.cursorAction(0434);          
+          }
+          if(index > 7){
+            mainGVM.cursorAction(01101 + index);          
+          }
+              
+      }
+      noFill();
+      strokeWeight(1);
+//      text(((index + 1)*binsize*binFreq).toString() + " Hz-\n" + ((index + 2)*binsize*binFreq).toString() + " Hz",(index + 0.6)*binsize*xgain,height/3);
+
+  }
+
+  
+}
+
+document.getElementById("actioninput").select();
+
+document.getElementById("actioninput").onkeypress = function(a) {
+    var charCode = a.keyCode || a.which;
+    if(charCode != 015){
+//        localCursorAction = charCode;   
+        localCursorAction = parseInt(mainGVM.hypercube[charCode],8);
+        mainGVM.cursorAction(localCursorAction);   
+        mainGVM.spellGlyph(mainGVM.glyph);
+        this.value = "";
+        mainGVM.clean();
+        document.getElementById("spellinput").value = mainGVM.cleanGlyph;
+    }
+    else{
+//            osc.start();
+ //        osc.stop();
+          oscon = !oscon;
+          if(oscon){
+              osc.start();
+          }
+          else{
+              osc.stop();
+          }
+           glyphindex = 0;
+
+    }
+
+}
+
+
+document.getElementById("actioninput").onkeydown = function(a) {
+    var charCode = a.keyCode || a.which;
+
+    if(charCode == 010) {
+        mainGVM.cursorAction(010);
+    }
+    if(charCode == 045){
+        mainGVM.cursorAction(020);             
+    }
+    if(charCode == 047){
+        mainGVM.cursorAction(021);   
+    }
+
+    if(charCode == 046){
+        //up arrow: prev symbol
+        mainGVM.clean();
+        mainGVM.glyph = "0207," + mainGVM.cleanGlyph;
+        mainGVM.spellGlyph(mainGVM.glyph);
+    }
+    if(charCode == 050){
+        //down arrow: next symbol
+        mainGVM.clean();
+        mainGVM.glyph = mainGVM.cleanGlyph + "0207,";
+        mainGVM.spellGlyph(mainGVM.glyph);
+
+    }
+    mainGVM.spellGlyph(mainGVM.glyph);
+    mainGVM.clean();
+    document.getElementById("spellinput").value = mainGVM.cleanGlyph;    
+}
+
+
+
+
+function mouseClicked() {
+  
+  if(!oscon){
+      osc.start();
+  }
+  else{
+      osc.stop();
+  }
+  oscon = !oscon;
+    
+}
+
+
+function action(actionaddress){
+
+    if(actionaddress == 0420){
+        freq += deltaf;
+    }
+    if(actionaddress == 0421){
+        freq -= deltaf;
+    }
+
+    if(actionaddress == 0422){
+        deltaf *= 2;
+    }
+    if(actionaddress == 0423){
+        deltaf /= 2;
+    }
+
+    if(actionaddress == 0424){
+        T += deltaT;
+    }
+    if(actionaddress == 0425){
+        T -= deltaT;
+    }
+
+    if(actionaddress == 0426){
+        deltaT *= 2;
+    }
+    if(actionaddress == 0427){
+        deltaT /= 2;
+    }
+
+    if(actionaddress == 0430){
+        amp += deltaa;
+    }
+    if(actionaddress == 0431){
+        amp -= deltaa;
+    }
+
+    if(actionaddress == 0432){
+        deltaa *= 2;
+    }
+    if(actionaddress == 0433){
+        deltaa /= 2;
+    }
+    if(actionaddress == 0433){
+        deltaa /= 2;
+    }
+    if(actionaddress == 0434){
+        //reset state to default
+        freq = f0;//frequency of sine wave in Hz
+        amp = 0.25;//max amplitude
+        T = 16;
+        deltaf = 66.6;
+        deltaa = 0.1;
+        T = 16;
+        deltaT = 4;
+        osc.stop();
+
+
+    }
+    if(actionaddress == 0435){
+        if(oscon){
+            osc.start();
+        }
+        
+        toneindex = 0;
+        inatone = true;
+        
+    }
+    if(actionaddress == 0436){
+        toneindex = 0;
+        inatone = true;
+    }
+    if(actionaddress == 0436){
+        //WILDCARD!
+        console.log("WILDCARD!");
+    }
+
+    
+}
+
+</script>
+<style>
+body{
+    overflow:hidden;
+    background-color:#9f8767;    ;
+    font-family:Comic Sans MS;
+    overflow:hidden;
+}
+main{
+    position:absolute;
+    left:0px;
+    bottom:0px;
+}
+#mainbox{
+    position:absolute;
+    z-index:1;
+    left:100px;
+    top:100px;
+}
+input{
+    background-color:#9f8767;    ;
+    font-family:Comic Sans MS;
+    
+}
+#actiontable{
+    position:absolute;
+    left:1px;
+    top:1px;
+    font-size:20px;
+}
+#actioninput{
+    width:1em;
+}
+#spellinput{
+    width:80em;
+}
+#homelink{
+    position:absolute;
+    right:1em;
+    top:1em;
+    font-size:2em;
+    color:blue;
+    z-index:5;
+}
+</style>
+</body>
+</html>

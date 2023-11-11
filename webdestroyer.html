@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <!--
+
+destroy files 
+
+    
+    -->
+    
+    <link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAP//AP///wANAP8A5Dz6ABueRwAAt/8A6BonABo86AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAREREREREREREREAAAEREREREQCIgREREd3dwAAB3d3d3d3d3d3d3d3d3d3d3d3d3VVVVVVVQAFVVAAVVVQIiBRAiIBEQIAIBECAAERAgAgFgIABmYCIiBmAiIGZgIiIGYCIgZmYCIAaIAAMzMzAAiIiIiIiIiIiIiIiIiIiIiIgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rel="icon" type="image/x-icon" />
+    
+    <!--Stop Google:-->
+    <META NAME="robots" CONTENT="noindex,nofollow">
+</head>
+<body>
+<table id = "linktable">
+    <tr>
+        <td>
+            <a href = "webeditor.html">
+            EDITOR
+            </a>
+        </td>
+        </tr>
+</table>    
+<div id = "imagefeedheader">
+    <h1>DESTROYER</h1>
+</div>
+    
+<div id = "imagefeed"></div>
+
+<script>
+
+uploadImages = [];
+
+var httpcUpload = new XMLHttpRequest();
+httpcUpload.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        uploadImages = JSON.parse(this.responseText);
+        loadimagefeed();
+    }
+};
+httpcUpload.open("GET", "dir.php", true);
+httpcUpload.send();
+
+
+function loadimagefeed(){
+
+    for(var index = 0;index < uploadImages.length;index++) {
+        if(uploadImages[index].includes(".") && uploadImages[index] != "index.html" && (uploadImages[index].substring(uploadImages[index].length - 5) == ".html") || (uploadImages[index].substring(uploadImages[index].length - 4) == ".css") || (uploadImages[index].substring(uploadImages[index].length - 4) == ".txt")  || (uploadImages[index].substring(uploadImages[index].length - 3) == ".js")){
+            var newuploadbox = document.createElement("DIV");
+            newuploadbox.classList.add("imagebox");
+    
+            document.getElementById("imagefeed").appendChild(newuploadbox);
+    
+            var newdiv = document.createElement("DIV");
+            newdiv.innerHTML = uploadImages[index];
+            newdiv.className = "filelabel";
+            newuploadbox.appendChild(newdiv);
+        
+        
+            var newspan = document.createElement("SPAN");
+            newspan.innerHTML = "X";
+            newuploadbox.appendChild(newspan);
+            newspan.classList.add("button");
+            newspan.classList.add("deletebutton");
+            newspan.onclick = function(){
+                var filename = this.parentElement.getElementsByClassName("filelabel")[0].innerHTML; 
+                var httpc = new XMLHttpRequest();
+                var url = "deletefile.php";         
+                httpc.open("POST", url, true);
+                httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+                httpc.send("filename=" + filename);//send text to deletefile.php
+                this.parentElement.parentElement.removeChild(this.parentElement);
+            }           
+            
+            
+            
+        }
+    }    
+}
+
+
+</script>
+<style>
+#fileToUpload,#submitinput,#uploadspan{
+    font-size:2em;
+}
+#fileToUpload,#submitinput{
+    cursor:pointer;
+}
+
+body{
+    overflow:hidden;
+    font-size:1em;
+    background-color:#808080;
+}
+h1{
+    text-align:center;
+}
+#linktable{
+    position:absolute;
+    top:0px;
+    right:0px;
+}
+#linktable a{
+    background-color:black;
+    color:#ff2cb4;
+    font-size:2em;
+}
+#imagefeedheader{
+    position:absolute;
+    left:0px;
+    top:0px;
+    padding-top:1em;
+    padding-left:1em;
+    height:8em;
+}
+#imagefeed{
+    position:absolute;
+    top:10em;
+    left:0px;
+    right:0px;
+    bottom:0px;
+    overflow:scroll;
+}
+.uploadimage{
+    max-width:50%;
+    margin:auto;
+    display:block;
+    background-color:#808080;
+}
+.imagebox{
+    border-top:solid;
+    padding-bottom:1em;
+    padding-top:1em;
+    padding-left:1em;
+    
+}
+.deletebutton{
+    width:4em;
+    background-color:#808080;
+    color:red;
+    border:solid;
+    border-color:red;
+}
+.button{
+    cursor:pointer;
+}
+.button:hover{
+    background-color:green;
+}
+.button:active{ 
+    background-color:yellow;
+}
+.data{
+    display:none;
+}
+.filelabel{
+    color:#ff2cb4;
+    font-size:2em;
+}
+</style>
+</body>
+</html>

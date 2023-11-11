@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <!--
+
+        EVERYTHING IS PHYSICAL 
+        EVERYTHING IS FRACTAL
+        EVERYTHING IS RECURSIVE
+        NO MONEY 
+        MO MINING 
+        NO PROPERTY
+        LOOK AT THE INSECTS
+        LOOK AT THE FUNGI
+        LANGUAGE IS HOW THE MIND PARSES REALITY
+
+    -->
+        <title>GAUSSIAN</title>
+
+<link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAZ4efAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEREREREREREREREREREREREAAAAAAAAREQEREREREBERAREREREQEREBEAAAARAREQEQEREBEBERARAQAQEQEREBEBABARAREQEQEREBEBERARAAAAEQEREBERERERAREQEREREREBERAAAAAAAAEREREREREREREREREREREREAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rel="icon" type="image/x-icon">
+
+
+    <!--Stop Google:-->
+    <META NAME="robots" CONTENT="noindex,nofollow">
+<!--geometron javascript library-->
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.7.0/lib/p5.js"></script>
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/addons/p5.sound.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script>
+            MathJax.Hub.Config({
+                tex2jax: {
+                inlineMath: [['$','$'], ['\\(','\\)']],
+                processEscapes: true,
+                processClass: "mathjax",
+                ignoreClass: "no-mathjax"
+                }
+            });//			MathJax.Hub.Typeset();//tell Mathjax to update the math
+        </script>
+
+</head>
+<body>
+
+
+<div id = "feedscroll">
+    
+    <h1>NOISE BAND</h1>
+    
+    <div id = "savebutton">POST</div>
+    
+    <h1><a style = "color:blue;text-align:center;font-family:Comic Sans MS;margin:auto" href = "index.html">HOME</a></h1>
+    
+<p>NOISE BAND FROM AN EXAMPLE ON P5JS.ORG</p>
+
+<p>
+    Click anywhere to start the sound, click again to stop.
+</p>
+</div>
+
+<script>
+
+
+
+if(innerWidth > innerHeight){
+    squaresize = innerHeight - 50;
+    document.getElementById("feedscroll").style.right =  squaresize.toString()+ "px";    
+}
+else{
+    squaresize = innerWidth - 50;
+    
+    document.getElementById("feedscroll").style.right =  "0px";    
+    document.getElementById("feedscroll").style.top = squaresize.toString() + "px";
+}
+
+
+
+/**
+ *  @name Filter BandPass
+ *  @arialabel The bandpass filter changes intensity as the user’s mouse moves left and right on the screen
+ *  @description Apply a p5.BandPass filter to white noise.
+ *  Visualize the sound with FFT.
+ *  Map mouseX to the bandpass frequency
+ *  and mouseY to resonance/width of the a BandPass filter
+ *
+ * <p><em><span class="small"> To run this example locally, you will need the
+ * <a href="http://p5js.org/reference/#/libraries/p5.sound">p5.sound library</a>
+ * a sound file, and a running <a href="https://github.com/processing/p5.js/wiki/Local-server">local server</a>.</span></em></p>
+ */
+ 
+noiseon = false;
+ 
+let noise;
+let fft;
+let filter, filterFreq, filterWidth;
+
+function setup() {
+
+  createCanvas(squaresize, squaresize);
+  fill(0);
+ // fill(255, 40, 255);
+
+  filter = new p5.BandPass();
+
+  noise = new p5.Noise();
+
+  noise.disconnect(); // Disconnect soundfile from master output...
+  filter.process(noise); // ...and connect to filter so we'll only hear BandPass.
+  noise.start();
+
+  fft = new p5.FFT();
+}
+
+function draw() {
+ // background(30);
+  background(159,135,103);
+
+  // Map mouseX to a bandpass freq from the FFT spectrum range: 10Hz - 22050Hz
+  filterFreq = map(mouseX, 0, width, 10, 22050);
+  // Map mouseY to resonance/width
+  filterWidth = map(mouseY, 0, height, 0, 90);
+  // set filter parameters
+  filter.set(filterFreq, filterWidth);
+
+  // Draw every value in the FFT spectrum analysis where
+  // x = lowest (10Hz) to highest (22050Hz) frequencies,
+  // h = energy / amplitude at that frequency
+  let spectrum = fft.analyze();
+  noStroke();
+  for (let i = 0; i < spectrum.length; i++) {
+    let x = map(i, 0, spectrum.length, 0, width);
+    let h = -height + map(spectrum[i], 0, 255, height, 0);
+    rect(x, height, width / spectrum.length, h);
+  }
+}
+
+
+
+function post(){
+            
+    png64 = document.getElementById("defaultCanvas0").toDataURL("image/png");
+    var timestamp = Math.round((new Date().getTime())/1000).toString();
+    var httpc = new XMLHttpRequest();
+    var url = "pngsave.php";        
+    httpc.open("POST", url, true);
+    httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    httpc.send("data="+encodeURIComponent(png64.substring(22))+"&filename=trashmagic/square" + timestamp +  "-noiseband.png");//send text to filesaver.php
+     //location.reload(); 
+     
+    newfilename = "trashmagic/square" + timestamp +  "-noiseband.png";
+    
+    var newbox = document.createElement("DIV");
+    newbox.classList.add("imagebox");         
+    
+    var deletespan = document.createElement("SPAN");
+    deletespan.innerHTML = "X";
+    deletespan.classList.add("deletespan");
+    deletespan.onclick = function(){
+        //delete the parent div of the image
+        //delete the file
+        var filename = this.parentElement.getElementsByClassName("filelabel")[0].innerHTML; 
+        var httpc = new XMLHttpRequest();
+        var url = "deletefile.php";         
+        httpc.open("POST", url, true);
+        httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+        httpc.send("filename=trashmagic/" + filename);//send text to deletefile.php
+        this.parentElement.parentElement.removeChild(this.parentElement);
+    }
+    
+    newbox.appendChild(deletespan);
+
+    var newdiv = document.createElement("DIV");
+    newdiv.innerHTML = newfilename;
+    newdiv.className = "filelabel";
+    newbox.appendChild(newdiv);
+
+    var newimg = document.createElement("IMG");
+    newimg.src = png64;
+    newimg.classList.add("uploadimage");
+    newimg.classList.add("button");
+    newbox.appendChild(newimg);    
+
+
+    document.getElementById("feedscroll").insertBefore(newbox,document.getElementById("feedscroll").getElementsByClassName("imagebox")[0]);
+        
+}
+
+function keyPressed() {
+
+    if(key == 's'){
+        post();
+    }
+
+}
+
+document.body.onclick = function(){
+    if(noiseon == false){
+        noise.start();
+        noiseon = true;
+    }
+    else{
+        noise.stop();
+        noiseon = false;
+        
+    }
+}
+
+document.getElementById("savebutton").onclick = function(){
+    post();
+}
+
+upuploadImages = [];
+var httpc9 = new XMLHttpRequest();
+    httpc9.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        upuploadImages = JSON.parse(this.responseText);
+        for(var index = upuploadImages.length - 1;index >= 0;index--) {
+            
+            if(upuploadImages[index].includes("-noiseband")){
+            
+                var newbox = document.createElement("DIV");
+                newbox.classList.add("imagebox");         
+                
+                var deletespan = document.createElement("SPAN");
+                deletespan.innerHTML = "X";
+                deletespan.classList.add("deletespan");
+                deletespan.onclick = function(){
+                    //delete the parent div of the image
+                    //delete the file
+                    var filename = this.parentElement.getElementsByClassName("filelabel")[0].innerHTML; 
+                    var httpc = new XMLHttpRequest();
+                    var url = "deletefile.php";         
+                    httpc.open("POST", url, true);
+                    httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+                    httpc.send("filename=trashmagic/" + filename);//send text to deletefile.php
+                    this.parentElement.parentElement.removeChild(this.parentElement);
+                }
+                
+                newbox.appendChild(deletespan);
+        
+                var newdiv = document.createElement("DIV");
+                newdiv.innerHTML = upuploadImages[index];
+                newdiv.className = "filelabel";
+                newbox.appendChild(newdiv);
+            
+                
+                document.getElementById("feedscroll").appendChild(newbox);
+                var newimg = document.createElement("IMG");
+                newimg.src = "trashmagic/" + upuploadImages[index];
+                newimg.classList.add("uploadimage");
+                newimg.classList.add("button");
+                newbox.appendChild(newimg);
+                
+            }
+            
+        }
+    }
+};
+httpc9.open("GET", "dir.php?filename=trashmagic", true);
+httpc9.send();
+
+</script>
+<style>
+body{
+    overflow:hidden;
+    background-color:#9f8767;    
+}
+main{
+    position:absolute;
+    right:25px;
+    top:25px;
+    border-left:solid;
+    border-width:10px
+}
+
+
+#feedscroll img{
+    max-width:80%;
+    display:block;
+    margin:auto;
+    margin-top:1em;
+    border:solid;
+}
+
+p{
+    margin:1em 1em 1em 1em;
+    font-size:1.5em;
+    font-family:Comic Sans MS;
+    overflow:scroll;
+}
+h1,h2,h3{
+    font-family:Comic Sans MS;
+    text-align:center;
+        overflow:scroll;
+
+}
+a{
+    color:blue;
+    font-family:Comic Sans MS;
+    font-size:1.5em;    
+    overflow:scroll;
+}
+#feedscroll{
+    position:absolute;
+    left:0px;
+    bottom:0px;
+    top:6em;
+    z-index:-2;
+    overflow:scroll;
+    background-color:#9f8767;    
+    padding:1em 1em 1em 1em;
+}
+#savebutton{
+    text-align:center;
+    border:solid;
+    border-radius:10px;
+    border-width:4px;
+    font-family:Comic Sans MS;
+    font-size:1.5em;
+    width:5em;
+    margin:auto;
+    cursor:pointer;
+}
+#savebutton:hover{
+    background-color:green;
+}
+#savebutton:active{
+    background-color:yellow;
+}
+
+.deletespan{
+    color:red;
+    border:solid;
+    border-color:red;
+    border-radius:0.5em;
+    padding: 1em 1em 1em 1em;
+    cursor:pointer;
+}
+.deletespan:hover{
+    background-color:#ff000080;
+}
+.filelabel{
+    display:none;
+}
+.button{
+    cursor:pointer;
+}
+.button:hover{
+    background-color:green;
+}
+.button:active{
+    background-color:yellow;
+}
+.data{
+    display:none;
+}
+</style>
+</body>
+</html>

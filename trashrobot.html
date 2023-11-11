@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+   <meta charset="utf-8">
+   <!--
+Trash magic is self-replicating media made of trash which forms an unenclosed digital commons outside of the system of private property.
+   -->
+   <!--Stop Google:-->
+   <META NAME="robots" CONTENT="noindex,nofollow">
+   <title>TRASH MAGIC NETWORK</title>    
+   <script src = "trashmagic.js"></script>
+   <link rel="stylesheet" href="trashmagic.css">
+   <script src = "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>    
+<div id = "mainscroll">
+    
+    <a href = "webeditor.html">Web Code Editor</a>
+    
+    <a href = "index.html">Home</a>
+    
+    <a href = "readme.html">Trash Magic Replicator</a>
+
+    <div id = "qrcode"></div>
+    
+    <h1 id = "pagename"></h1>
+    
+    <h1>TRASH MAGIC NETWORK</h1>
+    
+
+<p>In Trash Magic we build everything we need for a good life from trash and things we can grow and spread it using self-replicating media.</p>
+
+<p>
+    This page is hosted on a Trash Magic server on the Magic Dump. The Magic Dump is an unenclosed digital commons. It is digital infrastructure which exists outside of the system of private property and which is created entirely from waste streams of old computers made obsolete by the tech companies.
+</p>
+
+<p>
+    This is a mutual aid network.  We all say what we can use help with from the network and also how we might be able to help the network, and then manually find each other and help out. We are the algorithm here, there are no apps, no users, no data.  Just public boards we all post on and read and respond to.  Find the others.
+</p>
+    
+    <a href = "trashrobot.html">Trash Robot Home Page</a>
+    
+    <textarea id = "board1" class = "board"></textarea>
+    
+
+
+    <h1>TRASH MAGIC BOOKS</h1>
+    
+<a href = "https://www.lulu.com/shop/trash-robot/geometron-magic/paperback/product-y6p96w.html">BUY GEOMETRON MAGIC HARDCOPY FOR FREE DISTRO IN LITTLE FREE LIBRARIES</a>
+
+<a href = "https://raw.githubusercontent.com/LafeLabs/pibrary/main/geometronmagic/main-large.pdf">DOWNLOAD GEOMETRON MAGIC 8.5"X11" AND PRINT OUT ON OFFICE PRINTER AND DISTRIBUTE FREE IN 3 RING BINDER</a>
+
+<a href = "https://gm.trashrobot.org">READ GEOMETRON MAGIC FREE EBOOK HOSTED ON MAGIC DUMP SERVERS!</a>
+
+<a href = "https://www.lulu.com/shop/lafe-spietz/geometron/paperback/product-qqk98g.html">BUY GEOMETRON I FOR FREE DISTRO IN LITTLE FREE LIBRARIES!</a>
+
+<a href = "https://github.com/LafeLabs/bookofgeometron/raw/main/main-bigpaper.pdf">DOWNLOAD GEOMETRON I TO PRINT 8.5X11 PRINT OUT FREE AT OFFICE, PUT IN 3 RING BINDERS FROM TRASH AND DISTRIBUTE FREE!</a>
+
+<a href = "https://www.lulu.com/en/us/shop/lafe-spietz/trash-magic-manifesto-and-action-coloring-book/paperback/product-1km4deev.html?page=1&pageSize=4">BUY BOUND TRASH MAGIC MANIFESTO AND DISTRIBUTE FREE IN LITTLE FREE LIBRARIES!</a>
+
+<a href = "https://lafelabs.github.io/Trash_Magic_Manifesto.pdf">DOWNLOAD TRASH MAGIC MANIFESTO TO PRINT 8.5X11 ON OFFICE PRINTERS AND BIND IN TRASH-SOURCED 3 RING BINDERS AND DISTRIBUTE!</a>
+
+<a href = "https://trashbook.trashrobot.org">READ THE BOOK OF TRASH FREE EBOOK HOSTED ON TRASH MAGIC SERVERS IN THE MAGIC DUMP!</a>
+    
+<a href = "https://littlefreelibrary.org/">LOCATE A LITTLE FREE LIBRARY NEAR YOU!</a>    
+    
+</div>
+<script>
+
+pagename = window.location.href.split("://")[1];
+pagename = pagename.replace(/index.html/g, ""); 
+
+document.getElementById("pagename").innerHTML = pagename;
+
+titles = document.getElementsByTagName("H1");
+for(var index = 0;index < titles.length;index++){
+    rainbowstring(titles[index]);    
+}
+
+rainbow(document.getElementsByTagName("A"));
+googleyeyes(8);
+
+
+codesquaresize = 170;
+marginsize = 40;
+fontsize = 12;
+//globalurl = "http://www.trashrobot.org/qrcode.html";
+globalurl = window.location.href;
+qrcode = new QRCode(document.getElementById("qrcode"), {
+	text: globalurl,
+	width: codesquaresize,
+	height: codesquaresize,
+	colorDark : "#000000",
+	colorLight : "#ffffff",
+	correctLevel : QRCode.CorrectLevel.H
+});
+
+urlArray = window.location.href.split("/");
+pageName = urlArray[urlArray.length-1].split(".html")[0];
+
+fileName1 = pageName + "-board1.txt";
+//fileName1 = "sloanslake-board.txt"    
+board1 = "";
+
+var httpc2 = new XMLHttpRequest();
+httpc2.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        board1 = this.responseText;
+        document.getElementById("board1").value = board1;
+    }
+};
+
+httpc2.open("GET", "fileloader.php?filename=" + fileName1, true);
+httpc2.send();
+
+
+document.getElementById("board1").onkeyup = function() {
+    
+        board1 = this.value;
+        var httpc = new XMLHttpRequest();
+        var url = "filesaver.php";        
+        httpc.open("POST", url, true);
+        httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+        httpc.send("data="+encodeURIComponent(board1)+"&filename=" + fileName1);//send text to filesaver.php        
+    
+} 
+
+</script>
+<style>
+.board{
+    width:80%;
+    height:20em;
+    display:block;
+    border:solid;
+    border-width: 8px;
+    border-radius: 10px;
+    padding: 1em 1em 1em 1em;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+    margin-left:auto;
+    margin-right:auto;
+    background-color:#9f8767f0;
+    font-family:Comic Sans MS;
+    font-size:1.5em;
+}
+</style>
+</body>
+</html>
+
+

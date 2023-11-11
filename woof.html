@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <!--
+
+        EVERYTHING IS PHYSICAL 
+        EVERYTHING IS FRACTAL
+        EVERYTHING IS RECURSIVE
+        NO MONEY 
+        MO MINING 
+        NO PROPERTY
+        LOOK AT THE INSECTS
+        LOOK AT THE FUNGI
+        LANGUAGE IS HOW THE MIND PARSES REALITY
+
+    -->
+        <title>WOOF</title>
+
+
+<link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAC0LP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEREREREREREREREREREREREREREREREREBERAREQEREQEREBEREBERAREQERERAREBEQABEREQEQEQEBAREREBARAQEBEREBEBEBAQEREBEQEREBEREBERAREQEREBEREBEREREBEREREREREREREREREREREREREREREREREREAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rel="icon" type="image/x-icon">
+
+
+    <!--Stop Google:-->
+    <META NAME="robots" CONTENT="noindex,nofollow">
+<!--geometron javascript library-->
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.7.0/lib/p5.js"></script>
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/addons/p5.sound.js"></script>
+<script src = "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script>
+            MathJax.Hub.Config({
+                tex2jax: {
+                inlineMath: [['$','$'], ['\\(','\\)']],
+                processEscapes: true,
+                processClass: "mathjax",
+                ignoreClass: "no-mathjax"
+                }
+            });//			MathJax.Hub.Typeset();//tell Mathjax to update the math
+        </script>
+
+</head>
+<body>
+    
+    
+<div id = "qrcode"></div>
+
+<img src = "https://raw.githubusercontent.com/LafeLabs/squares/main/trashmagic/sun.svg" id = "sun"/>
+<img src = "https://raw.githubusercontent.com/LafeLabs/squares/main/trashmagic/pentagram.svg" id = "star"/>
+
+<div id = "elementsbox">
+    <span id = "airbox" class = "elemental">
+        <img src = "https://raw.githubusercontent.com/LafeLabs/squares/main/trashmagic/air.svg"/>:<input id = "airinput"/>Hz
+    </span>
+    
+    <span id = "firebox" class = "elemental">
+        <img src = "https://raw.githubusercontent.com/LafeLabs/squares/main/trashmagic/fire.svg"/>:<span id = "firespan"></span> Hz
+    </span>
+    
+    <span id = "waterbox" class = "elemental">
+        <img src = "https://raw.githubusercontent.com/LafeLabs/squares/main/trashmagic/water.svg"/>:<span id = "waterspan"></span> Hz
+    </span>  
+    <span id = "earthbox" class = "elemental">
+        <img src = "https://raw.githubusercontent.com/LafeLabs/squares/main/trashmagic/earth.svg"/>:<input id = "earthinput"/>Hz
+    </span>    
+</div>
+
+
+        
+<div class= "mathlabel" id = "zerothetabox">0</div>        
+<div class= "mathlabel" id = "thetabox">$\theta$</div>        
+<div class= "mathlabel" id = "pibox">$\pi$</div>        
+
+<div class= "mathlabel" id = "zerophibox">0</div>        
+<div class= "mathlabel" id = "phibox">$\phi$</div>        
+<div class= "mathlabel" id = "twopibox">$2\pi$</div>        
+        
+<a id = "replicatorlink" href = "https://github.com/lafeLabs/squares"><img src = "https://raw.githubusercontent.com/LafeLabs/squares/main/trashmagic/replicator.svg"/></a>        
+        
+<div id = "mainequation">
+    $$
+    \psi = \cos{\left(\frac{\theta}{2}\right)}\left| \textbf{sun} \right> + e^{i\phi}\sin{\left(\frac{\theta}{2}\right)}\left| \textbf{star} \right>
+    $$
+</div>
+
+<script>
+
+
+if(innerWidth > innerHeight){
+    squaresize = innerHeight - 160;
+
+    document.getElementById("elementsbox").style.width = ((innerWidth - squaresize)/2).toString() + "px";  
+    document.getElementById("elementsbox").style.height = (innerHeight).toString() + "px";  
+
+
+    document.getElementById("sun").style.width = (squaresize).toString() + "px";  
+    document.getElementById("sun").style.left = (20 + (innerWidth - squaresize)/2).toString() + "px";  
+    document.getElementById("sun").style.top = "60px";   
+    
+    document.getElementById("star").style.width = (squaresize).toString() + "px";  
+    document.getElementById("star").style.left = (20 + (innerWidth - squaresize)/2).toString() + "px";  
+    document.getElementById("star").style.top = "60px";    
+    
+    
+    document.getElementById("zerophibox").style.left = (0.5*innerWidth - 0.5*squaresize - 10).toString() + "px";  
+    document.getElementById("zerophibox").style.top = "0px";    
+    
+    document.getElementById("phibox").style.left = (0.5*innerWidth - 10).toString() + "px";  
+    document.getElementById("phibox").style.top = "0px";    
+
+    document.getElementById("twopibox").style.left = (0.5*innerWidth + 0.5*squaresize - 10).toString() + "px";  
+    document.getElementById("twopibox").style.top = "0px";  
+    
+    document.getElementById("zerothetabox").style.left = (0.5*innerWidth + 0.5*squaresize + 35).toString() + "px";  
+    document.getElementById("zerothetabox").style.top = "40px";    
+    
+    document.getElementById("thetabox").style.left = (0.5*innerWidth + 0.5*squaresize + 35).toString() + "px";  
+    document.getElementById("thetabox").style.top = (innerHeight/2 - 50).toString() + "px";    ;    
+
+
+    document.getElementById("pibox").style.left = (0.5*innerWidth + 0.5*squaresize + 35).toString() + "px";  
+    document.getElementById("pibox").style.top = (innerHeight - 120).toString() + "px";      
+    
+}
+else{
+    squaresize = innerWidth - 100;
+    
+    document.getElementById("sun").style.left = "50px";  
+    document.getElementById("sun").style.top = ((innerHeight - squaresize)/2).toString() + "px";  
+    document.getElementById("sun").style.width = (squaresize).toString() + "px";      
+    document.getElementById("star").style.left = "50px";  
+    document.getElementById("star").style.top = ((innerHeight - squaresize)/2).toString() + "px";  
+    document.getElementById("star").style.width = (squaresize).toString() + "px";          
+    
+    document.getElementById("zerothetabox").style.left = "20px";  
+    document.getElementById("zerothetabox").style.top = (innerHeight/2 - squaresize/2 -20).toString() + "px";    
+    
+    document.getElementById("thetabox").style.left = "20px";  
+    document.getElementById("thetabox").style.top = (innerHeight/2 - 20).toString() + "px";    ;    
+
+
+    document.getElementById("pibox").style.left = "20px";  
+    document.getElementById("pibox").style.top = (innerHeight - 150).toString() + "px";      
+    
+    
+    document.getElementById("zerophibox").style.left = (0.5*innerWidth - 0.5*squaresize + 20).toString() + "px";  
+    document.getElementById("zerophibox").style.top = (innerHeight - 170).toString() + "px";    
+    
+    document.getElementById("phibox").style.left = (0.5*innerWidth - 10).toString() + "px";  
+    document.getElementById("phibox").style.top = (innerHeight - 170).toString() + "px";    
+
+    document.getElementById("twopibox").style.left = (0.5*innerWidth + 0.5*squaresize - 50).toString() + "px";  
+    document.getElementById("twopibox").style.top = (innerHeight - 170).toString() + "px";  
+    
+}
+
+
+let osc, fft,osc2,osc3;
+oscon = false;
+
+f_earth = 69;
+f_air = 99;
+f_fire = f_air;
+f_water = f_earth;
+
+document.getElementById("earthinput").value = f_earth.toString();
+document.getElementById("airinput").value = f_air.toString();
+
+document.getElementById("earthinput").onchange = function(){
+    f_earth = parseFloat(this.value);
+}
+document.getElementById("airinput").onchange = function(){
+    f_air = parseFloat(this.value);
+}
+
+theta = 0;
+phi = 0;
+vx = 0;
+vy = 0;
+
+function setup() {
+
+  createCanvas(squaresize,squaresize);    
+  osc = new p5.SinOsc(); // set frequency and type
+  osc.amp(1.0);
+  osc2 = new p5.SinOsc(); // set frequency and type
+  osc2.amp(1.0);
+  fft = new p5.FFT();
+  // osc.start();
+  //osc2.start();
+
+  osc.freq(f_earth);  
+  osc2.freq(f_air); 
+  
+  if(innerWidth > innerHeight){
+        document.getElementsByTagName("MAIN")[0].style.left = ((innerWidth - squaresize)/2).toString() + "px";  
+        document.getElementsByTagName("MAIN")[0].style.top = "50px";   
+
+    }
+    else{
+    
+        document.getElementsByTagName("MAIN")[0].style.left = "50px";  
+        document.getElementsByTagName("MAIN")[0].style.top = ((innerHeight - squaresize)/2).toString() + "px";   
+
+    
+    }
+
+  
+}
+
+
+function draw(){
+  
+  
+  vx = mouseX/squaresize;
+  vy = mouseY/squaresize;
+  if(vx < 0){
+      vx = 0;
+  }
+  if(vx > 1){
+      vx = 1;
+  }
+  if(vy < 0){
+      vy = 0;
+  }
+  if(vy > 1){
+      vy = 1;
+  }
+   
+   theta = Math.PI*vy;
+   phi = 2*Math.PI*vx;
+   f_fire = f_air*(1 + vy);
+   f_water = f_earth*(1 + vx);
+   osc.freq(f_water);  
+   osc2.freq(f_fire); 
+   document.getElementById("firespan").innerHTML = (Math.round(f_fire)).toString();
+   document.getElementById("waterspan").innerHTML = (Math.round(f_water)).toString();
+
+    document.getElementById("sun").style.opacity = (Math.cos(theta/2)*Math.cos(theta/2)).toString();
+    document.getElementById("star").style.opacity = (Math.sin(theta/2)*Math.sin(theta/2)).toString();    
+
+    document.getElementById("star").style.transform = "rotate(" +  (phi*180/Math.PI).toString() + "deg)";
+    
+    
+   clear();
+   stroke("#ff2cb4");
+   fill("#ff2cb4");
+   circle(mouseX,mouseY,50);
+
+}
+
+
+function mouseClicked() {
+  
+  
+  if(mouseX > 0 && mouseX < squaresize && mouseY > 0 && mouseY < squaresize){
+      if(!oscon){
+          osc.start();
+          osc2.start();
+    
+      }
+      else{
+          osc.stop();
+          osc2.stop();
+      }
+      oscon = !oscon;
+  }
+}
+
+
+
+codesquaresize = 80;
+marginsize = 40;
+fontsize = 12;
+//globalurl = "http://www.trashrobot.org/qrcode.html";
+globalurl = window.location.href;
+qrcode = new QRCode(document.getElementById("qrcode"), {
+	text: globalurl,
+	width: codesquaresize,
+	height: codesquaresize,
+	colorDark : "#000000",
+	colorLight : "#ffffff",
+	correctLevel : QRCode.CorrectLevel.H
+});
+
+</script>
+<style>
+body{
+    background-color:black;
+    color:#ff2cb4;
+    overflow:hidden;
+}
+main{
+    border:solid;
+    border-width:10px;
+    border-color:#ff2cb4;
+    position:absolute;
+    
+}
+input{
+    width:2em;
+    font-size:60px;
+    background-color:black;
+    color:#00ff00;
+    font-family:courier;
+    z-index:1;
+}
+#elementsbox{
+    position:absolute;
+    left:0px;
+    top:0px;
+}
+#sun{
+    position:absolute;
+    z-index:-1;
+}
+#star{
+    position:absolute;
+    z-index:-2;
+}
+.mathlabel{
+    font-size:40px;
+    position:absolute;
+}
+#replicatorlink{
+    position:absolute;
+    right:0px;
+    display:block;
+    bottom:0px;
+    border:solid;
+    border-color:#ff2cb4;
+    width:100px;
+    height:100px;
+    text-align:center;
+    z-index:1;
+}
+#replicatorlink img{
+    height:100px;
+    display:block;
+}
+.elemental{
+    font-size:60px;
+    font-family:Comic Sans MS;
+}
+.elemental img{
+    width:100px;
+}
+#qrcode{
+    position:absolute;
+    right:10px;
+    top:0px;
+    border:solid;
+    border-width:10px;
+    border-color:white;
+}
+#mainequation{
+    position:absolute;
+    bottom:0px;
+    text-align:center;
+    width:100%;
+    font-size:20px;
+}
+@media only screen and (orientation: portrait) {
+    .elemental img{
+        width:40px;
+    }
+    .elemental{
+        font-size:25px;
+        font-family:Comic Sans MS;
+    }
+    input{
+        font-size:25px;
+    }
+
+}
+@media only screen and (orientation: landscape) {
+    
+}
+
+</style>
+</body>
+</html>

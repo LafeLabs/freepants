@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <!-- 
+
+        EVERYTHING IS PHYSICAL 
+        EVERYTHING IS FRACTAL
+        EVERYTHING IS RECURSIVE
+        NO MONEY 
+        NO MINING 
+        NO PROPERTY
+        LOOK AT THE INSECTS
+        LOOK AT THE FUNGI
+        LANGUAGE IS HOW THE MIND PARSES REALITY
+
+    -->
+    <title>SQUARES: AS ABOVE, SO BELOW.</title>
+
+
+<link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAZ4efAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEREREREREREREREREREREREAAAAAAAAREQEREREREBERAREREREQEREBEAAAARAREQEQEREBEBERARAQAQEQEREBEBABARAREQEQEREBEBERARAAAAEQEREBERERERAREQEREREREBERAAAAAAAAEREREREREREREREREREREREAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rel="icon" type="image/x-icon">
+
+    <!--Stop Google:-->
+    <META NAME="robots" CONTENT="noindex,nofollow">
+<script src="trashmagic.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/p5@1.7.0/lib/p5.js"></script>
+<script src = "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+</head>
+<body>
+<div class = "topbutton" id = "deletebutton">DELETE</div>
+<div class = "topbutton" id = "clearbutton">CLEAR</div>
+<div class = "topbutton" id = "postbutton">POST</div>
+
+<div class = "bottombutton" id = "removebutton" style = "">REMOVE BACK IMAGE</div>
+<!--
+<div id = "qrcode"></div>
+-->
+
+<div id = "feedscroll">
+    <h1>TRASH MAGIC SQUARES</h1>
+    
+    <a href = "https://github.com/lafeLabs/squares">REPLICATOR SCROLL AT GITHUB</a>
+    <a href= "gyro.html">TRASH MAGIC GYRO</a>
+    <a href= "woof.html">TRASH MAGIC WOOF</a>
+    <a href= "woof-mobile.html">TRASH MAGIC WOOF MOBILE</a>
+    <a href = "gyrator.html">TRASH MAGIC GYRATOR</a>
+    <a href = "https://trashrobot.org">TRASH ROBOT WEB PAGE</a>
+    <a href = "https://lafelabs.github.io/Trash_Magic_Manifesto.pdf">TRASH MAGIC MANIFESTO AND ACTION COLORING BOOK</a>
+    <a href = "https://github.com/LafeLabs/bookofgeometron/raw/main/main-bigpaper.pdf">THE BOOK OF GEOMETRON</a>
+    <a href = "https://raw.githubusercontent.com/LafeLabs/pibrary/main/geometronmagic/main-large.pdf">GEOMETRON MAGIC</a>
+    <a href = "https://www.lulu.com/shop/trash-robot/geometron-magic/paperback/product-y6p96w.html">GEOMETRON MAGIC HARDCOPY</a>
+    <a href = "tarot.html">TRASH MAGIC TAROT</a>
+    <a href = "https://trashmagic.community/auth/sign_up">SIGN UP FOR TRASH MAGIC MASTODON</a>
+    <a href = "geometron.html">Geometron</a>
+    <a href = "cubeworld.html">Cube World</a>
+    <a href = "hypercube.html">Geometron Hypercube</a>
+    <a href = "text.html">Text Squares</a>
+    <a href = "trashbook/">Book of Squares(Trashbook)</a>  
+    <a href = "icon-artist.html">Icon Magic</a>
+    <a href = "view.html">View Squares</a>  
+    <a href = "trace.html">Image Trace</a>  
+    <a href = "gaussian.html">Guassian Square</a>  
+    <a href = "coth.html">Coth Square</a>  
+    <a href = "fft2svg.html">noise spectrum to laser cutter</a> 
+    <a href = "trimsquares.html">Trim Squares</a>
+    <a href = "squares-react.html">Squares React</a>
+    <a href = "sigil.html">Icon Sigil</a>  
+    <a href = "slime.html">Slime Square</a>  
+    <a href = "slime2svg.html">Slime to SVG stack for laser cutter</a>  
+    <a href = "qnoise.html">QNOISE</a>  
+    <a href = "QNS-spectra.html">QNS Spectra</a>  
+    <a href = "https://denverlibrary.on.worldcat.org/discovery">Denver worldcat ILL search link</a>
+    <a href = "oscilloscope.html">Oscilloscope</a>  
+    <a href = "washboard.html">Tilted Washboard</a>
+    <a href = "noiseband.html">Noise Generator</a>
+    <a href = "dtmf.html">Dual Tone Multi Frequency(DTMF)</a>
+    <a href = "geometron-tone.html">Geometron TONE</a>
+    <a href = "https://archive.org/details/they-live-1988_202201">THEY LIVE free film</a>
+
+    <div id = "qrcode"></div>
+    
+
+</div>
+
+<script>
+
+rainbow(document.getElementsByTagName("A"));
+
+lineArrayStack = [];
+lineArray =[];
+
+
+titles = document.getElementsByTagName("H1");
+for(var index = 0;index < titles.length;index++){
+    rainbowstring(titles[index]);    
+}
+
+
+function setup() {
+
+    squareWidth = 100;
+
+    if(innerWidth > innerHeight){
+        squareWidth = innerHeight;
+        document.getElementById("clearbutton").style.right = (innerWidth - squareWidth).toString() + "px";
+        document.getElementById("feedscroll").style.height = (innerHeight - 70).toString() + "px";
+        document.getElementById("feedscroll").style.width = (innerWidth - squareWidth).toString() + "px";
+    }
+    else{
+        squareWidth = innerWidth;
+        document.getElementById("feedscroll").style.width = (innerWidth - 30).toString() + "px";
+        document.getElementById("feedscroll").style.height = (innerHeight - squareWidth - 70).toString() + "px";    
+    }
+    
+    document.getElementById("postbutton").style.left = (squareWidth/2 - 100).toString() + "px";
+    
+    
+    createCanvas(squareWidth-50, squareWidth-70);
+    background(159,135,103);
+    stroke(0);
+    strokeWeight(10);
+//      image(img, 0, 0,squareWidth-50,squareWidth-70);
+}
+
+inLine = false;
+
+newimage = false;
+
+function draw() {
+  
+  stroke(0);
+  if (mouseIsPressed === true) {
+    line(mouseX, mouseY, pmouseX, pmouseY);
+    inLine = true;
+    var r  ={};
+    r.x = mouseX;
+    r.y = mouseY;
+    lineArray.push(r);
+  }
+  else{
+      if(inLine){
+          lineArrayStack.push(lineArray);
+          lineArray = [];
+      }
+      inLine = false;
+  }
+}
+
+document.getElementById("removebutton").onclick = function(){
+    clear();
+    background(159,135,103);
+    for(var lineindex = 0;lineindex < lineArrayStack.length;lineindex++){
+        for(var pointindex = 1;pointindex < lineArrayStack[lineindex].length;pointindex++){
+            line(lineArrayStack[lineindex][pointindex - 1].x,lineArrayStack[lineindex][pointindex - 1].y,lineArrayStack[lineindex][pointindex].x,lineArrayStack[lineindex][pointindex].y);
+        }
+    }
+}
+
+document.getElementById("deletebutton").onclick = function(){
+    lineArrayStack.pop();
+    lineArrayStack.pop();
+    clear();
+    background(159,135,103);
+    for(var lineindex = 0;lineindex < lineArrayStack.length;lineindex++){
+        for(var pointindex = 1;pointindex < lineArrayStack[lineindex].length;pointindex++){
+            line(lineArrayStack[lineindex][pointindex - 1].x,lineArrayStack[lineindex][pointindex - 1].y,lineArrayStack[lineindex][pointindex].x,lineArrayStack[lineindex][pointindex].y);
+        }
+    }
+}
+
+
+
+document.getElementById("clearbutton").onclick = function(){
+    lineArrayStack = [];
+    clear();
+    background(159,135,103);
+}
+
+codesquaresize = 170;
+marginsize = 40;
+fontsize = 12;
+//globalurl = "http://www.trashrobot.org/qrcode.html";
+globalurl = window.location.href;
+qrcode = new QRCode(document.getElementById("qrcode"), {
+	text: globalurl,
+	width: codesquaresize,
+	height: codesquaresize,
+	colorDark : "#000000",
+	colorLight : "#ffffff",
+	correctLevel : QRCode.CorrectLevel.H
+});
+
+
+
+document.getElementById("postbutton").onclick = function(){
+/*            
+    clear();
+    background(159,135,103);
+    for(var lineindex = 0;lineindex < lineArrayStack.length;lineindex++){
+        for(var pointindex = 1;pointindex < lineArrayStack[lineindex].length;pointindex++){
+            line(lineArrayStack[lineindex][pointindex - 1].x,lineArrayStack[lineindex][pointindex - 1].y,lineArrayStack[lineindex][pointindex].x,lineArrayStack[lineindex][pointindex].y);
+        }
+    }
+    
+    */
+    
+    
+    png64 = document.getElementById("defaultCanvas0").toDataURL("image/png");
+    var timestamp = Math.round((new Date().getTime())/1000).toString();
+    var httpc = new XMLHttpRequest();
+    
+    var url = "pngsave.php";        
+    httpc.open("POST", url, true);
+    httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    httpc.send("data="+encodeURIComponent(png64.substring(22))+"&filename=trashmagic/square" + timestamp +  ".png");//send text to filesaver.php
+     //location.reload(); 
+     
+
+    newfilename = "trashmagic/square" + timestamp +  ".png";
+    
+    var newbox = document.createElement("DIV");
+    newbox.classList.add("imagebox");         
+    
+    var deletespan = document.createElement("SPAN");
+    deletespan.innerHTML = "X";
+    deletespan.classList.add("deletespan");
+    deletespan.onclick = function(){
+        //delete the parent div of the image
+        //delete the file
+        var filename = this.parentElement.getElementsByClassName("filelabel")[0].innerHTML; 
+        var httpc = new XMLHttpRequest();
+        var url = "deletefile.php";         
+        httpc.open("POST", url, true);
+        httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+        httpc.send("filename=trashmagic/" + filename);//send text to deletefile.php
+        this.parentElement.parentElement.removeChild(this.parentElement);
+    }
+    
+    newbox.appendChild(deletespan);
+
+    var newdiv = document.createElement("DIV");
+    newdiv.innerHTML = newfilename;
+    newdiv.className = "filelabel";
+    newbox.appendChild(newdiv);
+
+    var newimg = document.createElement("IMG");
+    newimg.src = png64;
+    newimg.classList.add("uploadimage");
+    newimg.classList.add("button");
+    newbox.appendChild(newimg);    
+
+
+    document.getElementById("feedscroll").insertBefore(newbox,document.getElementById("feedscroll").getElementsByClassName("imagebox")[0]);
+    
+    
+    
+}
+
+//listimages(document.getElementById("feedscroll"),"trashmagic");
+
+upuploadImages = [];
+var httpc9 = new XMLHttpRequest();
+    httpc9.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        upuploadImages = JSON.parse(this.responseText);
+        for(var index = upuploadImages.length - 1;index >= 0;index--) {
+            
+            var newbox = document.createElement("DIV");
+            newbox.classList.add("imagebox");         
+            
+            var deletespan = document.createElement("SPAN");
+            deletespan.innerHTML = "X";
+            deletespan.classList.add("deletespan");
+            deletespan.onclick = function(){
+                //delete the parent div of the image
+                //delete the file
+                var filename = this.parentElement.getElementsByClassName("filelabel")[0].innerHTML; 
+                var httpc = new XMLHttpRequest();
+                var url = "deletefile.php";         
+                httpc.open("POST", url, true);
+                httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+                httpc.send("filename=trashmagic/" + filename);//send text to deletefile.php
+                this.parentElement.parentElement.removeChild(this.parentElement);
+            }
+            
+            newbox.appendChild(deletespan);
+    
+            var newdiv = document.createElement("DIV");
+            newdiv.innerHTML = upuploadImages[index];
+            newdiv.className = "filelabel";
+            newbox.appendChild(newdiv);
+        
+            
+            document.getElementById("feedscroll").appendChild(newbox);
+            var newimg = document.createElement("IMG");
+            newimg.src = "trashmagic/" + upuploadImages[index];
+            newimg.classList.add("uploadimage");
+            newimg.classList.add("button");
+            newbox.appendChild(newimg);
+            
+            newimg.onclick = function(){
+                img = loadImage(this.src);
+                loadImage(this.src, img => {
+                    image(img, 0, 0,squareWidth-50,squareWidth-70);
+                });
+            }
+
+        }
+    }
+};
+httpc9.open("GET", "dir.php?filename=trashmagic", true);
+httpc9.send();
+
+</script>
+<style>
+body{
+    overflow:hidden;
+    background-color:#9f8767;    
+}
+canvas{
+    z-index:-1;
+}
+main{
+    position:absolute;
+    left:10px;
+    top:50px;
+}
+input,table{
+    background-color:#9f8767;    
+    font-family:COMIC SANS MS;
+}
+h1{
+    text-align:center;
+    font-family:Comic Sans MS;
+    font-size:2em;
+}
+#defaultCanvas0{
+    border:solid;
+    border-radius:25px;
+    border-width:5px;
+}
+#feedscroll{
+    position:absolute;
+    right:10px;
+    bottom:10px;
+    overflow:scroll;
+    border:solid;
+    background-color:#9f8767;    
+    border-radius:25px;
+    border-width:5px;
+    width:100px;
+    height:100px;
+}
+#feedscroll a{
+    display:block;
+    font-family:Comic Sans MS;
+    font-size:2em;
+    margin:10px 10px 10px 10px;
+    border-radius:20px;
+    color:black;
+    padding-left:1em;
+    border:solid;
+}
+.imagebox{
+    margin-bottom:2em;
+    margin-top:2em;
+    padding-bottom:2em; 
+    padding-top:2em;
+    border-bottom:solid;
+}
+.deletespan{
+    color:red;
+    border:solid;
+    border-color:red;
+    border-radius:0.5em;
+    padding: 1em 1em 1em 1em;
+    cursor:pointer;
+}
+.deletespan:hover{
+    background-color:#ff000080;
+}
+#feedscroll img{
+    max-width:80%;
+    display:block;
+    margin:auto;
+    margin-top:1em;
+    border:solid;
+}
+.filelabel{
+    display:none;
+}
+.topbutton{
+    position:absolute;
+    top:0px;
+    cursor:pointer;
+    width:6em;
+    z-index:100;
+    border:solid;
+    text-align:center;
+    font-size:1.8em;
+    border-width:5px;
+    border-radius:10px;
+    font-family:COMIC SANS MS;
+}
+.topbutton:hover{
+    background-color:green;
+}
+.topbutton:active{
+    background-color:yellow;
+}
+.bottombutton{
+    position:absolute;
+    bottom:0px;
+    cursor:pointer;
+    width:6em;
+    z-index:100;
+    border:solid;
+    text-align:center;
+    font-size:1.8em;
+    border-width:5px;
+    border-radius:10px;
+    font-family:COMIC SANS MS;
+}
+.bottombutton:hover{
+    background-color:green;
+}
+.bottombutton:active{
+    background-color:yellow;
+}
+#removebutton{
+    right:50%;
+    width:12em;
+}
+#deletebutton{
+    left:0px;
+}
+#clearbutton{
+    right:0px;
+}
+</style>
+</body>
+</html>

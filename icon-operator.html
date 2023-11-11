@@ -1,0 +1,871 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+        <!--
+
+TRASH MAGIC MEDIA NETWORK
+
+EVERYTHING IS PHYSICAL
+EVERYTHING IS FRACTAL
+EVERYTHING IS RECURSIVE
+
+NO MONEY
+NO MINING
+NO PROPERTY
+
+LOOK AT THE FUNGI
+LOOK AT THE INSECTS
+LANGUAGE IS HOW THE MIND PARSES REALITY
+
+
+
+    All Code, text, art, media, technology, and ideas CC0 PUBLIC DOMAIN
+
+
+
+    -->
+    
+<link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA/wAAAAD//wAA/wAAAAD/AP8A/wAApv8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFUAAARGAAIxFVUABEYAAjMRFQAARGYiIjMRAABERmZiIzEAAARERGZiMwAAAARERGYiAAAAAABERiL4PwAA+78AAPu/AAD33wAA9V8AAPVfAAD1XwAA998AAOADAADhAAAA4AAAAPAAAADwAAAA+AAAAP4AAAD/wAAA" rel="icon" type="image/x-icon" />
+
+   <title>TRASH MAGIC MEDIA</title>    
+<script src="https://cdn.jsdelivr.net/npm/x3dom@1.7.2/x3dom.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/x3dom@1.7.2/x3dom.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/94/three.min.js"></script>
+<script>
+THREE.STLExporter = function () {};
+THREE.STLExporter.prototype = {
+
+	constructor: THREE.STLExporter,
+
+	parse: ( function () {
+
+		var vector = new THREE.Vector3();
+		var normalMatrixWorld = new THREE.Matrix3();
+
+		return function parse( scene, options ) {
+
+			if ( options === undefined ) options = {};
+
+			var binary = options.binary !== undefined ? options.binary : false;
+
+			//
+
+			var objects = [];
+			var triangles = 0;
+
+			scene.traverse( function ( object ) {
+
+				if ( object.isMesh ) {
+
+					var geometry = object.geometry;
+
+					if ( geometry.isBufferGeometry ) {
+
+						geometry = new THREE.Geometry().fromBufferGeometry( geometry );
+
+					}
+
+					if ( geometry.isGeometry ) {
+
+						triangles += geometry.faces.length;
+
+						objects.push( {
+
+							geometry: geometry,
+							matrixWorld: object.matrixWorld
+
+						} );
+
+					}
+
+				}
+
+			} );
+
+			if ( binary ) {
+
+				var offset = 80; // skip header
+				var bufferLength = triangles * 2 + triangles * 3 * 4 * 4 + 80 + 4;
+				var arrayBuffer = new ArrayBuffer( bufferLength );
+				var output = new DataView( arrayBuffer );
+				output.setUint32( offset, triangles, true ); offset += 4;
+
+				for ( var i = 0, il = objects.length; i < il; i ++ ) {
+
+					var object = objects[ i ];
+
+					var vertices = object.geometry.vertices;
+					var faces = object.geometry.faces;
+					var matrixWorld = object.matrixWorld;
+
+					normalMatrixWorld.getNormalMatrix( matrixWorld );
+
+					for ( var j = 0, jl = faces.length; j < jl; j ++ ) {
+
+						var face = faces[ j ];
+
+						vector.copy( face.normal ).applyMatrix3( normalMatrixWorld ).normalize();
+
+						output.setFloat32( offset, vector.x, true ); offset += 4; // normal
+						output.setFloat32( offset, vector.y, true ); offset += 4;
+						output.setFloat32( offset, vector.z, true ); offset += 4;
+
+						var indices = [ face.a, face.b, face.c ];
+
+						for ( var k = 0; k < 3; k ++ ) {
+
+							vector.copy( vertices[ indices[ k ] ] ).applyMatrix4( matrixWorld );
+
+							output.setFloat32( offset, vector.x, true ); offset += 4; // vertices
+							output.setFloat32( offset, vector.y, true ); offset += 4;
+							output.setFloat32( offset, vector.z, true ); offset += 4;
+
+						}
+
+						output.setUint16( offset, 0, true ); offset += 2; // attribute byte count
+
+					}
+
+				}
+
+				return output;
+
+			} else {
+
+				var output = '';
+
+				output += 'solid exported\n';
+
+				for ( var i = 0, il = objects.length; i < il; i ++ ) {
+
+					var object = objects[ i ];
+
+					var vertices = object.geometry.vertices;
+					var faces = object.geometry.faces;
+					var matrixWorld = object.matrixWorld;
+
+					normalMatrixWorld.getNormalMatrix( matrixWorld );
+
+					for ( var j = 0, jl = faces.length; j < jl; j ++ ) {
+
+						var face = faces[ j ];
+
+						vector.copy( face.normal ).applyMatrix3( normalMatrixWorld ).normalize();
+
+						output += '\tfacet normal ' + vector.x + ' ' + vector.y + ' ' + vector.z + '\n';
+						output += '\t\touter loop\n';
+
+						var indices = [ face.a, face.b, face.c ];
+
+						for ( var k = 0; k < 3; k ++ ) {
+
+							vector.copy( vertices[ indices[ k ] ] ).applyMatrix4( matrixWorld );
+
+							output += '\t\t\tvertex ' + vector.x + ' ' + vector.y + ' ' + vector.z + '\n';
+
+						}
+
+						output += '\t\tendloop\n';
+						output += '\tendfacet\n';
+
+					}
+
+				}
+
+				output += 'endsolid exported\n';
+
+				return output;
+
+			}
+
+		};
+
+	}() )
+
+};
+</script>
+    <script src="geometron.js"></script>
+
+</head>
+<body>    
+
+<a id = "homelink" href = "index.html">HOME</a>
+        
+<div id = "linkbox">
+    
+    <div class= "button" id = "savebutton"> ⬇️ SAVE ICON TO FILES ⬇️</div>
+            <a href = "icon.stl">icon.stl</a>
+            <a href = "icon-vr.html">icon-vr.html</a>
+            <a href = "icon.png">icon.png</a>
+            <a href = "icon-stencil.svg">icon-stencil.svg</a>
+            <a href = "iconpage.svg">iconpage.svg</a>
+            
+</div>
+        
+        
+
+<div id  = "mainbox"><canvas id = "maincanvas"></canvas></div>
+
+<div style = "display:none" id = "square">
+    <x3d id = "mainx3d">
+        <scene id = "main">
+        </scene>
+    </x3d>
+</div>
+
+<div style = "display:none" id  = "pagebox"><canvas id = "pagecanvas"></canvas></div>
+
+<div style = "display:none" id  = "steniclbox"><canvas id = "stencilcanvas"></canvas></div>
+
+
+<table id = "glyphinputtable">
+    <tr>
+        <td>geometron glyph:</td>
+        <td><input id = "glyphinput"/></td>
+    </tr>
+    <tr>
+        <td>HTML embed code:</td>
+        <td>
+            <input id = "htmlinput"/>
+        </td>
+    </tr>
+    <tr>
+        <td>letter code:</td>
+        <td><input id = "letterinput"/></td>
+    </tr>
+</table>
+        
+        
+
+<div id = "feed"></div>
+
+<div  id = "importbutton" class= "button">IMPORT</div>
+<textarea id = "textio" ></textarea>
+
+<script>
+document.getElementById("letterinput").value = "";
+
+var camera, scene, renderer;
+var geometry, material, mesh;
+init();
+
+function drawcubethreejs(){
+    var newcube = new THREE.CubeGeometry( side,side,side );
+    newcube.translate(x,y,z);
+    var newcubemesh = new THREE.Mesh( newcube, material );
+    scene.add(newcubemesh);
+
+}
+
+function init(){
+    camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 10 );
+    camera.position.z = 3;
+    camera.position.x = 2;
+
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color( 0xffffff );
+    material = new THREE.MeshNormalMaterial( { color: 0x000000, wireframe: false } );
+    renderer = new THREE.WebGLRenderer( { antialias: true } );
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    document.body.appendChild( renderer.domElement ); 
+    
+}
+main = document.getElementById("main");
+
+function redraw(){
+    main.innerHTML = "";
+    x = 0.0;
+    y = 0.0;
+    z = 0.0;
+    side = 0.25;
+    solidColor = "1 0 0";
+    currentTrans = 0.0;
+    drawGlyph("0600," + glyph);
+    renderer.render( scene, camera );
+
+}
+
+function drawGlyph(localString){
+    var tempArray = localString.split(',');
+    for(var index = 0;index < tempArray.length;index++){
+        action(parseInt(tempArray[index],8));
+    }
+}
+
+function action(localCommand){
+
+    if(localCommand >= 0500 && localCommand < 0700){
+        drawGlyph(mainGVM.hypercube[localCommand]);
+    }
+    if(localCommand > 01000){
+        drawGlyph(mainGVM.hypercube[localCommand]);
+    }
+    if(localCommand >= 0220 && localCommand < 0300){
+        drawGlyph(mainGVM.hypercube[localCommand]);
+    }
+    
+
+    if(localCommand == 0700){
+        x += side;
+    }
+    if(localCommand == 0701){
+        x -= side;
+    }
+    if(localCommand == 0702){
+        y += side;
+    }
+    if(localCommand == 0703){
+        y -= side;
+    }
+    if(localCommand == 0704){
+        z += side;
+    }
+    if(localCommand == 0705){
+        z -= side;
+    }
+    if(localCommand == 0706){
+        side /= 2;
+    }
+    if(localCommand == 0707){
+        side *= 2;
+    }
+    if(localCommand == 0710){
+        drawsphere();
+    }
+    if(localCommand == 0711){
+        drawcube();
+        drawcubethreejs();
+    }
+    
+    if(localCommand == 0720){
+        //red
+        solidColor = "1 0 0";
+    }
+    if(localCommand == 0721){
+        //orange
+        solidColor = "1 0.5 0";
+    }
+    if(localCommand == 0722){
+        solidColor = "1 1 0";
+        //yellow
+    }
+    if(localCommand == 0723){
+        //green
+        solidColor = "0 1 0";
+    }
+    if(localCommand == 0724){
+        //blue
+        solidColor = "0 0 1";
+    }
+    if(localCommand == 0725){
+        //purple
+        solidColor = "1 0 1";
+    }
+
+
+}
+
+
+
+function drawsphere(){
+    var news = document.createElement("shape");
+    var newt = document.createElement("transform");
+    main.appendChild(newt);
+    newt.setAttribute("translation",x.toString() + " " + y.toString() + " " + z.toString() );
+    var newt2 = document.createElement("transform");
+    newt.appendChild(newt2);
+    newt2.setAttribute("scale",(side).toString() + " " + (side).toString() + " " + (side).toString());
+    newt2.appendChild(news);
+    var newa = document.createElement("appearance");
+    news.appendChild(newa);
+    var newm = document.createElement("material");
+    newm.setAttribute("diffuseColor",solidColor);
+    newm.setAttribute("transparency",currentTrans);
+    newa.appendChild(newm);
+    var newb = document.createElement("sphere");
+    news.appendChild(newb);
+}
+
+function drawcube(){
+    var news = document.createElement("shape");
+    var newt = document.createElement("transform");
+    main.appendChild(newt);
+    newt.setAttribute("translation",x.toString() + " " + y.toString() + " " + z.toString() );
+    var newt2 = document.createElement("transform");
+    newt.appendChild(newt2);
+    newt2.setAttribute("scale",(0.5*side).toString() + " " + (0.5*side).toString() + " " + (0.5*side).toString());
+    newt2.appendChild(news);
+    var newa = document.createElement("appearance");
+    news.appendChild(newa);
+    var newm = document.createElement("material");
+    newm.setAttribute("diffuseColor",solidColor);
+    newm.setAttribute("transparency",currentTrans);
+    newa.appendChild(newm);
+    var newb = document.createElement("box");
+    news.appendChild(newb);    
+}
+
+
+filetop = "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"/><script src=\"https://cdn.jsdelivr.net/npm/x3dom@1.7.2/x3dom.js\">";
+filetop += "<\/script><link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/x3dom@1.7.2/x3dom.css\"></head><body><x3d style = \"position:absolute;left:0px;right:0px;top:0px;bottom:0px;z-index:-1;\">";
+
+
+function save3d(){
+
+    x3dcode = main.innerHTML;
+    //this is an html file not an x3d file, because xml is the language of Mordor, which I shall not utter here
+
+    var url = "filesaver.php";        
+    var httpc = new XMLHttpRequest();
+    httpc.open("POST", url, true);
+    httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    httpc.send("data="+encodeURIComponent(filetop + "<scene>" + x3dcode + "</scene></x3d>" + "</scene></x3d>\n</body></html>")+"&filename=icon-vr.html");//send text to filesaver.php    
+    
+}
+
+glyph = "";
+feedwidth = 100;
+feedlinkwidth  = feedwidth;
+maincanvas = document.getElementById("maincanvas");
+mainsize = 400;
+if(innerWidth > innerHeight){
+    mainsize = innerHeight*0.5 - 50;
+    document.getElementById("feed").style.top = (mainsize).toString() + "px";
+
+
+
+}
+else{
+    mainsize = 0.5*innerWidth;
+//    document.getElementById("feed").style.top = (innerHeight*0.5).toString() + "px";
+  //  document.getElementById("mainbox").style.right = (0.25*innerWidth).toString() + "px";    
+    
+}
+var mainGVM = new GVM(maincanvas,mainsize,mainsize);
+mainGVM.unit = 30;
+mainGVM.style.fill1 = "white";
+mainGVM.style.color1 = "black";
+mainGVM.style.line1 = 0.5;
+mainGVM.drawGlyph("0321,0337,0337,0347,0336,0336,0320,");
+
+var pageGVM = new GVM(document.getElementById("pagecanvas"),425,550);
+pageGVM.unit = 75;//1.5 inches is 1 unit
+pageGVM.style.fill1 = "white";
+pageGVM.style.color1 = "black";
+pageGVM.style.line1 = 0.5;
+pageGVM.x0 = 25;//half inch
+pageGVM.y0 = 12;//quarter inch, rounded down
+pageGVM.drawGlyph("0300,");
+
+var stencilGVM = new GVM(document.getElementById("stencilcanvas"),600,600);
+
+
+gvmArray = [];
+
+iconfeed = [];
+
+mainGVM.importbytecode(hypercube);    
+
+pageGVM.importbytecode(hypercube);    
+pageGVM.hypercube[0221] = "0320,0370,0331,0333,0200,0336,0330,0332,0336,0336,0210,0210,0220,0371,";
+pageGVM.hypercube[0222] = "0221,0333,0221,0333,0221,0333,0221,0333,0221,0331,0332,0332,0332,0332,";
+pageGVM.hypercube[0223] = "0222,0222,0222,0222,0222,0222,0222,";
+
+stencilGVM.importbytecode(hypercube);    
+stencilGVM.hypercube[0500] = "0336,0336,0336,0330,0336,0336,0331,0333,0337,0204,0336,0330,0332,0337,0337,0337,0337,0337,";
+stencilGVM.hypercube[0501] = "0336,0336,0336,0331,0336,0336,0331,0333,0337,0204,0336,0330,0332,0337,0337,0337,0337,0337,";
+stencilGVM.hypercube[0502] = "0336,0336,0336,0332,0336,0336,0331,0333,0337,0204,0336,0330,0332,0337,0337,0337,0337,0337,";
+stencilGVM.hypercube[0503] = "0336,0336,0336,0333,0336,0336,0331,0333,0337,0204,0336,0330,0332,0337,0337,0337,0337,0337,";
+
+
+
+var httpcFeed = new XMLHttpRequest();
+httpcFeed.onreadystatechange = function(){
+    if (this.readyState == 4 && this.status == 200) {
+        iconfeed = JSON.parse(this.responseText);
+        document.getElementById("textio").value = this.responseText;
+        loadfeed();
+    }
+};
+
+httpcFeed.open("GET", "fileloader.php?filename=data/iconfeed.txt", true);
+httpcFeed.send();
+
+
+
+
+/*
+mainfeed = [];
+var httpc11 = new XMLHttpRequest();
+    httpc11.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        mainfeed = JSON.parse(this.responseText);
+    }
+};
+httpc11.open("GET", "fileloader.php?filename=data/mainfeed.txt", true);
+httpc11.send();
+*/
+
+
+
+document.getElementById("htmlinput").value = "";
+
+function loadfeed(){
+    gvmArray = [];
+    document.getElementById("feed").innerHTML = "";
+    for(var index = 0;index < iconfeed.length;index++){
+        var newdiv = document.createElement("span");
+        var newcan = document.createElement("CANVAS");
+        newcan.className = "feedcan";
+        newdiv.style.marginTop = 0.05*feedwidth + "px";
+        newdiv.style.marginBottom = 0.05*feedwidth + "px";
+        newdiv.appendChild(newcan);
+        newdiv.className = "feedelement";
+        newcan.classList.add("button");
+        document.getElementById("feed").appendChild(newdiv);
+        var newGVM = new GVM(newcan,feedlinkwidth,feedlinkwidth);
+        newGVM.hypercube = mainGVM.hypercube;
+        gvmArray.push(newGVM);
+        newGVM.drawGlyph(iconfeed[index]);    
+        
+        var datadiv = document.createElement("DIV");
+        datadiv.innerHTML = iconfeed[index];
+        datadiv.className = "data";
+        newdiv.appendChild(datadiv);
+        newdiv.onclick = function(){
+            glyph = this.getElementsByClassName("data")[0].innerHTML;
+            document.getElementById("glyphinput").value = glyph;
+            mainGVM.drawGlyph("0321,0337,0337,0347,0336,0336,0320," + glyph);
+            //make this the coin for coin studio
+            coin = glyph;
+            document.getElementById("letterinput").value = bytecode2ascii(glyph);
+            document.getElementById("htmlinput").value = "<img src = \"" + mainGVM.pngcode() + "\"/>";
+
+
+                        
+            pageGVM.hypercube[0220] = glyph;
+            pageGVM.drawGlyph("0300,0223,");
+            
+            
+        }
+        var newimg = document.createElement("IMG");
+        newimg.src = "iconsymbols/delete.svg";
+        newdiv.appendChild(newimg);
+        newimg.classList.add("button");
+        newimg.classList.add("deletebutton");
+        newimg.id = "if" + index.toString();
+        newimg.onclick = function(){
+            //find the index and remove that from the feed 
+            var thisindex = parseInt(this.id.substring(2));
+
+            var tempfeed = [];
+            for(var robotindex = 0;robotindex < iconfeed.length;robotindex++){
+                if(robotindex != thisindex){
+                    tempfeed.push(iconfeed[robotindex]);
+                }
+            }
+            iconfeed = tempfeed;    
+            this.parentElement.parentElement.removeChild(this.parentElement);
+            saveiconfeed();
+            loadfeed();
+        }        
+        
+    }    
+}
+
+document.getElementById("glyphinput").value = "";
+
+
+document.getElementById("savebutton").onclick = function(){
+    redraw();
+    savepng();
+    savepage();
+    savestencil();
+    save3d();
+    savestl();
+}
+
+function savestl(){
+    var exporter = new THREE.STLExporter();
+    var str = exporter.parse(scene);
+    var httpc = new XMLHttpRequest();
+    console.log(str);
+    httpc.open("POST", "filesaver.php", true);
+    httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    httpc.send("data="+encodeURIComponent(str)+"&filename=icon.stl");//send text to filesaver.php   
+
+}
+
+function savepng(){
+
+    var httpc = new XMLHttpRequest();
+    var url = "pngsave.php";        
+    httpc.open("POST", url, true);
+    httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    httpc.send("data="+encodeURIComponent(mainGVM.pngcode().substring(22))+"&filename=icon.png");//send text to filesaver.php
+}
+
+
+
+function bytecode2ascii(bytecode){
+    var bytesequence = bytecode.split(",");
+    var outstring = "";
+    for(var index = 0;index < bytesequence.length;index++){
+        var robotaction = parseInt(bytesequence[index],8);
+        if(robotaction == 0500){
+            outstring += "A";
+        }
+        if(robotaction == 0501){
+            outstring += "B";
+        }
+        if(robotaction == 0502){
+            outstring += "C";
+        }
+        if(robotaction == 0503){
+            outstring += "D";
+        }
+        if(robotaction == 0504){
+            outstring += "E";
+        }
+        if(robotaction == 0505){
+            outstring += "F";
+        }
+        if(robotaction == 0506){
+            outstring += "G";
+        }
+        if(robotaction == 0507){
+            outstring += "H";
+        }
+        if(robotaction >= 01040 && robotaction < 01177){
+            outstring += bytecode2ascii(mainGVM.hypercube[robotaction]);
+        }
+    }
+    return outstring;
+
+}
+
+
+function saveiconfeed(){
+    
+    var httpc = new XMLHttpRequest();
+    httpc.open("POST", "filesaver.php", true);
+    httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    httpc.send("data="+encodeURIComponent(JSON.stringify(iconfeed,null,"  "))+"&filename=data/iconfeed.txt");//send text to filesaver.php
+        
+}
+
+
+document.getElementById("importbutton").onclick = function(){
+    iconfeed = JSON.parse(document.getElementById("textio").value);
+    loadfeed();
+    saveiconfeed();
+}
+
+
+
+function savepage(){
+    var httpc2 = new XMLHttpRequest();
+    httpc2.open("POST","filesaver.php", true);
+    httpc2.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    httpc2.send("data="+encodeURIComponent(pageGVM.svgString) +"&filename=iconpage.svg");//send text to filesaver.php
+
+}
+
+function savestencil(){
+    stencilGVM.glyph = glyph;
+    stencilGVM.drawGlyph(glyph);
+
+    currentjson = {};
+    currentjson.shapes = [];
+    currentjson.glyph = glyph;
+    currentjson.x0 = stencilGVM.x0;
+    currentjson.y0 = stencilGVM.y0;
+    currentjson.unit = stencilGVM.unit;
+    currentjson.width = stencilGVM.width;
+    currentjson.height = stencilGVM.height;
+    currentjson.style = stencilGVM.style;
+    
+    stencilGVM.svgString = stencilGVM.svgString.split("<json>")[0] + "<json>" + JSON.stringify(currentjson,null,"  ") + "</json>" + stencilGVM.svgString.split("</json>")[1];
+
+    var httpc2 = new XMLHttpRequest();
+    httpc2.open("POST","filesaver.php", true);
+    httpc2.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    httpc2.send("data="+encodeURIComponent(stencilGVM.svgString) +"&filename=icon-stencil.svg");//send text to filesaver.php
+    
+    
+}
+
+
+
+function drawcube(){
+    var news = document.createElement("shape");
+    var newt = document.createElement("transform");
+    main.appendChild(newt);
+    newt.setAttribute("translation",x.toString() + " " + y.toString() + " " + z.toString() );
+    var newt2 = document.createElement("transform");
+    newt.appendChild(newt2);
+    newt2.setAttribute("scale",(0.5*side).toString() + " " + (0.5*side).toString() + " " + (0.5*side).toString());
+    newt2.appendChild(news);
+    var newa = document.createElement("appearance");
+    news.appendChild(newa);
+    var newm = document.createElement("material");
+    newm.setAttribute("diffuseColor",solidColor);
+    newm.setAttribute("transparency",currentTrans);
+    newa.appendChild(newm);
+    var newb = document.createElement("box");
+    news.appendChild(newb);    
+}
+</script>
+<style>
+body{
+    background-color:#8080ff;
+}
+a{
+/*        color:#ff2cb4;*/
+    color:#0000ff;
+
+}
+#savebutton{
+    border:solid;
+    border-radius:5px;
+    
+}
+#homelink{
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:5em;
+    font-size:1em;
+    text-align:center;
+    z-index:2;
+}
+#linkbox{
+    position:absolute;
+    right:0px;
+    top:0px;
+    z-index:2;
+}
+canvas{
+    display:none;
+}
+table .button{
+    border:solid;
+}
+#mainbox{
+    position:absolute;
+    right:0px;
+    top:0px;
+    background-color:white;
+}
+#maincanvas{
+    display:inline;
+}
+#feed canvas{
+    display:inline;
+}
+#textio{
+    font-family:courier;
+    position:Absolute;
+    left:5px;
+    bottom:5px;
+    height:95px;
+    width:45%;
+    background-color:black;
+    color:#00ff00;
+    z-index:2;
+}
+
+#glyphinputtable{
+    position:absolute;
+    left:10px;
+    top:2em;
+}
+#importbutton{
+    position:Absolute;
+    left:5px;
+    bottom:5px;
+    border:solid;
+    border-radius:5px;
+    text-align:center;
+    width:4em;
+    height:1em;
+    font-size:1em;
+    z-index:20;
+    background-color:white;
+}
+#square{
+    position:absolute;
+    right:0px;
+    top:0px;
+    border:solid;
+    border-width:0.1px;
+    border-color:blue;
+    overflow:hidden;
+    width:500px;
+    height:500px;
+}
+#mainbox{
+    border:solid;
+}
+#feed{
+    position:absolute;
+    right:0px;
+    overflow:scroll;
+    border:solid;
+    background-color:#e0e0e0;
+    z-index:-1;
+}
+@media only screen and (orientation: portrait) {
+    #mainbox{
+        top:100px;
+    }
+    #textio{
+
+    }
+    #feed{
+        right:0em;
+        left:0em;
+        bottom:110px;
+        top:320px;
+    }
+
+    #glyphinputtable{
+        top:4em;
+    }
+}
+@media only screen and (orientation: landscape) {
+    #feed{
+        top:400px;
+        bottom:0px;
+        bottom:120px;
+    }
+
+    #textio{
+        
+    }
+}
+.deletebutton{
+    width:20px;
+    margin-left:-20px;
+    display:none;
+}
+.button{
+    cursor:pointer;
+    text-align:center;
+}
+.button:hover{
+    background-color:yellow;
+}
+.button:active{
+    background-color:green;
+}
+.data{
+    display:none;
+}
+</style>
+</body>
+</html>
+
+

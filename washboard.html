@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <!--
+
+        EVERYTHING IS PHYSICAL 
+        EVERYTHING IS FRACTAL
+        EVERYTHING IS RECURSIVE
+        NO MONEY 
+        MO MINING 
+        NO PROPERTY
+        LOOK AT THE INSECTS
+        LOOK AT THE FUNGI
+        LANGUAGE IS HOW THE MIND PARSES REALITY
+
+    -->
+        <title>TILTED WASHBOARD POTENTIAL</title>
+
+<link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAZ4efAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEREREREREREREREREREREREAAAAAAAAREQEREREREBERAREREREQEREBEAAAARAREQEQEREBEBERARAQAQEQEREBEBABARAREQEQEREBEBERARAAAAEQEREBERERERAREQEREREREBERAAAAAAAAEREREREREREREREREREREREAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rel="icon" type="image/x-icon">
+
+
+    <!--Stop Google:-->
+    <META NAME="robots" CONTENT="noindex,nofollow">
+<!--geometron javascript library-->
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.7.0/lib/p5.js"></script>
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/addons/p5.sound.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script>
+            MathJax.Hub.Config({
+                tex2jax: {
+                inlineMath: [['$','$'], ['\\(','\\)']],
+                processEscapes: true,
+                processClass: "mathjax",
+                ignoreClass: "no-mathjax"
+                }
+            });//			MathJax.Hub.Typeset();//tell Mathjax to update the math
+        </script>
+
+</head>
+<body>
+
+
+<div id = "feedscroll">
+    
+
+    <h1><a style = "color:blue;text-align:center;margin:auto" href = "index.html">HOME</a></h1>
+    
+<img src= "https://raw.githubusercontent.com/LafeLabs/quantumnoisedotorg/master/trashmagic/rcsj.svg"/>    
+
+<table>
+    <tr>
+        <td>Natural oscillation period [frames]</td>
+        <td><input id = "tplasmainput"/></td>
+    </tr>
+    <tr>
+        <td>Bias period [frames]</td>
+        <td><input id = "tbiasinput"/></td>
+    </tr>
+    <tr>
+        <td>RC time [frames]</td>
+        <td><input id = "rcinput"/></td>
+    </tr>
+</table>
+    
+<p>We begin with the resistively and capacitively shunted Josephson junction with resistance R in ohms, capacitance C in farads, and critical current in amperes $I_0$. The current bias is I(t), also in amperes, and is some general function of time which comes from the input signal.  The first Josephson equation is:</p>
+
+<p>
+    $$
+    I(t) = I_0\sin{\delta},
+    $$
+</p>
+<p>
+    where $\delta$ is the difference in phase between the wave function on each side of the tunnel barrier, and it is a function of time.  The second Josephson equation is that the voltage across the junction is 
+</p>
+
+<p>
+    $$
+    V = \frac{\Phi_0}{2\pi}\dot{\delta}      
+    $$
+</p>
+<p>
+$\Phi_0$ is the flux quantum, which is $h/2e$, or about $2.07\times 10^{-15}$ webers, and $\dot{\delta}$ is the time derivative of the phase difference in radians.
+</p>
+
+<p>The full equation of motion with a resistor and capacitor is </p>
+
+<p>
+    $$
+    C\dot{V} + \frac{V}{R} + I_0\sin{\delta} = I(t)
+    $$
+</p>
+<p>
+    From this we can subsitute the second Josephson equation above to get 
+</p>
+
+<p>
+    $$
+    \frac{\Phi_0}{2\pi}C\ddot{\delta} + \frac{\Phi_0}{2\pi}\frac{1}{R}\dot{\delta} = I(t) - I_0\sin{\delta} 
+    $$
+</p>
+<p>
+    now we define the Josephson inductance to be 
+</p>
+
+<p>
+    $$
+    L_J \equiv \frac{\Phi_0}{2\pi}\frac{1}{I_0},
+    $$
+</p>
+<p>
+    Define the normalized current bias to be $i(t) = I(t)/I_0$, and divide each side of the equation by the critical current to get 
+</p>
+
+<p>
+    $$
+    L_JC\ddot{\delta} + \frac{L_J}{R}\dot{\delta} = i(t) - \sin{\delta}
+    $$
+</p>
+<p>
+    Now we define the plasma frequency to be 
+    $$
+\omega_p = \frac{1}{\sqrt{L_J C}}
+    $$
+    and multiply both sides of the equation by $\omega_p^2$ to get:
+</p>
+<p>
+    $$
+    \ddot{\delta} + \frac{1}{RC}\dot{\delta} = \omega_p^2(i(t) - \sin{\delta})
+    $$
+</p>
+<p>
+    And now we note that the right side of this equation can be seen as position derivative of an effective potential $U(\delta)$ which is 
+</p>
+
+<p>
+    $$
+    U(\delta) = E_J(1 - \cos{\delta} - i(t)\delta)
+    $$
+</p>
+<p>
+    This is enough information to plot the oscillating potential energy surface.  The normalized current bias is an AC bias with period of a few frames in our animation.  Our animations are generally 10 to 30 frames, so the period should be a few frames. The period in frames is $T_{bias}$
+</p>
+
+<p>
+    $$
+    i(t) = A\cos{\left(\frac{2\pi \textrm{[frameIndex]}}{T_{bias}}\right)}
+    $$
+</p>
+
+<p>
+    We vary the position x from 0 on the left side of the square plot to $[\textrm{squaresize}]$ pixels.  The phase $\delta$ varies across the horizontal axis with a period defined by $T_{phase}$ in units of pixels.  We want to center the plot on the center of the square, at the x value of $[\textrm{squresize}]/2$, and so the value of $\delta$ across the square as a function of x is 
+    $$
+    \delta = \frac{2\pi}{T_{phase}}\left(x - \frac{[\textrm{squaresize}]}{2}\right) 
+    $$
+    and the y value will be 
+    $$
+    y = \frac{[\textrm{squaresize}]}{2} - E_J(1 - \cos{\delta} - i(t)\delta),
+    $$
+    where $E_J$ is the Josephson energy in units of pixels.  Note that $\delta$ is always in units of radians.  
+</p>
+
+    </p>
+    
+    <p>
+position mouse to set the amplitude of oscillation(X) and the josephson energy(Y).  hit the s key to save a plot.
+    </p>
+
+
+    <p>We will now use the fourth order <a href= "https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods">Runge Kutta</a> method to turn this into a difference equation.</p>
+    
+    <p>
+        The second order differential equation can be re-written as a first order differential equation on a vector consisting of the phase space variables $\delta$ and $\dot{\delta}$.  
+    </p>
+    <p>
+        $$
+        \frac{d}{dt} \begin{bmatrix}\delta \\ \dot{\delta}\end{bmatrix} = \begin{bmatrix}\dot{\delta} \\ \omega_P^2\left(i(t) - \sin{\delta}\right) - \frac{1}{RC}\dot{\delta} \end{bmatrix}
+        $$
+        
+        $$
+        \vec{y} \equiv \begin{bmatrix}\delta \\ \dot{\delta}\end{bmatrix} 
+        $$
+    </p>
+    <p>
+        $$
+        \frac{d\vec{y}(t)}{dt} = f(\vec{y}(t),t), y(t_0) = y_0
+        $$
+    </p>
+    <p>
+        $$
+        \vec{y_{n+1}} = \vec{y_n} + \frac{h}{6}(k_1 + 2k_2 + 2k_3 + k_4),
+        $$
+    </p>
+    <p>
+        $$
+    t_{n+1} = t_n + h
+    $$
+    </p>
+    <p>
+        h is the time increment which is always one frame by default so that we are computing positions frame by frame.  All time units are in frames in our p5js code.  The coefficients are also vectors and are evaluated one after another. 
+    </p>
+    
+    <img src = "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Runge-Kutta_slopes.svg/1920px-Runge-Kutta_slopes.svg.png"/>
+    <p>
+        $$
+        \vec{k_1} = f(t_n,\vec{y_n})
+        $$
+        $$
+        \vec{k_2} = f(t_n + \frac{h}{2},\vec{y_n} + h\frac{\vec{k_1}}{2})
+        $$
+        $$
+        \vec{k_3} = f(t_n + \frac{h}{2},\vec{y_n} + h\frac{\vec{k_2}}{2})
+        $$
+        $$
+        \vec{k_4} = f(t_n + h,\vec{y_n} + h\vec{k_3})
+        $$
+    </p>
+    
+    <p>
+        this is how this is simulated. 
+    </p>
+    
+    
+</div>
+
+<script>
+
+let Tbias = 60;//period of current bias in frames
+RC = 300;//RC time in frames
+let Tphase = 300;//period of phase across the x axis in pixels
+let frameIndex = 0;
+Ej = 100;//Josephoson energy in pixels
+A = 0.10;//bias current amplitude in pixels
+
+ballX = 0;
+ballY = 0;
+
+h = 1;//1 frame is one step in time
+
+omegap = 0.1;
+Tplasma = 120;//natural period of small oscillations in frames
+
+delta = 0.1;
+deltadot = 0;
+y = [0,0];
+ynext = [0,0];
+k1 = [0,0];
+k2 = [0,0];
+k3 = [0,0];
+k4 = [0,0];
+
+
+document.getElementById("tplasmainput").value = Tplasma.toString();
+document.getElementById("tbiasinput").value = Tbias.toString();
+document.getElementById("rcinput").value = RC.toString();
+
+document.getElementById("rcinput").onchange = function(){
+ RC = parseInt(this.value);    
+}
+document.getElementById("tbiasinput").onchange = function(){
+ Tbias = parseInt(this.value);    
+}
+document.getElementById("tplasmainput").onchange = function(){
+ Tplasma = parseInt(this.value);    
+}
+
+if(innerWidth > innerHeight){
+    squaresize = innerHeight - 50;
+    document.getElementById("feedscroll").style.right =  squaresize.toString()+ "px";    
+}
+else{
+    squaresize = innerWidth - 50;
+    
+    document.getElementById("feedscroll").style.right =  "0px";    
+    document.getElementById("feedscroll").style.top = squaresize.toString() + "px";
+}
+
+
+function setup() {
+
+  createCanvas(squaresize, squaresize);    
+   strokeWeight(2);  
+   background("#F8F0E3");
+    
+}
+
+
+
+function draw(){
+
+  frameRate(20);
+  
+  omegap = 2*Math.PI/Tplasma;
+  Ej = mouseY;
+  A = mouseX/width;
+//  background(220);
+  background("#9f8767");
+
+  k1[0] = deltadot;
+  k1[1] = omegap*(A*Math.cos(2*Math.PI*frameIndex/Tbias) - sin(delta)) - (1/RC)*deltadot;
+
+
+  ynext[0] = delta + 0.5*h*k1[0];
+  ynext[1] = deltadot + 0.5*h*k1[1];  
+
+  k2[0] = ynext[1];
+  k2[1] = omegap*(A*Math.cos(2*Math.PI*(frameIndex + 0.5*h)/Tbias) - sin(ynext[0])) - (1/RC)*ynext[1];
+
+
+  ynext[0] = delta + 0.5*h*k2[0];
+  ynext[1] = deltadot + 0.5*h*k2[1];  
+
+
+  k3[0] = ynext[1];
+  k3[1] = omegap*(A*Math.cos(2*Math.PI*(frameIndex + 0.5*h)/Tbias) - sin(delta)) - (1/RC)*ynext[1];
+
+  ynext[0] = delta + h*k3[0];
+  ynext[1] = deltadot + h*k3[1];  
+    
+  k4[0] = ynext[1];
+  k4[1] = omegap*(A*Math.cos(2*Math.PI*(frameIndex + h)/Tbias)-sin(delta)) - (1/RC)*ynext[1];
+
+  ynext[0] = delta + 0.1667*h*(k1[0] + 2*k2[0] + 2*k3[0] + k4[0]);
+  ynext[1] = deltadot + 0.1667*h*(k1[1] + 2*k2[1] + 2*k3[1] + k4[1]); 
+
+  delta = ynext[0];
+  deltadot = ynext[1];
+  
+  if(delta > Math.PI*squaresize/Tphase){
+      delta = -Math.PI*squaresize/Tphase;
+  }
+  if(delta < -Math.PI*squaresize/Tphase){
+      delta = Math.PI*squaresize/Tphase;
+  }
+
+
+    
+  noFill();
+  // plot hyperbolic tangent functions
+  strokeWeight(8);
+  beginShape();
+  
+  for (let x = 0; x <= width; x++)  {
+      var deltaplotx = (x - 0.5*squaresize)*Math.PI*2/Tphase;
+      vertex(x,0.5*height - Ej*(1 - Math.cos(deltaplotx) - deltaplotx*A*Math.cos(2*Math.PI*frameIndex/Tbias) ));
+  }
+  endShape();
+  
+  ballX = 0.5*squaresize + delta*Tphase/(2*Math.PI);
+  ballY = 0.5*height - Ej*(1 - Math.cos(delta) - delta*A*Math.cos(2*Math.PI*frameIndex/Tbias) );
+
+     
+  fill("red");
+  ellipse(ballX,ballY,40,40);
+
+  
+  frameIndex++;
+  
+  if(frameIndex > 100000){
+      frameIndex = 0;
+  }
+}
+
+
+
+
+function post(){
+            
+    png64 = document.getElementById("defaultCanvas0").toDataURL("image/png");
+    var timestamp = Math.round((new Date().getTime())/1000).toString();
+    var httpc = new XMLHttpRequest();
+    var url = "pngsave.php";        
+    httpc.open("POST", url, true);
+    httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    httpc.send("data="+encodeURIComponent(png64.substring(22))+"&filename=trashmagic/square" + timestamp +  "-coth.png");//send text to filesaver.php
+     //location.reload(); 
+     
+    newfilename = "trashmagic/square" + timestamp +  "-coth.png";
+    
+    var newbox = document.createElement("DIV");
+    newbox.classList.add("imagebox");         
+    
+    var deletespan = document.createElement("SPAN");
+    deletespan.innerHTML = "X";
+    deletespan.classList.add("deletespan");
+    deletespan.onclick = function(){
+        //delete the parent div of the image
+        //delete the file
+        var filename = this.parentElement.getElementsByClassName("filelabel")[0].innerHTML; 
+        var httpc = new XMLHttpRequest();
+        var url = "deletefile.php";         
+        httpc.open("POST", url, true);
+        httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+        httpc.send("filename=trashmagic/" + filename);//send text to deletefile.php
+        this.parentElement.parentElement.removeChild(this.parentElement);
+    }
+    
+    newbox.appendChild(deletespan);
+
+    var newdiv = document.createElement("DIV");
+    newdiv.innerHTML = newfilename;
+    newdiv.className = "filelabel";
+    newbox.appendChild(newdiv);
+
+    var newimg = document.createElement("IMG");
+    newimg.src = png64;
+    newimg.classList.add("uploadimage");
+    newimg.classList.add("button");
+    newbox.appendChild(newimg);    
+
+
+    document.getElementById("feedscroll").insertBefore(newbox,document.getElementById("feedscroll").getElementsByClassName("imagebox")[0]);
+        
+}
+
+function keyPressed() {
+
+    if(key == 's'){
+        post();
+    }
+
+}
+
+
+upuploadImages = [];
+var httpc9 = new XMLHttpRequest();
+    httpc9.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        upuploadImages = JSON.parse(this.responseText);
+        for(var index = upuploadImages.length - 1;index >= 0;index--) {
+            
+            if(upuploadImages[index].includes("-coth")){
+            
+                var newbox = document.createElement("DIV");
+                newbox.classList.add("imagebox");         
+                
+                var deletespan = document.createElement("SPAN");
+                deletespan.innerHTML = "X";
+                deletespan.classList.add("deletespan");
+                deletespan.onclick = function(){
+                    //delete the parent div of the image
+                    //delete the file
+                    var filename = this.parentElement.getElementsByClassName("filelabel")[0].innerHTML; 
+                    var httpc = new XMLHttpRequest();
+                    var url = "deletefile.php";         
+                    httpc.open("POST", url, true);
+                    httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+                    httpc.send("filename=trashmagic/" + filename);//send text to deletefile.php
+                    this.parentElement.parentElement.removeChild(this.parentElement);
+                }
+                
+                newbox.appendChild(deletespan);
+        
+                var newdiv = document.createElement("DIV");
+                newdiv.innerHTML = upuploadImages[index];
+                newdiv.className = "filelabel";
+                newbox.appendChild(newdiv);
+            
+                
+                document.getElementById("feedscroll").appendChild(newbox);
+                var newimg = document.createElement("IMG");
+                newimg.src = "trashmagic/" + upuploadImages[index];
+                newimg.classList.add("uploadimage");
+                newimg.classList.add("button");
+                newbox.appendChild(newimg);
+                
+            }
+            
+        }
+    }
+};
+httpc9.open("GET", "dir.php?filename=trashmagic", true);
+httpc9.send();
+
+
+</script>
+<style>
+body{
+    overflow:hidden;
+    background-color:#9f8767;
+    font-family:Arial;
+}
+main{
+    position:absolute;
+    right:25px;
+    top:25px;
+    border-left:solid;
+    border-width:10px
+}
+
+input{
+    background-color:#9f8767;
+}
+#feedscroll img{
+    max-width:80%;
+    display:block;
+    margin:auto;
+    margin-top:1em;
+    border:solid;
+}
+
+p{
+    margin:1em 1em 1em 1em;
+    font-size:1.5em;
+    font-family:Arial;
+    overflow:scroll;
+}
+h1,h2,h3{
+    font-family:Arial;
+    text-align:center;
+    overflow:scroll;
+
+}
+a{
+    color:blue;
+    font-family:Arial;
+    font-size:1.5em;    
+    overflow:scroll;
+}
+#feedscroll{
+    position:absolute;
+    left:0px;
+    bottom:0px;
+    top:6em;
+    z-index:-2;
+    overflow:scroll;
+    background-color:#9f8767; 
+    padding:1em 1em 1em 1em;
+}
+.deletespan{
+    color:red;
+    border:solid;
+    border-color:red;
+    border-radius:0.5em;
+    padding: 1em 1em 1em 1em;
+    cursor:pointer;
+}
+.deletespan:hover{
+    background-color:#ff000080;
+}
+.filelabel{
+    display:none;
+}
+.button{
+    cursor:pointer;
+}
+.button:hover{
+    background-color:green;
+}
+.button:active{
+    background-color:yellow;
+}
+.data{
+    display:none;
+}
+</style>
+</body>
+</html>

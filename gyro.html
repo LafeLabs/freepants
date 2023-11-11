@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <!--
+
+        EVERYTHING IS PHYSICAL 
+        EVERYTHING IS FRACTAL
+        EVERYTHING IS RECURSIVE
+        NO MONEY 
+        MO MINING 
+        NO PROPERTY
+        LOOK AT THE INSECTS
+        LOOK AT THE FUNGI
+        LANGUAGE IS HOW THE MIND PARSES REALITY
+
+    -->
+        <title>TRASH MAGIC GYRO</title>
+
+
+<link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAC0LP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEREREREREREREREREREREREREREREREREBERAREQEREQEREBEREBERAREQERERAREBEQABEREQEQEQEBAREREBARAQEBEREBEBEBAQEREBEQEREBEREBERAREQEREBEREBEREREBEREREREREREREREREREREREREREREREREREAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rel="icon" type="image/x-icon">
+
+
+    <!--Stop Google:-->
+    <META NAME="robots" CONTENT="noindex,nofollow">
+<!--geometron javascript library-->
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.7.0/lib/p5.js"></script>
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/addons/p5.sound.js"></script>
+<script src = "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script>
+            MathJax.Hub.Config({
+                tex2jax: {
+                inlineMath: [['$','$'], ['\\(','\\)']],
+                processEscapes: true,
+                processClass: "mathjax",
+                ignoreClass: "no-mathjax"
+                }
+            });//			MathJax.Hub.Typeset();//tell Mathjax to update the math
+        </script>
+
+</head>
+<body>
+    
+    
+<div id = "qrcode"></div>
+
+<div id = "scroll">
+    
+    <h1>TRASH MAGIC GYRO</h1>
+
+<p style = "font-size:25px">
+    Connect to sub-woofer.  Click SQUARE to start, move mouse in SQUARE to adjust frequencies.  Change base frequencies in inputs below. 
+</p>
+    <p>
+        <img src = "https://raw.githubusercontent.com/LafeLabs/squares/main/trashmagic/air.svg"/>tone:<input id = "airinput"/>Hz.  
+    </p>
+    
+    
+    <p>
+       <img src = "https://raw.githubusercontent.com/LafeLabs/squares/main/trashmagic/fire.svg"/>tone:<span id = "firespan"></span> Hz    
+    </p>
+    <p>
+        <img src = "https://raw.githubusercontent.com/LafeLabs/squares/main/trashmagic/water.svg"/>tone:<span id = "waterspan"></span> Hz
+    </p>
+    
+    <p>
+        <img src = "https://raw.githubusercontent.com/LafeLabs/squares/main/trashmagic/earth.svg"/>tone:<input id = "earthinput"/>Hz
+    </p>
+    
+    <p style = "font-size:20px">
+        $$
+        \Gamma = \cos{(2\pi t f_{\textbf{water}})}  + \sin{(2\pi t f_{\textbf{fire}})}
+        $$
+        $$
+    f_{\textbf{water}} = f_{\textbf{earth}}(1 + x)
+        $$    
+        $$
+    f_{\textbf{fire}} = f_{\textbf{air}}(1 + y)
+        $$    
+    </p> 
+    
+    <p>
+        <a href = "index.html">HOME</a>
+    </p>
+    
+</div>
+
+
+
+<a id = "replicator" href = "https://github.com/lafeLabs/squares"><img src = "https://raw.githubusercontent.com/LafeLabs/squares/main/trashmagic/replicator.svg"/></a>        
+
+       
+
+
+<script>
+
+if(innerWidth > innerHeight){
+    squaresize = innerHeight - 250;
+    document.getElementById("scroll").style.right = (innerHeight - 50).toString() + "px";
+    
+}
+else{
+    squaresize = innerWidth - 250;
+    document.getElementById("scroll").style.top = (innerWidth - 50).toString() + "px";
+}
+
+document.getElementById("replicator").style.right = (squaresize -50).toString() + "px";
+    
+let osc, fft,osc2,osc3;
+oscon = false;
+
+f_earth = 69;
+f_air = 99;
+f_fire = f_air;
+f_water = f_earth;
+
+document.getElementById("earthinput").value = f_earth.toString();
+document.getElementById("airinput").value = f_air.toString();
+
+document.getElementById("earthinput").onchange = function(){
+    f_earth = parseFloat(this.value);
+}
+document.getElementById("airinput").onchange = function(){
+    f_air = parseFloat(this.value);
+}
+
+theta = 0;
+phi = 0;
+vx = 0;
+vy = 0;
+
+function setup() {
+
+  createCanvas(squaresize,squaresize);    
+  osc = new p5.SinOsc(); // set frequency and type
+  osc.amp(1.0);
+  osc2 = new p5.SinOsc(); // set frequency and type
+  osc2.amp(1.0);
+  fft = new p5.FFT();
+  // osc.start();
+  //osc2.start();
+
+  osc.freq(f_earth);  
+  osc2.freq(f_air); 
+
+}
+
+frameIndex = 0;
+r = 200;//radius in px
+T = 100;//period in points
+
+function draw(){
+  
+  
+  vx = mouseX/width;
+  vy = mouseY/height;
+  if(vx < 0){
+      vx = 0;
+  }
+  if(vx > 1){
+      vx = 1;
+  }
+  if(vy < 0){
+      vy = 0;
+  }
+  if(vy > 1){
+      vy = 1;
+  }
+   
+   theta = Math.PI*vy;
+   phi = 2*Math.PI*vx;
+   f_fire = f_air*(1 + vy);
+   f_water = f_earth*(1 + vx);
+   osc.freq(f_water);  
+   osc2.freq(f_fire); 
+   document.getElementById("firespan").innerHTML = (Math.round(f_fire)).toString();
+   document.getElementById("waterspan").innerHTML = (Math.round(f_water)).toString();
+
+    
+   clear();
+   stroke("#ff2cb4");
+   noFill();
+   strokeWeight(6);
+   beginShape();   
+   for(var i = 0;i < 1000;i++){
+       vertex(width/2 + r*Math.cos(2*Math.PI*(i + frameIndex)*(1 + vx)/T),height/2 - r*Math.sin(2*Math.PI*(i + frameIndex)*(1 + vy)*f_air/(f_earth*T)));
+   }
+   endShape();
+   frameIndex++;
+   if(frameIndex > 10000){
+       frameIndex = 0;
+   }
+}
+
+
+function mouseClicked() {
+  
+  
+  if(mouseX > 0 && mouseX < width && mouseY > 0 && mouseY < height){
+      if(!oscon){
+          osc.start();
+          osc2.start();
+    
+      }
+      else{
+          osc.stop();
+          osc2.stop();
+      }
+      oscon = !oscon;
+  }
+}
+
+
+
+codesquaresize = 80;
+marginsize = 40;
+fontsize = 12;
+//globalurl = "http://www.trashrobot.org/qrcode.html";
+globalurl = window.location.href;
+qrcode = new QRCode(document.getElementById("qrcode"), {
+	text: globalurl,
+	width: codesquaresize,
+	height: codesquaresize,
+	colorDark : "#000000",
+	colorLight : "#ffffff",
+	correctLevel : QRCode.CorrectLevel.H
+});
+
+</script>
+<style>
+body{
+    background-color:black;
+    color:#ff2cb4;
+    overflow:hidden;
+    font-family:Comic Sans MS;
+}
+p{
+    font-size:40px;
+    overflow:scroll;
+}
+input{
+    background-color:black;
+    color:#00ff00;    
+    font-size:40px;
+    width:2em;
+}
+a{
+    color:blue;
+}
+p img{
+    width:50px;
+}
+main{
+    border:solid;
+    border-width:6px;
+    border-color:#ff2cb4;
+    position:absolute;
+    right:50px;
+    top:120px;
+    display:block;
+    background-color:#ff00ff20;
+    border-radius:10px;
+}
+#qrcode{
+    position:absolute;
+    right:10px;
+    top:10px;
+    border:solid;
+    border-width:10px;
+    border-color:white;
+}
+#replicator{
+    position:absolute;
+    right:150px;
+    top:0px;
+}
+#replicator img{
+    width:100px;
+    border:solid;
+    border-width:6px;
+    border-color:#ff2cb4;
+    border-radius:20px;
+}
+#scroll{
+    overflow:scroll;
+    position:absolute;
+    left:10px;
+    bottom:10px;
+    background-color:#ff00ff20;
+    border-radius:10px;
+    border-width:6px;
+    border:solid;
+    padding:1em 1em 1em 1em;
+}
+@media only screen and (orientation: portrait) {
+ 
+    #scroll{
+        right:10px;
+    }
+    
+}
+@media only screen and (orientation: landscape) {
+ 
+    #scroll{
+        top:10px;
+
+    }
+    
+}
+
+</style>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <!--
+
+github.com/lafelabs/picrust/README.md
+
+    -->
+    <link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAP//AP///wANAP8A5Dz6ABueRwAAt/8A6BonABo86AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAREREREREREREREAAAEREREREQCIgREREd3dwAAB3d3d3d3d3d3d3d3d3d3d3d3d3VVVVVVVQAFVVAAVVVQIiBRAiIBEQIAIBECAAERAgAgFgIABmYCIiBmAiIGZgIiIGYCIgZmYCIAaIAAMzMzAAiIiIiIiIiIiIiIiIiIiIiIgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rel="icon" type="image/x-icon" />
+
+    <!--Stop Google:-->
+    <META NAME="robots" CONTENT="noindex,nofollow">
+
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/showdown/1.8.6/showdown.js"></script>
+
+<!--       un comment to use math
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script>
+            MathJax.Hub.Config({
+                tex2jax: {
+                inlineMath: [['$','$'], ['\\(','\\)']],
+                processEscapes: true,
+                processClass: "mathjax",
+                ignoreClass: "no-mathjax"
+                }
+            });//			MathJax.Hub.Typeset();//tell Mathjax to update the math
+        </script>
+    -->
+
+    
+</head>
+<body>    
+<div id = "scrollscroll"></div>
+<a id = "editlink" href= "readmeeditor.html">EDIT</a>
+
+<a id = "homelink" href= "index.html">HOME</a>
+
+<script>
+
+
+scroll = "";
+rawhtml = "";
+var converter = new showdown.Converter();
+// for more on options see here:
+// https://github.com/showdownjs/showdown/wiki/Showdown-Options
+converter.setOption('literalMidWordUnderscores', 'true');
+converter.setOption('tables', 'true')
+    
+filename = "README.md";
+loadscroll("README.md");
+
+
+function loadscroll(scrollname){
+    filename = scrollname;
+
+    document.getElementById("scrollscroll").innerHTML = "";
+    document.getElementById("scrollscroll").style.display = "block";
+    var httpc666 = new XMLHttpRequest();
+    httpc666.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            scroll = this.responseText;
+            rawhtml = converter.makeHtml(scroll);
+            document.getElementById("scrollscroll").innerHTML = rawhtml;
+
+            //			MathJax.Hub.Typeset();//tell Mathjax to update the math
+    //			MathJax.Hub.Typeset();//tell Mathjax to update the math
+        }
+    };
+    httpc666.open("GET", "fileloader.php?filename=" + scrollname, true);
+    httpc666.send();
+    //MathJax.Hub.Typeset();//tell Mathjax to update the math
+}
+
+
+</script>
+<style>
+body{
+    overflow:hidden;
+        background-color:#9f8767;
+    font-family:Comic Sans MS;
+}
+a{
+    color:blue;
+}
+#scrollscroll{
+    padding-left:1em;
+    padding-right:1em;
+    left:0px;
+    bottom:0px;
+    position:absolute;
+    overflow:scroll;
+    font-size:2em;
+    display:none;
+    z-index:-3;
+}
+pre{
+    overflow:scroll;
+}
+#scrollscroll img{
+    max-width:50%;
+    display:block;
+    margin:auto;
+    background-color:none;
+}
+h1,h2,h3,h4{
+    text-align:center;
+}
+
+#editlink{
+    position:absolute;
+    right:0px;
+    top:0px;
+    font-size:2em;
+}
+#homelink{
+    position:absolute;
+    right:0px;
+    top:4em;
+    font-size:2em;
+}
+
+@media only screen and (orientation: landscape) {
+    #scrollscroll{
+        top:0px;
+        right:100px;
+    }
+}
+
+@media only screen and (orientation: portrait) {
+    #scrollscroll{
+        top:100px;
+        right:0px;
+    }
+}
+</style>
+</body>
+</html>

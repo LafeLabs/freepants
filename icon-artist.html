@@ -1,0 +1,1317 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <!--
+
+        EVERYTHING IS PHYSICAL 
+        EVERYTHING IS FRACTAL
+        EVERYTHING IS RECURSIVE
+        NO MONEY 
+        MO MINING 
+        NO PROPERTY
+        LOOK AT THE INSECTS
+        LOOK AT THE FUNGI
+        LANGUAGE IS HOW THE MIND PARSES REALITY
+
+    
+    -->
+    
+    <link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA/wAAAAD//wAA/wAAAAD/AP8A/wAApv8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFUAAARGAAIxFVUABEYAAjMRFQAARGYiIjMRAABERmZiIzEAAARERGZiMwAAAARERGYiAAAAAABERiL4PwAA+78AAPu/AAD33wAA9V8AAPVfAAD1XwAA998AAOADAADhAAAA4AAAAPAAAADwAAAA+AAAAP4AAAD/wAAA" rel="icon" type="image/x-icon" />
+    
+    <!--Stop Google:-->
+    <META NAME="robots" CONTENT="noindex,nofollow">
+<!--geometron javascript library-->
+    <script src="geometron.js"></script>
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.js"></script>
+</head>
+<body>
+    <!--➞-->
+<div id = "selectorbox">
+    <a href = "index.html">HOME</a>
+    <span id = "imagesbutton" class = "button">IMAGES</span>
+    <span id = "alignbutton" class = "button">ALIGN</span>
+    <span id = "tracebutton" class = "button">TRACE</span>
+    <span id = "sharebutton" class = "button">SHARE</span>
+</div>
+
+<div id = "postbutton" class = "button">POST SQUARE</div>
+
+<div id = "mainbox">
+    <div id ="mainboxbackground"></div>
+    <canvas id = "gridcanvas"></canvas>
+    <canvas id = "maincanvas"></canvas>
+    <img id = "mainimage"/>
+    <div id = "hammerxy"></div>
+</div>
+
+
+<div id = "utilitybox">
+    <div id = "imagesbox">
+            <table  id  = "imagecontroltable">
+        <tr>
+            <td>Input Image URL from Web:</td>
+        </tr>
+        <tr>
+            <td>
+                <input id = "imageurlinput"/>
+            </td>
+            
+        </tr>
+        <tr>
+            <td>
+        <form id = "uploadform" action="uploadimage.php" method="post" enctype="multipart/form-data">
+                        <span id ="uploadspan">UPLOAD:</span>
+                <input type="file" name="fileToUpload" id="fileToUpload">
+                <input type="submit" value="Upload Image" name="submit" id ="submitinput">
+        </form>        
+        
+                    </td>
+                </tr>
+            </table>
+            
+        <div id = "imagefeed">
+        
+        </div>
+    </div>
+    <div id = "alignbox">
+        <div id = "zoomrotatebox">
+                <table id = "rotatezoomtable">
+                    <tr id = "rotatezoombuttons1">
+                        <td>
+                            <img id = "zoomoutbutton" src= "iconsymbols/shrink.svg" class = "button" /> 
+                        </td>
+                        <td>
+                            <img id = "littlezoomoutbutton" src= "iconsymbols/shrinksmall.svg" class = "button"/> 
+                        </td>
+                        <td>
+                            <img id = "littlezoominbutton" src= "iconsymbols/expandsmall.svg" class = "button" /> 
+                        </td>
+                        <td>
+                            <img id = "zoominbutton" src= "iconsymbols/expand.svg" class = "button"/> 
+                        </td>
+                    </tr>
+                    <tr id = "rotatezoombuttons2">
+                        <td>
+                            <img id = "rotateleftbutton" src= "iconsymbols/left.svg" class = "button" /> 
+                        </td>
+                        <td>
+                            <img id = "littlerotateleftbutton" src= "iconsymbols/leftsmall.svg" class = "button"/> 
+                        </td>
+                        <td>
+                            <img id = "littlerotaterightbutton" src= "iconsymbols/rightsmall.svg" class = "button"/> 
+                        </td>
+                        <td>
+                            <img id = "rotaterightbutton" src= "iconsymbols/right.svg" class = "button" /> 
+                        </td>
+                    </tr>
+                </table>
+        
+                <img src = "iconsymbols/scale.svg" id = "scalebar"/>
+                <img src = "iconsymbols/rotate.svg" id = "rotatebar"/>
+        </div>
+
+    </div>
+    <div id = "tracebox">
+        <div id = "controltablebox">
+            <table id = "controltable">
+            </table>    
+        </div>    
+        <div id = "spellbox">
+            <div id = "savebutton" class=  "button">SAVE ICON TO ICON FEED</div>
+            <table>
+            
+                <tr>  
+                    <td>
+                        <img style = "width:30px" id = "modeindicator" class = "button" src = "iconsymbols/cursor.svg"/>
+                    </td>
+                    <td>
+                        <input id = "actioninput"/>
+
+                    </td>
+                    <td>
+                        <input id = "spellinput"/>
+                    </td>
+                </tr>
+            </table>
+            <div id = "spellcanvasbox">
+                <canvas id = "spellcanvas"></canvas>
+            </div>
+        </div>
+
+    </div>
+    <div id = "sharebox">
+        <div id = "iobox">
+            <div id ="iconfeed">
+            </div>
+            <table id ="iotable">
+                <tr>
+        
+                    <td id = "loadbutton" class = "button">IMPORT</td>
+                </tr>
+            </table>
+            <textarea id = "textio"></textarea>
+        
+        </div>
+    </div>
+</div>
+
+<script>
+controlbuttonsize = 80;
+
+controls  = [
+    "0500,0501,0502,0503,",
+    "0504,0505,0506,0507,",
+    "011,020,010,021,",
+    "0320,0321,0322,0323,",
+    "0324,0325,0326,0327,",
+    "040,041,042,043,",
+    "044,045,046,050,",
+    "051,052,053,054,",
+    "055,056,057,060,",
+    "061,062,063,064,",
+    "065,066,067,070,",
+    "071,072,073,074,",
+    "075,076,077,0100,",
+    "0101,0102,0103,0104,",
+    "0105,0106,0107,0110,",
+    "0111,0112,0113,0114,",
+    "0115,0116,0117,0120,",
+    "0121,0122,0123,0124,",
+    "0125,0126,0127,0130,",
+    "0131,0132,0133,0134,",
+    "0135,0136,0137,0140,",
+    "0141,0142,0143,0144,",
+    "0145,0146,0147,0150,",
+    "0151,0152,0153,0154,",
+    "0155,0156,0157,0160,",
+    "0161,0162,0163,0164,",
+    "0165,0166,0167,0170,",
+    "0171,0172,0173,0174,",
+    "0175,0176,"
+];
+
+robotkeys = [
+    "0141:0506,",
+    "0163:0505,",
+    "0144:0507,",
+    "0167:0504,",
+    "0101:0502,",
+    "0123:0501,",
+    "0104:0503,",
+    "0127:0500,",
+    "061:0320,",
+    "062:0322,",
+    "063:0323,",
+    "064:0324,",
+    "065:0325,",
+    "066:0326,",
+    "067:0327,",
+    "0152:0502,",
+    "0153:0501,",
+    "0154:0503,",
+    "0151:0500,",
+    "0134:011,",
+    "0152:0502,",
+    "0154:0503,",
+    "0163:0505,",
+    "0151:0500,"
+];
+
+
+//deletemode = false;
+deletemode = true;
+
+
+mainboxsize = 500;
+if(innerWidth > innerHeight){
+    //computer
+    mainboxsize = innerHeight;
+    //put link table in left side separate from mainbox
+    document.getElementById("mainbox").style.top = "0px";
+    document.getElementById("utilitybox").style.width = (innerWidth- innerHeight).toString() + "px";
+    controlbuttonsize = (innerWidth - innerHeight)*0.24;
+    
+}
+else{
+    //mobile
+    mainboxsize = innerWidth;
+    document.getElementById("utilitybox").style.top = (mainboxsize - 10).toString() + "px";
+    controlbuttonsize = (innerWidth)*0.24;    
+}
+
+
+
+
+maincanvas = document.getElementById("maincanvas");
+//var mainGVM = new GVM(maincanvas,0.5*innerWidth - 10,0.5*innerWidth -10);
+var mainGVM = new GVM(maincanvas,mainboxsize,mainboxsize);
+
+mainGVM.drawGlyph("0337,0337,0334,0334,0334,");
+var spellGVM = new GVM(document.getElementById("spellcanvas"),420,800);
+
+spellGVM.x0 = 5;
+spellGVM.y0 = 35;
+spellGVM.unit = 20;
+
+
+image = {
+    "w":1.0,
+    "x":0.0,
+    "y":0.0,
+    "angle":0,
+    "src":""
+};
+
+
+var httpcimage = new XMLHttpRequest();
+httpcimage.onreadystatechange = function(){
+    if (this.readyState == 4 && this.status == 200) {
+        image = JSON.parse(this.responseText);
+        document.getElementById("imageurlinput").value = image.src;
+        loadimage();
+    };
+};
+
+httpcimage.open("GET", "fileloader.php?filename=data/alignimage.txt", true);
+httpcimage.send();
+
+
+
+//uploadImages = [];
+imagefeed = [];
+var httpcImagefeed = new XMLHttpRequest();
+httpcImagefeed.onreadystatechange = function(){
+    if (this.readyState == 4 && this.status == 200) {
+        imagefeed = JSON.parse(this.responseText);
+        loadimagefeed();
+    };
+};
+
+httpcImagefeed.open("GET", "fileloader.php?filename=data/imagefeed.txt", true);
+httpcImagefeed.send();
+
+function loadimagefeed(){
+//    document.getElementById("imagefeed").innerHTML = "";
+    for(var index = imagefeed.length - 1;index >= 0;index--){
+        var newbox = document.createElement("DIV");
+        newbox.classList.add("imagebox");
+        var newimg = document.createElement("IMG");
+        newimg.src = imagefeed[index];
+        newimg.classList.add("uploadimage");
+        newimg.classList.add("button");
+        newbox.appendChild(newimg);
+        document.getElementById("imagefeed").appendChild(newbox);
+        newimg.onclick = function() {
+            var localsrc = this.src;
+            document.getElementById("imageurlinput").value = localsrc;
+            document.getElementById("mainimage").src = localsrc;
+            image.x = 0;
+            image.y = 0;
+            image.w = 1.0;
+            image.angle = 0;
+            image.src = localsrc;
+            loadimage();
+        }
+        var newimg = document.createElement("IMG");
+        newimg.src = "iconsymbols/delete.svg";
+        newbox.appendChild(newimg);
+        newimg.classList.add("button");
+        newimg.classList.add("deletebutton");
+
+        newimg.id = "src" + index.toString();
+        newimg.onclick = function(){
+            var thisindex = this.id.substring(3);
+            var localimagefeed = imagefeed;
+            imagefeed = [];
+            for(var srcindex = 0;srcindex < localimagefeed.length;srcindex++){
+                if(srcindex != thisindex){
+                    imagefeed.push(localimagefeed[srcindex]);
+                }
+            }
+            document.getElementById("imagefeed").innerHTML = "";
+            
+            saveimagefeed();
+            loadimagefeed();
+            loadlocalimagefeed();
+            
+        }
+
+    }    
+}
+
+
+mc = new Hammer(document.getElementById("hammerxy"));
+mc.get('pan').set({ direction: Hammer.DIRECTION_ALL });
+mc.on("panleft panright panup pandown tap press rotate", function(ev) {
+    
+    document.getElementById("mainimage").style.left = (ev.deltaX + image.x*mainGVM.width).toString() +  "px";
+    document.getElementById("mainimage").style.top = (ev.deltaY + image.y*mainGVM.width).toString() +  "px";
+
+});    
+
+mczoom = new Hammer(document.getElementById("scalebar"));
+mczoom.get('pan').set({ direction: Hammer.DIRECTION_ALL });
+mczoom.on("panleft panright panup pandown tap press", function(ev) {
+
+    document.getElementById("mainimage").style.width = (2*ev.deltaX + image.w*mainGVM.width).toString() +  "px";
+
+});    
+
+mcrotate = new Hammer(document.getElementById("rotatebar"));
+mcrotate.get('pan').set({ direction: Hammer.DIRECTION_ALL });
+mcrotate.on("panleft panright panup pandown tap press", function(ev) {
+
+    document.getElementById("mainimage").style.transform = "rotate(" + (image.angle + ev.deltaX*Math.PI/5).toString() + "deg)";
+
+});    
+
+
+function loadimage(){
+    document.getElementById("mainimage").src = image.src;
+    document.getElementById("mainimage").style.left = (image.x*mainGVM.width).toString() + "px";
+    document.getElementById("mainimage").style.top = (image.y*mainGVM.width).toString() + "px";    
+    document.getElementById("mainimage").style.width = (image.w*mainGVM.width).toString() + "px";    
+    document.getElementById("mainimage").style.transform = "rotate(" + (image.angle).toString() + "deg)";
+    
+
+    
+}
+
+document.getElementById("loadbutton").onclick = function(){
+    iconfeed = JSON.parse(document.getElementById("textio").value);
+    loadfeed();
+    saveiconfeed();
+}
+
+document.getElementById("savebutton").onclick = function(){
+    pushicon();
+}
+
+
+
+
+document.getElementById("zoomoutbutton").onclick = function() {
+    image.w /= 1.25;
+    document.getElementById("mainimage").style.width = (image.w*mainGVM.width).toString() +  "px";    
+}
+
+document.getElementById("zoominbutton").onclick = function() {
+    image.w *= 1.25;
+    document.getElementById("mainimage").style.width = (image.w*mainGVM.width).toString() +  "px";    
+}
+
+document.getElementById("littlezoomoutbutton").onclick = function() {
+    image.w /= 1.01;
+    document.getElementById("mainimage").style.width = (image.w*mainGVM.width).toString() +  "px";    
+}
+
+document.getElementById("littlezoominbutton").onclick = function() {
+    image.w *= 1.01;
+    document.getElementById("mainimage").style.width = (image.w*mainGVM.width).toString() +  "px";    
+}
+
+document.getElementById("rotateleftbutton").onclick = function() {
+    image.angle -= 5;
+    document.getElementById("mainimage").style.transform = "rotate(" + (image.angle).toString() + "deg)";    
+}
+document.getElementById("rotaterightbutton").onclick = function() {
+    image.angle += 5;
+    document.getElementById("mainimage").style.transform = "rotate(" + (image.angle).toString() + "deg)";    
+}
+document.getElementById("littlerotateleftbutton").onclick = function() {
+    image.angle -= 0.5;
+    document.getElementById("mainimage").style.transform = "rotate(" + (image.angle).toString() + "deg)";    
+}
+document.getElementById("littlerotaterightbutton").onclick = function() {
+    image.angle += 0.5;
+    document.getElementById("mainimage").style.transform = "rotate(" + (image.angle).toString() + "deg)";    
+}
+
+function saveimage(){
+    var httpc = new XMLHttpRequest();
+    httpc.open("POST", "filesaver.php", true);
+    httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    httpc.send("data="+encodeURIComponent(JSON.stringify(image),null,"    ")+"&filename=data/alignimage.txt");//send text to filesaver.php
+
+}
+
+
+function saveimagefeed(){
+    var httpc = new XMLHttpRequest();
+    httpc.open("POST", "filesaver.php", true);
+    httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    httpc.send("data="+encodeURIComponent(JSON.stringify(imagefeed,null,"  "))+"&filename=data/imagefeed.txt");//send text to filesaver.php   
+    document.getElementById("imageurlinput").value = "";
+     
+
+}
+
+document.getElementById("imageurlinput").value = "";
+
+//document.getElementById("imageurlinput").select();
+document.getElementById("imageurlinput").onchange  = function(){
+
+    if(this.value == ""){
+        document.getElementById("mainimage").src = "";
+    }
+    else{
+        document.getElementById("imagefeed").innerHTML = "";
+        imagefeed.push(this.value);
+        saveimagefeed();
+        loadimagefeed();
+        loadlocalimagefeed();
+    }
+}
+
+uploadImages = [];
+
+var httpcUpload = new XMLHttpRequest();
+httpcUpload.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        uploadImages = JSON.parse(this.responseText);
+        loadlocalimagefeed();
+    }
+};
+httpcUpload.open("GET", "dir.php?filename=trashmagic", true);
+httpcUpload.send();
+
+
+function loadlocalimagefeed(){
+
+        for(var index = uploadImages.length - 1;index >= 0;index--) {
+            var newuploadbox = document.createElement("DIV");
+            newuploadbox.classList.add("uploadbox");
+            var newimg = document.createElement("IMG");
+            newimg.src = "trashmagic/" + uploadImages[index];
+            newimg.classList.add("uploadimage");
+            newimg.classList.add("button");
+            newuploadbox.appendChild(newimg);
+            document.getElementById("imagefeed").appendChild(newuploadbox);
+            newimg.onclick = function() {
+                var localsrc = this.src;
+                document.getElementById("imageurlinput").value = localsrc;
+
+                document.getElementById("mainimage").src = localsrc;
+                image.x = 0;
+                image.y = 0;
+                image.w = 1.0;
+                image.angle = 0;
+                image.src = localsrc;
+                loadimage();
+    
+            }
+            var newimg = document.createElement("IMG");
+            newimg.src = "iconsymbols/delete.svg";
+            newuploadbox.appendChild(newimg);
+            newimg.classList.add("button");
+            newimg.classList.add("deletebutton");
+            newimg.onclick = function(){
+                var imageurl =this.parentElement.getElementsByClassName("uploadimage")[0].src; 
+                var imagename = "trashmagic/" + imageurl.split("trashmagic/")[1];
+                var httpc = new XMLHttpRequest();
+                var url = "deletefile.php";         
+                httpc.open("POST", url, true);
+                httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+                httpc.send("filename=" + imagename);//send text to deletefile.php
+                this.parentElement.parentElement.removeChild(this.parentElement);
+            }
+        }
+
+                
+}
+
+
+
+
+
+function saveicon(){
+    var httpc = new XMLHttpRequest();
+    httpc.open("POST", "filesaver.php", true);
+    httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    httpc.send("data="+encodeURIComponent(icon)+"&filename=data/icon.txt");//send text to filesaver.php
+}
+
+
+function pushicon(){
+    
+    var httpciconfeed = new XMLHttpRequest();
+    httpciconfeed.onreadystatechange = function(){
+        if (this.readyState == 4 && this.status == 200) {
+            iconfeed = JSON.parse(this.responseText);
+            document.getElementById("textio").value = JSON.stringify(iconfeed,null,"    ");
+                
+            mainGVM.clean();
+            iconfeed.unshift(mainGVM.cleanGlyph);
+            var httpc = new XMLHttpRequest();
+            httpc.open("POST", "filesaver.php", true);
+            httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            httpc.send("data="+encodeURIComponent(JSON.stringify(iconfeed,null,"  "))+"&filename=data/iconfeed.txt");//send text to filesaver.php
+            
+            loadfeed();            
+
+        }
+        
+    };
+    httpciconfeed.open("GET", "fileloader.php?filename=data/iconfeed.txt", true);
+    httpciconfeed.send();
+    
+}
+
+spellGVM.importbytecode(hypercube);
+mainGVM.importbytecode(hypercube);    
+for(var index = 040;index < 0177;index++){
+    mainGVM.hypercube[index] = "0177,";
+}
+mainGVM.importbytecode(robotkeys);
+loadcontroltable();
+var httpcicon = new XMLHttpRequest();
+httpcicon.onreadystatechange = function(){
+    if (this.readyState == 4 && this.status == 200) {
+        icon = this.responseText;
+        drawmain();
+    }
+};
+httpcicon.open("GET", "fileloader.php?filename=data/icon.txt", true);
+httpcicon.send();
+var httpcFeed = new XMLHttpRequest();
+httpcFeed.onreadystatechange = function(){
+    if (this.readyState == 4 && this.status == 200) {
+        iconfeed = JSON.parse(this.responseText);
+        loadfeed();
+        document.getElementById("textio").value = JSON.stringify(iconfeed,null,"  ");
+    }
+};
+httpcFeed.open("GET", "fileloader.php?filename=data/iconfeed.txt", true);
+httpcFeed.send();
+
+
+function drawmain(){
+    mainGVM.glyph = icon + "0207,";
+    mainGVM.clean();
+    mainGVM.drawGlyph(mainGVM.glyph);
+    mainGVM.actionSequence("0300,0337,0337,0334,0334,0334,");    
+    
+    spellGVM.spellGlyph(mainGVM.glyph);
+    document.getElementById("spellinput").value = mainGVM.cleanGlyph;
+}
+
+
+
+function loadcontroltable(){
+    document.getElementById("controltable").innerHTML = "";
+    for(var index = 0;index < controls.length;index++){
+        var newtr = document.createElement("TR");
+        document.getElementById("controltable").appendChild(newtr);
+        rowarray = controls[index].split(",");
+        for(var rowindex = 0;rowindex < rowarray.length;rowindex++){
+            if(rowarray[rowindex].length > 0){
+                var newtd = document.createElement("TD");
+                newtr.appendChild(newtd);
+                var newcan = document.createElement("CANVAS");
+                newtd.appendChild(newcan);
+                var datadiv = document.createElement("div");
+                datadiv.innerHTML = rowarray[rowindex];
+                datadiv.className = "data";
+                newtd.appendChild(datadiv);
+                var newGVM = new GVM(newcan,controlbuttonsize,controlbuttonsize);
+                newGVM.unit = controlbuttonsize - 2;
+                newGVM.x0 = 1;
+                newGVM.y0 = controlbuttonsize-1;
+                newGVM.importbytecode(hypercube);
+                newGVM.action(0300);
+                if(parseInt(rowarray[rowindex],8) >= 040 && parseInt(rowarray[rowindex],8) < 0177){
+                    newGVM.drawGlyph("0300,0336,0336,0330,0333,0337,");
+                }
+                newGVM.action(parseInt(rowarray[rowindex],8)+01000);
+
+                newtd.onclick = function(){
+                    var localaction = parseInt(this.getElementsByClassName("data")[0].innerHTML,8);
+                    if(localaction != 022 && localaction != 023){
+                        if(localaction >= 040 && localaction < 0177){
+                            localaction += 01000;
+                        }
+                        mainGVM.cursorAction(localaction);
+                    }
+
+                    mainGVM.clean();
+                    spellGVM.spellGlyph(mainGVM.glyph);
+                    document.getElementById("spellinput").value = mainGVM.cleanGlyph;
+                    icon = mainGVM.cleanGlyph;
+                    saveicon();
+                    mainGVM.actionSequence("0300,0337,0337,0334,0334,0334,"); 
+
+                }
+                newcan.classList.add("button");
+            }
+        }
+    }
+}
+
+feedwidth = 300;
+feedlinkwidth = 80;
+
+function loadfeed(){
+    gvmArray = [];
+    document.getElementById("iconfeed").innerHTML = "";
+    for(var index = 0;index < iconfeed.length;index++){
+        var newdiv = document.createElement("span");
+        var newcan = document.createElement("CANVAS");
+        newcan.className = "feedcan";
+        newdiv.style.marginTop = 0.05*feedwidth + "px";
+        newdiv.style.marginBottom = 0.05*feedwidth + "px";
+        newdiv.appendChild(newcan);
+        newdiv.className = "feedelement";
+       // newdiv.classList.add("list-group-item");
+        newdiv.ondrop = function(){
+            neworder();
+        }
+        newcan.classList.add("button");
+//        newdiv.style.height = "200px";
+        document.getElementById("iconfeed").appendChild(newdiv);
+        var newGVM = new GVM(newcan,feedlinkwidth,feedlinkwidth);
+        newGVM.hypercube = mainGVM.hypercube;
+        gvmArray.push(newGVM);
+        newGVM.drawGlyph(iconfeed[index]);    
+
+
+        var datadiv = document.createElement("DIV");
+        datadiv.innerHTML = iconfeed[index];
+        datadiv.className = "data";
+        newdiv.appendChild(datadiv);
+        newdiv.onclick = function(){
+            glyph = this.getElementsByClassName("data")[0].innerHTML + "0207,";
+            mainGVM.glyph = glyph;
+            mainGVM.drawGlyph(glyph);
+            mainGVM.actionSequence("0300,0337,0337,0334,0334,0334,");    
+            spellGVM.spellGlyph(mainGVM.glyph);    
+            mainGVM.clean();
+            document.getElementById("spellinput").value = mainGVM.cleanGlyph;
+            icon = mainGVM.cleanGlyph;
+            saveicon();
+            
+        }
+        
+        
+        var newimg = document.createElement("IMG");
+        newimg.src = "iconsymbols/delete.svg";
+        newdiv.appendChild(newimg);
+        newimg.classList.add("button");
+        newimg.classList.add("deletebutton");
+        newimg.id = "if" + index.toString();
+        newimg.onclick = function(){
+            //find the index and remove that from the feed 
+            var thisindex = parseInt(this.id.substring(2));
+
+            var tempfeed = [];
+            for(var robotindex = 0;robotindex < iconfeed.length;robotindex++){
+                if(robotindex != thisindex){
+                    tempfeed.push(iconfeed[robotindex]);
+                }
+            }
+            iconfeed = tempfeed;    
+            this.parentElement.parentElement.removeChild(this.parentElement);
+            saveiconfeed();
+            loadfeed();
+        }
+        
+        
+    }    
+}
+
+
+
+function saveiconfeed(){
+    var httpc = new XMLHttpRequest();
+    httpc.open("POST", "filesaver.php", true);
+    httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    httpc.send("data="+encodeURIComponent(JSON.stringify(iconfeed,null,"  "))+"&filename=data/iconfeed.txt");//send text to filesaver.php
+    document.getElementById("textio").value = JSON.stringify(iconfeed,null,"  ");    
+}
+
+
+
+document.getElementById("actioninput").onkeypress = function(a) {
+    var charCode = a.keyCode || a.which;
+    if(charCode != 015){
+        if(mode == 0 || mode == 3){
+            localCursorAction = parseInt(mainGVM.hypercube[charCode],8);   
+        }    
+        if(mode == 1){
+            localCursorAction = charCode + 01000;     
+        }    
+        if(mode == 2){
+            localCursorAction = charCode;     
+        }    
+        
+        mainGVM.cursorAction(localCursorAction);   
+        mainGVM.actionSequence("0300,0337,0337,0334,0334,0334,");    
+        spellGVM.spellGlyph(mainGVM.glyph);    
+        this.value = "";
+        mainGVM.clean();
+        document.getElementById("spellinput").value = mainGVM.cleanGlyph;
+        icon = mainGVM.cleanGlyph;
+        saveicon();
+    }
+
+}
+
+
+document.getElementById("actioninput").onkeydown = function(a) {
+    var charCode = a.keyCode || a.which;
+
+    if(charCode == 015) {
+        modeswitch();
+    }
+
+    if(charCode == 010) {
+        mainGVM.cursorAction(010);
+    }
+    if(charCode == 045){
+        mainGVM.cursorAction(020);             
+    }
+    if(charCode == 047){
+        mainGVM.cursorAction(021);   
+    }
+
+    if(charCode == 046){
+        //up arrow: prev symbol
+        mainGVM.clean();
+        mainGVM.glyph = "0207," + mainGVM.cleanGlyph;
+        mainGVM.drawGlyph(mainGVM.glyph);
+    }
+    if(charCode == 050){
+        //down arrow: next symbol
+        mainGVM.clean();
+        mainGVM.glyph = mainGVM.cleanGlyph + "0207,";
+        mainGVM.drawGlyph(mainGVM.glyph);
+
+    }
+
+    spellGVM.spellGlyph(mainGVM.glyph);
+    document.getElementById("spellinput").value = mainGVM.cleanGlyph;
+    mainGVM.clean();
+        mainGVM.actionSequence("0300,0337,0337,0334,0334,0334,");    
+    icon = mainGVM.cleanGlyph;
+    saveicon();
+    
+}
+
+document.getElementById("actioninput").value = "";
+
+mode =0;
+function modeswitch(){
+    mode++;
+    mode = mode%2;
+    if(mode == 0){
+        document.getElementById("modeindicator").src = "iconsymbols/cursor.svg";
+    }
+    if(mode == 1){
+        document.getElementById("modeindicator").src = "iconsymbols/abcfont.svg";
+    }
+
+    document.getElementById("actioninput").select();   
+}
+
+document.getElementById("modeindicator").onclick = function(){
+    modeswitch();
+}
+
+
+
+document.getElementById("spellinput").onchange = function(){
+    
+    icon = this.value;
+    saveicon();
+    drawmain();
+}
+
+
+
+function neworder(){
+    
+    var datafeed = document.getElementById("iconfeed").getElementsByClassName("data");
+    newiconfeed = [];
+    
+    for(var index = 0;index < datafeed.length;index++){
+        newiconfeed.push(datafeed[index].innerHTML);
+    }
+    iconfeed  = newiconfeed;
+    loadfeed();
+    saveiconfeed();
+
+}
+
+
+selectorbuttons = document.getElementById("selectorbox").getElementsByClassName("button");
+
+document.getElementById("imagesbutton").onclick = function(){
+    for(var index = 0;index < 4;index++){
+        if(index == 0){
+            selectorbuttons[index].style.backgroundColor = "green";
+            selectorbuttons[index].style.borderColor = "black";
+        }
+        else{
+            selectorbuttons[index].style.backgroundColor = "#00000000";
+            selectorbuttons[index].style.borderColor = "white";
+        }
+    }
+    document.getElementById("imagesbox").style.display = "block";
+    document.getElementById("alignbox").style.display = "none";
+    document.getElementById("tracebox").style.display = "none";
+    document.getElementById("sharebox").style.display = "none";
+    document.getElementById("hammerxy").style.display = "none";
+    
+    
+}
+
+document.getElementById("hammerxy").style.display = "none";
+
+document.getElementById("alignbutton").onclick = function(){
+    for(var index = 0;index < 4;index++){
+
+        if(index == 1){
+            selectorbuttons[index].style.backgroundColor = "green";
+            selectorbuttons[index].style.borderColor = "black";
+        }
+        else{
+            selectorbuttons[index].style.backgroundColor = "#00000000";
+            selectorbuttons[index].style.borderColor = "white";
+        }
+    }
+    document.getElementById("imagesbox").style.display = "none";
+    document.getElementById("alignbox").style.display = "block";
+    document.getElementById("tracebox").style.display = "none";
+    document.getElementById("sharebox").style.display = "none";
+    document.getElementById("hammerxy").style.display = "block";
+    
+}
+
+document.getElementById("tracebutton").onclick = function(){
+    for(var index = 0;index < 4;index++){
+
+        if(index == 2){
+            selectorbuttons[index].style.backgroundColor = "green";
+            selectorbuttons[index].style.borderColor = "black";
+        }
+        else{
+            selectorbuttons[index].style.backgroundColor = "#00000000";
+            selectorbuttons[index].style.borderColor = "white";
+        }
+    }
+
+    document.getElementById("imagesbox").style.display = "none";
+    document.getElementById("alignbox").style.display = "none";
+    document.getElementById("tracebox").style.display = "block";
+    document.getElementById("sharebox").style.display = "none";
+    if(innerWidth > innerHeight){
+        document.getElementById("actioninput").select();
+    }
+    document.getElementById("hammerxy").style.display = "none";
+
+    
+}
+document.getElementById("sharebutton").onclick = function(){
+    for(var index = 0;index < 4;index++){
+
+        if(index == 3){
+            selectorbuttons[index].style.backgroundColor = "green";
+            selectorbuttons[index].style.borderColor = "black";
+        }
+        else{
+            selectorbuttons[index].style.backgroundColor = "#00000000";
+            selectorbuttons[index].style.borderColor = "white";
+        }
+    }
+
+    document.getElementById("imagesbox").style.display = "none";
+    document.getElementById("alignbox").style.display = "none";
+    document.getElementById("tracebox").style.display = "none";
+    document.getElementById("sharebox").style.display = "block";
+    document.getElementById("hammerxy").style.display = "none";
+
+}
+
+document.getElementById("imagesbox").style.display = "none";
+document.getElementById("alignbox").style.display = "none";
+document.getElementById("tracebox").style.display = "block";
+document.getElementById("sharebox").style.display = "none";
+selectorbuttons[2].style.backgroundColor = "green";
+selectorbuttons[2].style.borderColor = "black";
+
+if(innerWidth> innerHeight){
+    document.getElementById("actioninput").select();
+}
+
+document.getElementById("postbutton").onclick = function(){
+     
+    mainGVM.clean();
+    mainGVM.drawGlyph(mainGVM.cleanGlyph);
+    
+    png64 = mainGVM.pngcode();
+        //png64 = document.getElementById("defaultCanvas0").toDataURL("image/png");
+     
+     
+    var timestamp = Math.round((new Date().getTime())/1000).toString();
+    var httpc = new XMLHttpRequest();
+    
+    var url = "pngsave.php";        
+    httpc.open("POST", url, true);
+    httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    httpc.send("data="+encodeURIComponent(png64.substring(22))+"&filename=trashmagic/square" + timestamp +  ".png");//send text to filesaver.php
+     //location.reload(); 
+     
+   
+}
+
+</script>
+<style>
+body{
+    overflow:hidden;
+    background-color:#9f8767;    
+}
+input{
+        background-color:#9f8767;    
+}
+#mainbox{
+    position:absolute;
+    right:0px;
+    top:0px;
+    width:250px;
+    height:250px;
+    border:solid;
+    overflow:hidden;
+}
+
+#selectorbox{
+    position:absolute;
+    z-index:100;
+    font-size:25px;   
+    height:30px;
+    left:0px;
+    top:0px;
+    right:0px;
+}
+#selectorbox span,a{
+    border:solid;
+    text-align:center;
+    margin:auto;
+    color:black;
+}
+#utilitybox{
+    position:absolute;
+}
+
+#tracebox{
+    position:absolute;
+    top:3em;
+    left:0px;
+    right:0px;
+    bottom:0px;
+    overflow:hidden;
+    
+}
+#imagesbox{
+    position:absolute;
+    top:3em;
+    left:0px;
+    right:0px;
+    bottom:0px;
+    overflow:hidden;
+}
+#alignbox{
+    position:absolute;
+    top:3em;
+    left:0px;
+    right:0px;
+    bottom:0px;
+    overflow:hidden;
+    background-color:#9f8767;    
+
+}
+#sharebox{
+    position:absolute;
+    top:3em;
+    left:0px;
+    right:0px;
+    bottom:0px;
+    overflow:hidden;
+
+}
+#actioninput{
+    width:1em;
+}
+
+#iconfeed{
+    background-color:#9f8767;    
+    position:absolute;
+    overflow:scroll;
+}
+
+#textio{
+    background-color:black;
+    color:#00ff00;
+    font-family:courier;
+    border:solid;
+    border-width:5px;
+    position:absolute;
+}
+
+#zoomrotatebox{
+    position:absolute;
+    right:0px;
+    bottom:0px;
+    left:0px;
+    top:2em;
+    z-index:2;
+    background-color:#9f8767;    
+}
+#scalebar{
+    width:100%;
+    position:absolute;
+    left:0px;
+    right:0px;
+}
+#rotatebar{
+    width:100%;
+    position:absolute;
+    left:0px;
+    bottom:0px;
+    right:0px;
+    
+}
+#rotatezoomtable{
+    position:absolute;
+    top:0px;
+    right:0px;
+    width:98%;
+    height:50%;
+}
+#rotatezoomtable tr{
+    height:50%;
+    border:solid;
+    background-color:#9f8767;
+    margin:auto;
+}
+#rotatezoomtable td{
+    height:100%;
+    borer:solid;
+}
+#rotatezoomtable img{
+    width:100%;
+}
+
+
+@media only screen and (orientation: portrait) {
+    #mainbox{
+        top:40px;
+    }
+    #scalebar{
+        height:50%;
+        bottom:50%;
+    }
+    #rotatebar{
+        height:50%;
+    }
+
+    #actioninput{
+        display:none;
+    }
+    #utilitybox{
+        left:0px;
+        bottom:0px;
+        right:0px;
+    }
+    #iconfeed{
+        left:0px;
+        top:10px;
+        bottom:110px;
+        right:0px;
+    }    
+    #textio{
+        bottom:0px;
+        height:90px;
+        left:0px;
+        width:50%;
+    }
+    #loadbutton{
+        position:absolute;
+        right:0px;
+        bottom:0px;
+    }
+    #rotatezoombuttons1{
+        display:none;
+    }
+    #rotatezoombuttons2{
+        display:none;
+    }
+
+    
+}
+@media only screen and (orientation: landscape) {
+    #scalebar{
+        height:25%;
+        bottom:25%;
+    }
+    #rotatebar{
+        height:25%;
+    }
+    
+    #selectorbox{
+    }
+    #utilitybox{
+        left:0px;
+        bottom:0px;
+        top:0px;
+    }
+    #iconfeed{
+        left:0px;
+        top:3em;
+        bottom:240px;
+        right:0px;
+    }    
+    #textio{
+        bottom:0px;
+        height:200px;
+        left:0px;
+        right:0px;
+        width:95%;
+    }
+
+}
+
+.feedelement{
+
+}
+#savebutton{
+    border:Solid;
+    text-align:center;
+}
+#spellbox{
+    border:solid;
+    position:absolute;
+    left:0px;
+    bottom:0px;
+    right:0px;
+    height:48%;
+    overflow:scroll;
+}
+#controltablebox{
+    position:absolute;
+    overflow:scroll;
+    left:0px;
+    right:0px;
+    top:1em;
+    height:48%;
+}
+#mainboxbackground{
+    position:absolute;
+    left:0px;
+    right:0px;
+    top:0px;
+    bottom:0px;
+    z-index:-5;
+background-color:#9f8767;    
+}
+#mainimage{
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:100%;
+    z-index:-3;
+}
+#gridcanvas{
+    z-index:-2;
+    position:absolute;
+    left:0px;
+    top:0px;
+    
+}
+#hammerxy{
+    position:absolute;
+    left:0px;
+    right:0px;
+    top:0px;
+    bottom:0px;
+    z-index:2;
+}
+
+#iotable td{
+    border:solid;
+    border-radius:5px;
+    font-family:courier;
+    text-align:center;
+    font-size:2em;
+    background-color:black;
+    color:#00ff00;
+}
+#imagecontroltable{
+}
+#imagefeed{
+    position:absolute;
+    top:5em;
+    right:0px;
+    left:0px;
+    bottom:0px;
+    overflow:scroll;
+    background-color:#9f8767;    
+    
+}
+.uploadimage{
+    max-width:75%;
+    display:block;
+    margin:auto;
+    margin-bottom:2em;
+    margin-top:2em;
+
+}
+
+.button{
+    cursor:pointer;
+    border:solid;
+}
+.button:hover{
+    background-color:#008000;
+}
+.button:active{
+    background-color:yellow;
+}
+
+.data{
+    display:none;
+}
+.icondata{
+    display:none;
+}
+.deletebutton{
+    width:20px;
+    background-color:#808080;
+    font-size:2em;
+    color:red;
+    z-index:1;
+
+}
+#iconfeed .deletebutton{
+    margin-left:-15px;
+}
+#imagefeed .deletebutton{
+    width:50px;
+}
+.imagebox{
+    border-bottom:solid;
+}
+#postbutton{
+    position:absolute;
+    top:10px;
+    right:10px;
+    z-index:2;
+    text-align:center;
+    font-family:Comic Sans MS;
+    border-radius:5px;
+    text-align:center;
+    font-size:1.5em;
+    width:10em;
+}
+</style>
+</body>
+</html>

@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <!--
+
+        EVERYTHING IS PHYSICAL
+        EVERYTHING IS FRACTAL
+        EVERYTHING IS RECURSIVE
+        NO MONEY 
+        MO MINING 
+        NO PROPERTY
+        LOOK AT THE INSECTS
+        LOOK AT THE FUNGI
+        LANGUAGE IS HOW THE MIND PARSES REALITY
+
+    -->
+
+    <title>TRASH MAGIC TAROT</title>
+    <link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAABEAERABEAAAEQABAAEQAAAAEAEAEAAAAAABAQEAAAAAEAAREAEAAAERERERERAAABAAERABAAAAAAEBAQAAAAAAEAEAEAAAABEAAQABEAAAEQABAAEQAAAAABEQAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rel="icon" type="image/x-icon" />
+
+    <!--Stop Google:-->
+    <META NAME="robots" CONTENT="noindex,nofollow">
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.js"></script>
+    <script src = "geometron.js"></script>
+    <script src = "tarot.js"></script>
+   <script src = "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+<img style = "background-color:black" id = "reloadbutton" src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAACRUlEQVRoge1ZMU7DQBAcU8EbEAUUFFRUNHkFIJQfmHQ8IFV4AhU9HSWKkFLlBWnpsPKASCkiIRRElsIHduxb+zbe+ER0u7KSKPLMzu367rwHBAsWLFiwnTPCPggnIByDsO87HHcjXIBwD8IEhBmo5DPz3z0IF77DLRvhFoTEEnidJyDEvsMHCNdmhCmSi8j7BIRrXyIGjULPeW4QBm2LeHIM8tOUT2K+u/iTNxGFsnoBIQbh0HLvofnvxa+Y6nIagtARYHXMPZxvqczSB5vLRb8Bbr9CzBYmADM7WfxBAfuBwZ42D3ydKGaINs9EmYPLTE+NA/bFbqhH8Mdje2bmUpAz5uoyI3UJwlHpaiakw3BdSYG+Kx68Oh83EpHF8G7B/paCPK8DOG88lioi0hi+GI6RFOhjg2w8Kol4reBYScHuhCJmSiLOHbimUtBFHWS0Sj/3tKZHwptjIZ9KQE8ds/GmJKInqICFFHzqAHquJMT2NmmtAON3UoJVBfirkohHQTZ+/UNKMmKAvlREpBzL2mzYl4FnKZFtkXxXEjHeIBu/Ll4krxgg93cPO+4NzLbmINviXDJcXXBbKCHp3ALe1qYx0STgpsc2tvHK7SJ+OlZ/sco93BOFyEtkllddhcwQ+lixa/qWel070XzIAqjrabm3g/jl1l9vi/HPqKZBZymqlkRkYgZR1QZmA99rvWWaiflrYku9MAgem9jrgmIUOi3FbJV+p0WVgHDrO/yy/fuDHs7So7djpMdv/+joLViwYMGCOdoPChPRTfl1TSoAAAAASUVORK5CYII=">
+    
+<div id = "slidebox"></div>    
+
+<div class = "iconbox" id = "iconbox1">
+    <canvas id = "icon1canvas"></canvas>
+</div>
+<div class = "iconbox" id = "iconbox2">
+    <canvas id = "icon2canvas"></canvas>
+</div>
+
+<div class = "hebrewbox" id = "hebrewbox1">
+    <canvas id = "hebrewcanvas1"></canvas>
+</div>
+<div class = "hebrewbox" id = "hebrewbox2">
+    <canvas id = "hebrewcanvas2"></canvas>
+</div>
+
+<div class = "hebrewnamebox" id = "hebrewnamebox1"></div>
+<div class = "hebrewnamebox" id = "hebrewnamebox2"></div>
+
+
+
+<a id = "icon1namelink" href = ""></a>
+<a id = "icon1hebrewlink" href = ""></a>
+
+<input id = "jsonio"/>
+
+<a id = "icon2namelink" href = ""></a>
+<a id = "icon2hebrewlink" href = ""></a>
+
+
+<div class = "leftnamebox" id = "leftnamebox1"></div>
+<div class = "leftnamebox" id = "leftnamebox2"></div>
+<div class = "rightnamebox" id = "rightnamebox1"></div>
+<div class = "rightnamebox" id = "rightnamebox2"></div>
+
+<img class = "cardimg" id = "cardimg1"/>
+<img class = "cardimg" id = "cardimg2"/>
+
+
+<a id = "printerlink" href= "scroll.html">SCROLL</a>
+
+<a id = "homelink" href= "index.html">HOME</a>
+
+<div id = "qrcode"></div>
+
+<script>
+
+codesquaresize = 170;
+marginsize = 40;
+fontsize = 12;
+
+globalurl = window.location.href;
+qrcode = new QRCode(document.getElementById("qrcode"), {
+	text: globalurl,
+	width: codesquaresize,
+	height: codesquaresize,
+	colorDark : "#000000",
+	colorLight : "#ffffff",
+	correctLevel : QRCode.CorrectLevel.H
+});
+
+spread = [0,0];
+
+//spread[0] = Math.round(Math.random()*78);
+//spread[1] = Math.round(Math.random()*78);
+spread[0] = Math.round(Math.random()*21);
+spread[1] = Math.round(Math.random()*21);
+
+if(spread[1] == spread[0]){
+    spread[1] = Math.round(Math.random()*21);
+}
+
+icon1 = deck[spread[0]];
+icon2 = deck[spread[1]];
+
+document.getElementById("leftnamebox1").innerHTML = leftname[spread[0]];
+document.getElementById("rightnamebox1").innerHTML = rightname[spread[0]];
+
+document.getElementById("leftnamebox2").innerHTML = leftname[spread[1]];
+document.getElementById("rightnamebox2").innerHTML = rightname[spread[1]];
+
+if(spread[0] < 22){
+    document.getElementById("icon1namelink").innerHTML = rightname[spread[0]];    
+    document.getElementById("icon1namelink").href = cardlinks[spread[0]];    
+    document.getElementById("icon1hebrewlink").innerHTML = hebrewname[spread[0]];    
+    document.getElementById("icon1hebrewlink").href = hebrewlinks[spread[0]];        
+    
+}
+
+if(spread[1] < 22){
+    document.getElementById("icon2namelink").innerHTML = rightname[spread[1]];    
+    document.getElementById("icon2namelink").href = cardlinks[spread[1]];    
+    document.getElementById("icon2hebrewlink").innerHTML = hebrewname[spread[1]];    
+    document.getElementById("icon2hebrewlink").href = hebrewlinks[spread[1]];            
+    
+}
+document.getElementById("cardimg2").src = cardimages[spread[1]];
+document.getElementById("cardimg1").src = cardimages[spread[0]];
+
+document.getElementById("jsonio").value = JSON.stringify(spread);
+
+document.getElementById("jsonio").onchange = function(){
+    spread = JSON.parse(this.value);
+    document.getElementById("cardimg2").src = cardimages[spread[1]];
+    document.getElementById("cardimg1").src = cardimages[spread[0]];
+
+    icon1 = deck[spread[0]];
+    icon2 = deck[spread[1]];
+    icon1GVM.drawGlyph(icon1);
+    icon2GVM.drawGlyph(icon2);
+    document.getElementById("leftnamebox1").innerHTML = leftname[spread[0]];
+    document.getElementById("rightnamebox1").innerHTML = rightname[spread[0]];
+
+    document.getElementById("leftnamebox2").innerHTML = leftname[spread[1]];
+    document.getElementById("rightnamebox2").innerHTML = rightname[spread[1]];
+    
+
+
+    if(spread[0] < 22){
+        hebrewGVM1.drawGlyph(hebrewicons[spread[0]]);
+        document.getElementById("hebrewnamebox1").innerHTML = hebrewname[spread[0]];
+    }
+    else{
+        hebrewGVM1.drawGlyph("0300,");
+        document.getElementById("hebrewnamebox1").innerHTML = "";
+    }
+    if(spread[1] < 22){
+        hebrewGVM2.drawGlyph(hebrewicons[spread[1]]);
+        document.getElementById("hebrewnamebox2").innerHTML = hebrewname[spread[1]];        
+    }
+    else{
+        hebrewGVM2.drawGlyph("0300,");
+        document.getElementById("hebrewnamebox2").innerHTML = "";
+    }
+
+
+    if(spread[0] < 22){
+        document.getElementById("icon1namelink").innerHTML = rightname[spread[0]];    
+        document.getElementById("icon1namelink").href = cardlinks[spread[0]];    
+        document.getElementById("icon1hebrewlink").innerHTML = hebrewname[spread[0]];    
+        document.getElementById("icon1hebrewlink").href = hebrewlinks[spread[0]];        
+    }
+    else{
+        document.getElementById("icon1namelink").innerHTML = leftname[spread[0]] + " OF " + rightname[spread[0]];    
+        document.getElementById("icon1namelink").href = cardlinks[spread[0]];    
+        document.getElementById("icon1hebrewlink").innerHTML = "";    
+        document.getElementById("icon1hebrewlink").href = "";        
+    }
+    
+    if(spread[1] < 22){
+        document.getElementById("icon2namelink").innerHTML = rightname[spread[1]];    
+        document.getElementById("icon2namelink").href = cardlinks[spread[1]];    
+        document.getElementById("icon2hebrewlink").innerHTML = hebrewname[spread[1]];    
+        document.getElementById("icon2hebrewlink").href = hebrewlinks[spread[1]];            
+    }
+    else{
+        document.getElementById("icon2namelink").innerHTML = leftname[spread[1]] + " OF " + rightname[spread[1]];    
+        document.getElementById("icon2namelink").href = cardlinks[spread[1]];    
+        document.getElementById("icon2hebrewlink").innerHTML = "";    
+        document.getElementById("icon2hebrewlink").href = "";        
+    }
+    theta= 0;
+    redraw();
+
+
+}
+
+icon1canvas = document.getElementById("icon1canvas");
+icon2canvas = document.getElementById("icon2canvas");
+hebrewcanvas1 = document.getElementById("hebrewcanvas1");
+hebrewcanvas2 = document.getElementById("hebrewcanvas2");
+
+if(innerWidth > innerHeight){
+    square = innerHeight;
+    margin = Math.round(0.5*(innerWidth - square));
+    document.getElementById("iconbox1").style.left = margin.toString() + "px";
+    document.getElementById("iconbox2").style.left = margin.toString() + "px";    
+}
+else{
+    square = innerWidth;
+    margin = Math.round(0.5*(innerHeight - square));
+    document.getElementById("iconbox1").style.top = margin.toString() + "px";
+    document.getElementById("iconbox2").style.top = margin.toString() + "px";    
+}
+
+document.getElementById("reloadbutton").style.width = (Math.round(0.3*margin)).toString() + "px";
+
+pixelcube = [
+    "0500:0406,0406,0403,0407,0405,0404,0407,0336,0336,0336,0336,0330,0330,0347,0200,0337,0337,0337,0337,0702,0711,",
+    "0501:0406,0406,0402,0407,0405,0404,0407,0336,0336,0336,0336,0331,0331,0347,0337,0337,0337,0337,0703,0711,",
+    "0502:0406,0406,0401,0407,0405,0404,0407,0336,0336,0336,0336,0332,0332,0347,0337,0337,0337,0337,0701,0711,",
+    "0503:0406,0406,0400,0407,0405,0404,0407,0336,0336,0336,0336,0333,0333,0347,0337,0337,0337,0337,0700,0711,",
+    "0504:0406,0406,0403,0407,0407,0336,0336,0336,0336,0330,0330,0337,0337,0337,0337,0702,",
+    "0505:0406,0406,0402,0407,0407,0336,0336,0336,0336,0331,0331,0337,0337,0337,0337,0703,",
+    "0506:0406,0406,0401,0407,0407,0336,0336,0336,0336,0332,0332,0337,0337,0337,0337,0701,",
+    "0507:0406,0406,0400,0407,0407,0336,0336,0336,0336,0333,0333,0337,0337,0337,0337,0700,"
+    ];
+
+var icon1GVM = new GVM(icon1canvas,square,square);
+var icon2GVM = new GVM(icon2canvas,square,square);
+var hebrewGVM1 = new GVM(hebrewcanvas1,0.5*margin,0.5*margin);
+var hebrewGVM2 = new GVM(hebrewcanvas2,0.5*margin,0.5*margin);
+
+icon1GVM.importbytecode(pixelcube);
+icon2GVM.importbytecode(pixelcube);
+hebrewGVM1.importbytecode(pixelcube);
+hebrewGVM2.importbytecode(pixelcube);
+
+icon1GVM.style.color0 = "black";
+icon2GVM.style.color0 = "black";
+hebrewGVM1.style.color0 = "black";
+hebrewGVM2.style.color0 = "black";
+
+icon1GVM.style.fill0 = "black";
+icon2GVM.style.fill0 = "black";
+hebrewGVM1.style.fill0 = "black";
+hebrewGVM2.style.fill0 = "black";
+
+icon1GVM.style.line0 = 2;
+icon2GVM.style.line0 = 2;
+hebrewGVM1.style.line0 = 2;
+hebrewGVM2.style.line0 = 2;
+
+icon1GVM.drawGlyph(icon1);
+icon2GVM.drawGlyph(icon2);
+
+    if(spread[0] < 22){
+        hebrewGVM1.drawGlyph(hebrewicons[spread[0]]);
+        document.getElementById("hebrewnamebox1").innerHTML = hebrewname[spread[0]];
+    }
+    else{
+        hebrewGVM1.drawGlyph("0300,");
+        document.getElementById("hebrewnamebox1").innerHTML = "";
+    }
+    if(spread[1] < 22){
+        hebrewGVM2.drawGlyph(hebrewicons[spread[1]]);
+        document.getElementById("hebrewnamebox2").innerHTML = hebrewname[spread[1]];        
+    }
+    else{
+        hebrewGVM2.drawGlyph("0300,");
+        document.getElementById("hebrewnamebox2").innerHTML = "";
+    }
+
+
+theta = 0;
+
+mc = new Hammer(document.getElementById("slidebox"));
+mc.get('pan').set({ direction: Hammer.DIRECTION_ALL });
+mc.on("panleft panright panup pandown tap press", function(ev) {
+
+//    theta = Math.PI/4 +(ev.deltaX/200);
+    theta = (ev.deltaX/200);
+    redraw();
+
+});
+
+redraw();
+
+function redraw(){
+    alpha = Math.cos(theta)*Math.cos(theta);
+    beta = Math.sin(theta)*Math.sin(theta);
+    document.getElementById("icon1canvas").style.opacity = (alpha).toString();
+    document.getElementById("icon2canvas").style.opacity = (beta).toString();
+    
+    document.getElementById("cardimg1").style.opacity = (alpha).toString();
+    document.getElementById("cardimg2").style.opacity = (beta).toString();    
+    
+    document.getElementById("leftnamebox1").style.opacity = (alpha).toString();
+    document.getElementById("leftnamebox2").style.opacity = (beta).toString();
+
+    document.getElementById("rightnamebox1").style.opacity = (alpha).toString();
+    document.getElementById("rightnamebox2").style.opacity = (beta).toString();    
+    
+    document.getElementById("hebrewcanvas1").style.opacity = (alpha).toString();
+    document.getElementById("hebrewcanvas2").style.opacity = (beta).toString();        
+    document.getElementById("hebrewnamebox1").style.opacity = (alpha).toString();
+    document.getElementById("hebrewnamebox2").style.opacity = (beta).toString();            
+    
+}
+
+document.getElementById("reloadbutton").onclick = function(){
+    // location.reload(); 
+
+
+    //spread[0] = Math.round(Math.random()*78);
+    //spread[1] = Math.round(Math.random()*78);
+    spread[0] = Math.round(Math.random()*77);
+    spread[1] = Math.round(Math.random()*77);
+    document.getElementById("jsonio").value = JSON.stringify(spread);
+    
+    if(spread[1] == spread[0]){
+        spread[1] = Math.round(Math.random()*77);
+    }
+    
+    icon1 = deck[spread[0]];
+    icon2 = deck[spread[1]];
+
+
+    document.getElementById("cardimg2").src = cardimages[spread[1]];
+    document.getElementById("cardimg1").src = cardimages[spread[0]];
+
+    icon1GVM.drawGlyph(icon1);
+    icon2GVM.drawGlyph(icon2);
+    document.getElementById("leftnamebox1").innerHTML = leftname[spread[0]];
+    document.getElementById("rightnamebox1").innerHTML = rightname[spread[0]];
+
+    document.getElementById("leftnamebox2").innerHTML = leftname[spread[1]];
+    document.getElementById("rightnamebox2").innerHTML = rightname[spread[1]];
+    
+
+
+    if(spread[0] < 22){
+        hebrewGVM1.drawGlyph(hebrewicons[spread[0]]);
+        document.getElementById("hebrewnamebox1").innerHTML = hebrewname[spread[0]];
+    }
+    else{
+        hebrewGVM1.drawGlyph("0300,");
+        document.getElementById("hebrewnamebox1").innerHTML = "";
+    }
+    if(spread[1] < 22){
+        hebrewGVM2.drawGlyph(hebrewicons[spread[1]]);
+        document.getElementById("hebrewnamebox2").innerHTML = hebrewname[spread[1]];        
+    }
+    else{
+        hebrewGVM2.drawGlyph("0300,");
+        document.getElementById("hebrewnamebox2").innerHTML = "";
+    }
+
+
+    if(spread[0] < 22){
+        document.getElementById("icon1namelink").innerHTML = rightname[spread[0]];    
+        document.getElementById("icon1namelink").href = cardlinks[spread[0]];    
+        document.getElementById("icon1hebrewlink").innerHTML = hebrewname[spread[0]];    
+        document.getElementById("icon1hebrewlink").href = hebrewlinks[spread[0]];        
+    }
+    else{
+        document.getElementById("icon1namelink").innerHTML = leftname[spread[0]] + " OF " + rightname[spread[0]];    
+        document.getElementById("icon1namelink").href = cardlinks[spread[0]];    
+        document.getElementById("icon1hebrewlink").innerHTML = "";    
+        document.getElementById("icon1hebrewlink").href = "";        
+    }
+    
+    if(spread[1] < 22){
+        document.getElementById("icon2namelink").innerHTML = rightname[spread[1]];    
+        document.getElementById("icon2namelink").href = cardlinks[spread[1]];    
+        document.getElementById("icon2hebrewlink").innerHTML = hebrewname[spread[1]];    
+        document.getElementById("icon2hebrewlink").href = hebrewlinks[spread[1]];            
+    }
+    else{
+        document.getElementById("icon2namelink").innerHTML = leftname[spread[1]] + " OF " + rightname[spread[1]];    
+        document.getElementById("icon2namelink").href = cardlinks[spread[1]];    
+        document.getElementById("icon2hebrewlink").innerHTML = "";    
+        document.getElementById("icon2hebrewlink").href = "";        
+    }
+    theta= 0;
+    redraw();
+}
+
+</script>
+<style>
+body{
+    background-color:#9f8767;;
+    color:black;
+    overflow:hidden;
+    font-family:Comic Sans MS;
+    font-size:3em;
+}
+.iconbox{
+    position:absolute;
+    z-index:-1;
+}
+#qrcode{
+    position:absolute;
+    top:50%;
+    left:10px;
+    border:solid;
+    border-color:white;
+    border-width:15px;
+}
+#printerlink{
+    left:50%;
+    bottom:20px;
+    font-size:20px;
+    display:none;
+}
+#homelink{
+    right:50%;
+    bottom:0px;
+    font-size:1.5em;
+}
+#slidebox{
+    position:absolute;
+    left:0px;
+    top:0px;
+    right:0px;
+    bottom:0px;
+    z-index:0;
+}
+#reloadbutton{
+    position:absolute;
+    left:0px;
+    top:0px;
+    z-index:4;
+    cursor:pointer;
+    border-color:black;
+    border:solid;
+}
+#reloadbutton:hover{
+    background-color:#9f8767;;
+}
+a{
+    color:blue  ;
+    font-family:Comic Sans MS;
+    font-size:0.5em;
+    z-index:3;
+    position:absolute;
+}
+#icon1namelink{
+    top:0px;
+    right:62%;
+}
+#icon2namelink{
+    top:0px;
+    left:62%;
+}
+#icon1hebrewlink{
+    top:1em;
+    right:62%;
+}
+#icon2hebrewlink{
+    top:1em;
+    left:62%;
+}
+
+#jsonio{
+    position:absolute;
+    top:0px;
+    left:40%;
+    width:20%;
+    border:solid;
+    border-color:black;
+    background-color:#9f8767;
+    color:black;
+    font-family:courier;
+    font-size:24px;
+}
+.leftnamebox{
+    position:absolute;
+    left:0px;
+    bottom:0px;
+}
+.rightnamebox{
+    position:absolute;
+    right:0px;
+    bottom:0px;
+}
+.hebrewbox{
+    position:absolute;
+    right:0px;
+    top:30px;
+}
+.hebrewnamebox{
+    position:absolute;
+    right:0px;
+    top:0px;
+    font-size:24px;
+}
+.cardimg{
+    position:absolute;
+    right:0px;
+    bottom:3em;
+}
+</style>
+</body>
+</html>

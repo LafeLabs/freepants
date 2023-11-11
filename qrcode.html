@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <!--
+
+
+    -->
+    <link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAP//AP///wANAP8A5Dz6ABueRwAAt/8A6BonABo86AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAREREREREREREREAAAEREREREQCIgREREd3dwAAB3d3d3d3d3d3d3d3d3d3d3d3d3VVVVVVVQAFVVAAVVVQIiBRAiIBEQIAIBECAAERAgAgFgIABmYCIiBmAiIGZgIiIGYCIgZmYCIAaIAAMzMzAAiIiIiIiIiIiIiIiIiIiIiIgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rel="icon" type="image/x-icon" />
+
+    <!--Stop Google:-->
+    <META NAME="robots" CONTENT="noindex,nofollow">
+
+<script src = "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>    
+
+<a id= "toplink" href = "index.html">HOME</a>
+<a id = "othertoplink" href = "qrcode-page.html">qrcode-page.html</a>
+<table>
+    <tr>
+        <td>URL:</td>
+        <td><input id = "urlinput"/></td>
+    </tr>
+</table>
+<a id = "linklink"></a>
+<div id = "qrcode"></div>
+
+<script>
+
+codesquaresize = 512;
+marginsize = 40;
+fontsize = 12;
+
+//globalurl = "http://www.trashrobot.org/qrcode.html";
+globalurl = window.location.href.split("qrcode.html")[0];
+
+
+document.getElementById("urlinput").value = "";
+
+document.getElementById("urlinput").select();
+
+document.getElementById("urlinput").onchange = function(){
+    globalurl= this.value;
+    qrcode.makeCode(globalurl);
+    document.getElementById("linklink").href = globalurl;
+    document.getElementById("linklink").innerHTML = globalurl;
+    
+}
+
+
+document.getElementById("linklink").href = globalurl;
+document.getElementById("linklink").innerHTML = globalurl;
+document.getElementById("urlinput").value = globalurl;
+
+qrcode = new QRCode(document.getElementById("qrcode"), {
+	text: globalurl,
+	width: codesquaresize,
+	height: codesquaresize,
+	colorDark : "#000000",
+	colorLight : "#ffffff",
+	correctLevel : QRCode.CorrectLevel.H
+});
+
+
+
+
+</script>
+<style>
+input{
+    border:solid;
+}
+body{
+    font-family:courier;
+}
+canvas,img{
+    border:solid;
+    border-width:4px;
+    margin:1em 1em 1em 1em;
+}
+#toplink{
+    position:absolute;
+    right:0px;
+    top:0px;
+    font-size:2em;
+}
+#othertoplink{
+    position:absolute;
+    right:50%;
+    top:0px;
+    font-size:2em;
+    
+}
+.button{
+    cursor:pointer;
+    text-align:center;
+    border:solid;
+    border-radius:3px;
+}
+.button:hover{
+    background-color:green;
+}
+.button:active{
+    background-color:yellow;
+}
+</style>
+</body>
+</html>

@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <!--
+
+        EVERYTHING IS PHYSICAL
+        EVERYTHING IS FRACTAL
+        EVERYTHING IS RECURSIVE
+        NO MONEY
+        MO MINING
+        NO PROPERTY
+        LOOK AT THE INSECTS
+        LOOK AT THE FUNGI
+        LANGUAGE IS HOW THE MIND PARSES REALITY
+
+    -->
+    <link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAP//AP///wANAP8A5Dz6ABueRwAAt/8A6BonABo86AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAREREREREREREREAAAEREREREQCIgREREd3dwAAB3d3d3d3d3d3d3d3d3d3d3d3d3VVVVVVVQAFVVAAVVVQIiBRAiIBEQIAIBECAAERAgAgFgIABmYCIiBmAiIGZgIiIGYCIgZmYCIAaIAAMzMzAAiIiIiIiIiIiIiIiIiIiIiIgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rel="icon" type="image/x-icon" />
+
+    <!--Stop Google:-->
+    <META NAME="robots" CONTENT="noindex,nofollow">
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.6.0/lib/p5.js"></script>
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/addons/p5.sound.js"></script>
+<script src = "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>    
+    
+</head>
+<body>    
+<a href = "index.html" id = "homelink">home</a>
+
+<div id = "glyphbox"></div>
+
+    <div id = "qrcode"></div>
+
+<img id = "dtmfimage" src = "https://raw.githubusercontent.com/LafeLabs/quantumnoisedotorg/master/trashmagic/hex.svg"/>
+<div id = "readme">
+    click to turn the sound on/off.  mouse position x and y control the two frequencies.
+</div>
+<script>
+    /*
+
+first, getting calibrated frequencies in an fft...
+
+*/
+let osc, fft,osc2,osc3;
+
+frameIndex = 0;
+xgain = 6;
+oscon = false;
+
+glyph = "";
+indexarray = [];
+
+colorwheel = [];
+angles = [];
+spingain = 0.001;
+spinradius = 100;
+n = 16;
+binsize = 12;
+
+for(var index = 0;index < n;index++){
+    H = index*360/n;
+    z = 255*(1 - Math.abs((H/60)%2 - 1));
+    
+    if(H < 60){
+        red = 255;
+        green = Math.round(z);
+        blue = 0;
+    }
+    if(H >= 60 && H < 120){
+        red = Math.round(z);
+        green = 255;
+        blue = 0;
+    }
+    if(H >= 120 && H < 180){
+        red = 0;
+        green = 255;
+        blue = Math.round(z);
+    }
+    if(H >= 180 && H < 240){
+        red = 0;    
+        green = Math.round(z);
+        blue = 255;
+    }
+    if(H >= 240 && H < 300){
+        red = Math.round(z);    
+        green = 0;
+        blue = 255;
+    }
+    if(H >= 300 && H < 360){
+        red = 255;    
+        green = 0;
+        blue = Math.round(z);
+    }
+        
+    redstring = red.toString(16);
+    if(redstring.length < 2){
+        redstring = "0" + redstring;    
+    }
+    greenstring = green.toString(16);
+    if(greenstring.length < 2){
+        greenstring = "0" + greenstring; 
+    }
+    bluestring = blue.toString(16);
+    if(bluestring.length < 2){
+        bluestring = "0" + bluestring; 
+    }
+    color = "#" + redstring + greenstring + bluestring;
+    colorwheel.push(color);
+    angles.push(0);
+}
+
+
+function setup() {
+
+  t0 = millis();
+  frameRate(32);
+  createCanvas(innerWidth, innerHeight);
+
+   //  background(159,135,103);
+
+
+  osc = new p5.SinOsc(); // set frequency and type
+  osc.amp(0.2);
+  osc2 = new p5.SinOsc(); // set frequency and type
+  osc2.amp(0.2);
+  fft = new p5.FFT();
+  osc.start();
+  osc2.start();
+  freq = 1300;
+  freq2= 1000;
+  osc.freq(freq);  
+  osc2.freq(freq2);  
+
+
+  mic = new p5.AudioIn();
+  mic.start();
+  fft = new p5.FFT();
+  fft.setInput(mic);
+
+  
+}
+
+
+function draw() {
+
+  freq2= mouseY*5;
+  freq = mouseX*5;
+  osc.freq(freq);  
+  osc2.freq(freq2);  
+
+  spectrum = fft.analyze();
+  nyquistFreq = sampleRate() / 2;
+  binFreq = nyquistFreq / (spectrum.length);
+  i1000 = Math.round(1000/binFreq);
+
+  background(159,135,103);
+  strokeWeight(1);
+  stroke(0);
+  noFill();
+  text("Sample Rate = " + sampleRate().toString() + " Hz",10,30);
+  text("fx = " + freq.toString() + " Hz",10,60);
+  text("fy = " + freq2.toString() + " Hz",10,90);
+
+  text("Number of Points = " + spectrum.length.toString(),10,120);
+
+
+  text("hex glyph = " + glyph,10,150);
+
+//  text("12th point freq = " + (12*binFreq).toString()  + " Hz",10,150);
+  //text("24th point freq = " + (24*binFreq).toString()  + " Hz",10,180);
+
+  noFill();
+  beginShape();
+  vertex(0,height);
+  strokeWeight(4);
+  for(var i = 0; i < spectrum.length; i++) {
+     vertex(i*xgain, map(spectrum[i], 0, 255, height, 0));
+  }
+  vertex(width,height);
+  endShape();
+
+
+  stroke("red");
+  line(xgain*i1000,0,xgain*i1000,height);
+  stroke("green");
+  line(xgain*2*i1000,0,xgain*2*i1000,height);
+  stroke("blue");
+  line(xgain*3*i1000,0,xgain*3*i1000,height);
+  stroke("purple");
+  line(xgain*4*i1000,0,xgain*4*i1000,height);
+
+  strokeWeight(1);
+  stroke("red");
+  text("1 kHz",xgain*i1000 + 10,100);
+  stroke("green");
+  text("2 kHz",xgain*2*i1000 + 10,100);
+  stroke("blue");
+  text("3 kHz",xgain*3*i1000 + 10,100);
+  stroke("purple");
+  text("4 kHz",xgain*4*i1000 + 10,100);
+
+  strokeWeight(10);
+  for(var index = 0;index < n;index++){
+      stroke(colorwheel[index]);
+      for(var subindex = 1;subindex < binsize;subindex++){
+          line(xgain*((index + 1)*binsize + subindex - 1),map(spectrum[(index + 1)*binsize + subindex - 1], 0, 255, height, 0),xgain*((index + 1)*binsize + subindex),map(spectrum[(index + 1)*binsize + subindex], 0, 255, height, 0));
+      }
+      power = 0;
+      for(var subindex = 0;subindex < binsize;subindex++){
+         power += spectrum[(index + 1)*binsize + subindex];
+      }
+      power /= binsize;
+      angles[index] -= spingain*power;
+      line((index + 1)*binsize*xgain,0.5*height,(index + 1)*binsize*xgain + spinradius*Math.sin(angles[index]+Math.PI),0.5*height + spinradius*Math.cos(angles[index]+Math.PI));
+      fill(colorwheel[index] + "80");
+      circle((index + 1.5)*binsize*xgain,map(power, 0, 255, height, 0),50);
+      if(-angles[index] > 2*Math.PI){
+          glyph += (index).toString(16);
+          angles[index] += 2*Math.PI;
+
+      }
+
+  }
+
+/*
+  for(var index = 0;index < n;index++){
+      fill(colorwheel[index] + "80");
+      strokeWeight(10);
+      stroke(colorwheel[index]);
+      circle((index + 1)*12*xgain,map(spectrum[12*(index + 1)], 0, 255, height, 0),50);
+     angles[index] -= spingain*spectrum[12*(index + 1)];
+     line((index + 1)*12*xgain,0.5*height,(index + 1)*12*xgain + spinradius*Math.sin(angles[index]),0.5*height + spinradius*Math.cos(angles[index]));
+      
+  }
+    
+  noFill();
+  strokeWeight(1);
+  for(var index = 0;index < n;index++){
+      stroke(colorwheel[index]);
+      text(((index + 1)*12*binFreq).toString() + " Hz",(index + 1)*12*xgain,map(spectrum[12*(index + 1)], 0, 255, height, 0) - 100)  
+  }
+
+*/
+
+
+}
+
+function mouseClicked() {
+  
+  if(!oscon){
+      osc.start();
+      osc2.start();
+
+  }
+  else{
+      osc.stop();
+      osc2.stop();
+  }
+  oscon = !oscon;
+    
+}
+
+
+codesquaresize = 170;
+marginsize = 40;
+fontsize = 12;
+//globalurl = "http://www.trashrobot.org/qrcode.html";
+globalurl = window.location.href;
+qrcode = new QRCode(document.getElementById("qrcode"), {
+	text: globalurl,
+	width: codesquaresize,
+	height: codesquaresize,
+	colorDark : "#000000",
+	colorLight : "#ffffff",
+	correctLevel : QRCode.CorrectLevel.H
+});
+
+
+</script>
+<style>
+    body{
+        overflow:hidden;
+    }
+    #glyphbox{
+        position:absolute;
+        border:solid;
+        left:20em;
+        top:10;
+        width:50%;
+        height:3em;
+        font-size:1.5em;
+        overflow:scroll;
+        z-index:3;
+    }
+    #asciibox{
+        
+    }
+    #homelink{
+        position:absolute;
+        color:blue;
+        top:10px;
+        left:25%;
+        width:5em;
+        font-family:Comic Sans MS;
+    }
+    #readme{
+        position:absolute;
+        right:10px;
+        top:10px;
+        border:solid;
+        overflow:scroll;
+        height:200px;
+        width:200px;
+        border-radius:10px;
+        border-width:5px;
+        font-family:courier;
+        color:white;
+        background-color:#0000ff;
+        font-size:16px;
+        padding:1em 1em 1em 1em;
+    }
+    #dtmfimage{
+        position:absolute;
+        right:10px;
+        width:200px;
+        top:50%;
+    }
+    #qrcode{
+        position:absolute;
+        right:50px;
+        bottom:50px;
+        z-index:200;
+        background-color:white;
+        border:solid;
+        border-width:30px;
+        border-color:white;
+    }
+</style>
+</body>
+</html>

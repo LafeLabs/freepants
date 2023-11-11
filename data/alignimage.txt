@@ -1,0 +1,1 @@
+{"w":0.688,"x":0.13942857142857143,"y":0.05714285714285714,"angle":0,"src":"https://upload.wikimedia.org/wikipedia/en/0/05/Hello_kitty_character_portrait.png"}

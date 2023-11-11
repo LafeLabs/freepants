@@ -1,0 +1,6 @@
+[
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Bell_System_hires_1969_logo_blue.svg/400px-Bell_System_hires_1969_logo_blue.svg.png",
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Logo_NIKE.svg/2880px-Logo_NIKE.svg.png",
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Mastodon_logotype_%28simple%29_new_hue.svg/1920px-Mastodon_logotype_%28simple%29_new_hue.svg.png",
+  "https://www.webstaurantstore.com/images/products/large/446017/1736195.jpg"
+]

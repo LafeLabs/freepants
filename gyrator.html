@@ -1,0 +1,929 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <!--
+
+        EVERYTHING IS PHYSICAL 
+        EVERYTHING IS FRACTAL
+        EVERYTHING IS RECURSIVE
+        NO MONEY 
+        MO MINING 
+        NO PROPERTY
+        LOOK AT THE INSECTS
+        LOOK AT THE FUNGI
+        LANGUAGE IS HOW THE MIND PARSES REALITY
+
+    -->
+        <title>TRASH MAGIC GYRATOR</title>
+
+<link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAZ4efAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEREREREREREREREREREREREAAAAAAAAREQEREREREBERAREREREQEREBEAAAARAREQEQEREBEBERARAQAQEQEREBEBABARAREQEQEREBEBERARAAAAEQEREBERERERAREQEREREREBERAAAAAAAAEREREREREREREREREREREREAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rel="icon" type="image/x-icon">
+
+
+    <!--Stop Google:-->
+    <META NAME="robots" CONTENT="noindex,nofollow">
+<!--geometron javascript library-->
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.7.0/lib/p5.js"></script>
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/addons/p5.sound.js"></script>
+<script src = "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="geometron.js"></script>
+    <script src="tarot.js"></script>
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script>
+            MathJax.Hub.Config({
+                tex2jax: {
+                inlineMath: [['$','$'], ['\\(','\\)']],
+                processEscapes: true,
+                processClass: "mathjax",
+                ignoreClass: "no-mathjax"
+                }
+            });//			MathJax.Hub.Typeset();//tell Mathjax to update the math
+        </script>
+
+</head>
+<body>
+    
+<img src = "https://upload.wikimedia.org/wikipedia/commons/8/82/Morchella_conica_1_beentree.jpg" id = "mainimage"/>
+
+
+<div id = "mainbox">
+    <canvas id = "maincanvas"></canvas>
+</div>
+
+<div id = "qrcode"></div>
+
+<div id = "scrollbox">
+    <div id = "mainscroll">
+            <h1>Trash Magic Gyrator</h1>
+    
+    <a href= "index.html">BACK HOME TO SQUARES</a>
+    
+    <p>
+        Tap to start/stop oscillators.  X and y motion of pointer or touch on screen rings up gyrators on x and y axes.  Connect machine to speaker with heavy bass.  Cycle mode between "EXCITE MODE", "STEADY MODE" and "OSSCILATE MODE".  Enter numbers in table to set the image offset in percent, image scaling in percent, and base frequency in Hz.
+    </p>
+    
+            <table>
+                <tr>
+                    <td id = "modebutton">MODE SWITCH</td>
+                    <td id ="modeindicator">EXCITE MODE</td>
+                </tr>
+                <tr>
+                    <td>New Image URL:</td>
+                    <td><input id = "imageurlinput"/></td>
+                </tr>
+                <tr>
+                    <td>w:</td>
+                    <td><input id = "winput"/></td>
+                    <td>%</td>
+                </tr>
+                <tr>
+                    <td>x:</td>
+                    <td><input id = "xinput"/></td>
+                    <td>%</td>
+                </tr>
+                <tr>
+                    <td>y:</td>
+                    <td><input id = "yinput"/></td>
+                    <td>%</td>
+                </tr>
+                <tr>
+                    <td>f1:</td>
+                    <td><input id = "f1input"/></td>
+                    <td>Hz</td>
+                </tr>
+                <tr>
+                    <td>f2:</td>
+                    <td><input id = "f2input"/></td>
+                    <td>Hz</td>
+                </tr>
+            </table>
+        <form id = "uploadform" action="uploadimage.php" method="post" enctype="multipart/form-data">
+                        <span id ="uploadspan">UPLOAD:</span>
+                <input type="file" name="fileToUpload" id="fileToUpload">
+                <input  type="submit" value="Upload Image" name="submit" id ="submitinput">
+        </form>
+    
+    <p>
+        
+    </p>    
+<p>
+    
+    $$
+    F_x = \left(\frac{G}{w}\right)\sqrt{\left[\int_0^T\cos{\left(\frac{2\pi t}{T}\right)}x(t)dt\right]^2  + \left[\int_0^T\sin{\left(\frac{2\pi t}{T}\right)}x(t)dt\right]^2}
+    $$
+    
+    $$
+    F_y = \left(\frac{G}{w}\right)\sqrt{\left[\int_0^T\cos{\left(\frac{2\pi t}{T}\right)}y(t)dt\right]^2  + \left[\int_0^T\sin{\left(\frac{2\pi t}{T}\right)}y(t)dt\right]^2}
+    $$    
+    </p>    
+<p>
+
+    
+    $$
+    \dot{v_x} = \frac{F_x - v_x}{\tau}
+    $$
+    $$
+    \dot{v_y} = \frac{F_y - v_y}{\tau}
+    $$
+
+    </p>    
+<p>
+
+    $$
+    f'_1 = f_1(1 + v_x)
+    $$
+    $$
+    f'_2 = f_2(1 + v_y)
+    $$
+    </p>    
+<p>
+
+$$
+v = \sqrt{v_x^2 + v_y^2}
+$$
+
+</p>
+        
+    </div>
+    <div id = "localscroll"></div>
+    <div id = "globalscroll"></div>
+</div>
+
+
+<script>
+
+
+oscmode = 0;//0 is stimulation, 1 is steady, 2 is osc
+
+document.getElementById("modebutton").onclick = function(){
+    oscmode++;
+    if(oscmode > 2){
+        oscmode = 0;
+    }
+    if(oscmode == 0){
+        document.getElementById("modeindicator").innerHTML = "EXCITE MODE";
+    }
+    if(oscmode == 1){
+        document.getElementById("modeindicator").innerHTML = "STEADY MODE";
+    }
+    if(oscmode == 2){
+        document.getElementById("modeindicator").innerHTML = "OSCILLATE MODE";
+    }
+    
+}
+
+gyratorjson0 = {
+  "w":100,
+  "x":0,
+  "y":0,
+  "imageurl":"https://upload.wikimedia.org/wikipedia/commons/8/82/Morchella_conica_1_beentree.jpg",
+  "f1":69,
+  "f2":99
+};
+
+document.getElementById("imageurlinput").value = "";
+
+document.getElementById("imageurlinput").onchange  = function(){
+
+    imagefeed.push(this.value);
+    saveimagefeed();
+    loadimagefeed();
+
+}
+
+
+function saveimagefeed(){
+    var httpc = new XMLHttpRequest();
+    httpc.open("POST", "filesaver.php", true);
+    httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    httpc.send("data="+encodeURIComponent(JSON.stringify(imagefeed,null,"  "))+"&filename=imagefeed.txt");//send text to filesaver.php   
+    document.getElementById("imageurlinput").value = "";
+     
+
+}
+
+//savegyratorjson();
+
+function savegyratorjson(){
+    
+    var httpc = new XMLHttpRequest();
+    httpc.open("POST", "filesaver.php", true);
+    httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    httpc.send("data="+encodeURIComponent(JSON.stringify(gyratorjson,null,"  "))+"&filename=gyratorjson.txt");//send text to filesaver.php   
+    document.getElementById("imageurlinput").value = "";
+    
+}
+
+gyratorjson = {};
+var httpcjson = new XMLHttpRequest();
+httpcjson.onreadystatechange = function(){
+    if (this.readyState == 4 && this.status == 200) {
+        gyratorjson = JSON.parse(this.responseText);
+        document.getElementById("mainimage").src = gyratorjson.imageurl;
+        document.getElementById("winput").value = gyratorjson.w;
+        document.getElementById("xinput").value = gyratorjson.x;
+        document.getElementById("yinput").value = gyratorjson.y;
+        document.getElementById("f1input").value = gyratorjson.f1;
+        document.getElementById("f2input").value = gyratorjson.f2;
+        freq = gyratorjson.f1;  
+        freq2 = gyratorjson.f2;  
+    };
+};
+httpcjson.open("GET", "fileloader.php?filename=gyratorjson.txt", true);
+httpcjson.send();
+
+
+imagefeed = [];
+var httpcImagefeed = new XMLHttpRequest();
+httpcImagefeed.onreadystatechange = function(){
+    if (this.readyState == 4 && this.status == 200) {
+        imagefeed = JSON.parse(this.responseText);
+        loadimagefeed();
+    };
+};
+
+httpcImagefeed.open("GET", "fileloader.php?filename=imagefeed.txt", true);
+httpcImagefeed.send();
+
+function loadimagefeed(){
+    document.getElementById("globalscroll").innerHTML = "<h1>GLOBAL</h1>";
+    for(var index = imagefeed.length - 1;index >= 0;index--){
+        var newbox = document.createElement("DIV");
+        newbox.classList.add("imagebox");
+        var newimg = document.createElement("IMG");
+        newimg.src = imagefeed[index];
+        newimg.classList.add("uploadimage");
+        newimg.classList.add("button");
+        newbox.appendChild(newimg);
+        document.getElementById("globalscroll").appendChild(newbox);
+        newimg.onclick = function() {
+            var localsrc = this.src;
+            document.getElementById("mainimage").src = localsrc;
+            gyratorjson.imageurl = localsrc;
+            savegyratorjson();
+            
+        }
+        var newdiv = document.createElement("DIV");
+        newbox.appendChild(newdiv);
+        newdiv.className = "deletespan";
+        newdiv.id = "src" + index.toString();
+        newdiv.innerHTML = "DELETE";
+        newdiv.onclick = function(){
+            var thisindex = this.id.substring(3);
+            var localimagefeed = imagefeed;
+            imagefeed = [];
+            for(var srcindex = 0;srcindex < localimagefeed.length;srcindex++){
+                if(srcindex != thisindex){
+                    imagefeed.push(localimagefeed[srcindex]);
+                }
+            }
+            document.getElementById("globalscroll").innerHTML = "<h1>GLOBAL</h1>";
+            saveimagefeed();
+            loadimagefeed();
+        }
+
+    }    
+}
+
+
+
+//document.getElementById("mainimage").src = "https://upload.wikimedia.org/wikipedia/commons/7/7a/Clavulina_cristata_sasata.JPG";
+
+//document.getElementById("mainimage").src = "https://upload.wikimedia.org/wikipedia/commons/6/67/Mushrooms_growed_with_PF_Tek.jpg";
+
+document.getElementById("mainimage").src = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Psilocybe.mexicana.la.primavera.jpg/1920px-Psilocybe.mexicana.la.primavera.jpg";
+
+
+
+
+
+if(innerWidth > innerHeight){
+    squaresize = innerHeight;
+
+
+        document.getElementById("scrollbox").style.right =  squaresize.toString()+ "px";    
+        document.getElementById("scrollbox").style.top = "0px";        
+        document.getElementById("qrcode").style.right = (squaresize - 125).toString() + "px";
+        
+}
+else{
+    squaresize = innerWidth;
+    
+    
+    
+        document.getElementById("scrollbox").style.right =  "0px";    
+    document.getElementById("scrollbox").style.top = squaresize.toString() + "px";
+}
+
+document.getElementById("mainimage").style.width =  squaresize.toString()+ "px";    
+
+maincanvas = document.getElementById("maincanvas");
+var mainGVM = new GVM(maincanvas,squaresize,squaresize);
+mainGVM.importbytecode(hypercube);    
+mainGVM.style.line0 = 4;
+mainGVM.style.line1 = 4;
+mainGVM.style.line2 = 4;
+mainGVM.style.line3 = 4;
+mainGVM.style.line4 = 4;
+mainGVM.style.line5 = 4;
+mainGVM.style.line6 = 4;
+mainGVM.style.line7 = 4;
+
+//mainGVM.x0 = squaresize*350/700;
+//mainGVM.y0 = squaresize*516.54/700;
+mainGVM.unit = squaresize/25;
+
+mainGVM.x0 = squaresize/5;
+mainGVM.y0 = squaresize/5;
+
+//mainGVM.drawGlyph(pentagram);
+
+T = 32;//number of frames of period of oscillation, 8 frames for 3 Hz at 24 frames per second
+
+//T = 35;
+
+Trub = 12;
+
+let osc, fft,osc2,osc3;
+oscon = false;
+
+// freq = 111;
+  //freq2 = 80;
+ freq = 110;
+ freq2 = 69;
+
+
+document.getElementById("f1input").onchange = function(){
+    freq = parseFloat(this.value);
+    gyratorjson.f1 = freq; 
+    savegyratorjson();
+}
+document.getElementById("f2input").onchange = function(){
+    freq2 = parseFloat(this.value);
+    gyratorjson.f2 = freq2; 
+    savegyratorjson();
+    
+}
+
+document.getElementById("winput").onchange = function(){
+    gyratorjson.w = parseFloat(this.value);
+    savegyratorjson();
+}
+document.getElementById("xinput").onchange = function(){
+    gyratorjson.x = parseFloat(this.value);
+    savegyratorjson();
+}
+document.getElementById("yinput").onchange = function(){
+    gyratorjson.y = parseFloat(this.value);
+    savegyratorjson();
+}
+  
+nxy = 16;
+xarray = [];
+yarray = [];
+for(var index = 0;index < nxy;index++){
+    xarray.push(0);
+    yarray.push(0);
+    
+}
+
+P = [];
+Q = [];
+for(var index = 0;index < 16;index++){
+    P.push(Math.cos(2*Math.PI*index/16));
+    Q.push(Math.sin(2*Math.PI*index/16));
+}
+
+deckindex = 0;
+//mainGVM.drawGlyph(deck[deckindex]);
+
+
+
+v = 0;
+vold = 0;
+vx = 0;
+vxold = 0;
+vy = 0;
+vyold = 0;
+  
+function setup() {
+
+  createCanvas(squaresize,squaresize);    
+  osc = new p5.SinOsc(); // set frequency and type
+  osc.amp(1.0);
+  osc2 = new p5.SinOsc(); // set frequency and type
+  osc2.amp(1.0);
+  fft = new p5.FFT();
+  // osc.start();
+  //osc2.start();
+  osc.freq(freq);  
+  osc2.freq(freq2); 
+  
+  circle(10,10,50);
+  frameRate(30);
+
+}
+
+
+xgain = 8;
+frameIndex = 0;
+
+function draw(){
+  
+  
+  for(var index = nxy-1;index > 0;index--){
+      xarray[index] = xarray[index-1];  
+      yarray[index] = yarray[index-1];
+
+  }
+  xarray[0] = mouseX;
+  yarray[0] = mouseY;
+  px = 0;
+  qx = 0;
+  for(var i = 0; i < P.length; i++) {
+     px += (xarray[i])*P[i];
+     qx += (xarray[i])*Q[i];
+  }
+  
+  F = sqrt(px*px + qx*qx)/16;
+
+
+//  F = (px + qx)/2;
+
+  py = 0;
+  qy = 0;
+  for(var i = 0; i < P.length; i++) {
+     py += (yarray[i])*P[i];
+     qy += (yarray[i])*Q[i];
+  }
+  
+  G = sqrt(py*py + qy*qy)/16;
+//  G = sqrt(py + qy)/16;
+  
+  
+  stroke(0);
+
+
+
+//  background("#9f8767");
+  clear();
+//  circle(mouseX,mouseY,height/4);
+  noFill();
+
+
+  
+  stroke("blue");
+  beginShape();
+  strokeWeight(4);
+  for(var i = 0; i < P.length; i++) {
+     vertex(width - i*xgain,0.5*height - 0.25*height*P[i]);
+  }
+  endShape();
+
+  beginShape();
+  strokeWeight(4);
+  for(var i = 0; i < P.length; i++) {
+     vertex(0.5*width - 0.25*width*P[i],i*xgain);
+
+  }
+  endShape();
+
+
+  stroke("green");
+  beginShape();
+  strokeWeight(4);
+  for(var i = 0; i < xarray.length; i++) {
+     vertex(width - i*xgain,0.5*height - 0.25*height*Q[i]);
+  }
+  endShape();
+  beginShape();
+  strokeWeight(4);
+  for(var i = 0; i < xarray.length; i++) {
+     vertex(0.5*width - 0.25*width*Q[i],i*xgain);
+  }
+  endShape();
+
+  
+  stroke("red");
+  beginShape();
+  strokeWeight(4);
+  for(var i = 0; i < xarray.length; i++) {
+     vertex(width - i*xgain, yarray[i]);
+  }
+  endShape();
+  beginShape();
+  strokeWeight(4);
+  for(var i = 0; i < xarray.length; i++) {
+     vertex(xarray[i],i*xgain);
+  }
+  endShape();
+     
+//  circle(4*F,4*G,50);
+  
+  force = 20*Math.sqrt(F*F/(width*width) + G*G/(height*height));
+  if(force > 255){
+      force = 255;
+  }
+
+  fgain = 20;
+  Fx = fgain*F/width;  
+  Fy = fgain*G/width;  
+  
+  
+  tau = 16;
+  v = vold + ((force - vold)/tau);
+  vold = v;
+
+  vx = vxold + ((Fx - vxold)/tau);
+  vxold = vx;
+
+  vy = vyold + ((Fy - vyold)/tau);
+  vyold = vy;
+
+  speed = Math.sqrt(vx*vx + vy*vy);
+
+  if(oscmode == 1){
+      speed = 1;
+      if(xarray[0] > 0){
+          vx = xarray[0]/width;
+      }
+      else{
+          vx = 0;
+      }
+      if(yarray[0] > 0){
+          vy = yarray[0]/width;
+      }
+      else{
+          vy = 0;
+      }
+  }
+  if(oscmode == 2){
+      speed = 1;
+      if(xarray[0] > 0){
+          vx = (1 + Math.cos(2*Math.PI*frameIndex/10))*xarray[0]/width;
+      }
+      else{
+          vx = 0;
+      }
+      if(yarray[0] > 0){
+          vy = (1 + Math.cos(2*Math.PI*frameIndex/10))*yarray[0]/width;
+      }
+      else{
+          vy = 0;
+      }
+  }
+  v  = Math.sqrt(vx*vx + vy*vy);
+
+    if(oscmode ==0){
+       if(v > 1){
+          speed = 1;
+       }  
+       if(v < 0.01){
+          speed = 0;
+       }  
+    }
+  if(oscmode == 2){
+      v = 0;
+  }
+  osc.amp(speed);
+  osc2.amp(speed);
+  osc.freq(freq*(1 + vx));  
+  osc2.freq(freq2*(1 + vy)); 
+ 
+  
+  stroke("red");
+  
+  fill(255*force,0,0);
+  circle(width- 100,30,50);
+  noFill();
+  textSize(50);
+  fill("red");
+  text('F',width - 120,100);
+
+
+  textSize(50);
+  text('X',0.5*width ,100);
+  text('Y',width - 50,0.5*height);
+
+  stroke("blue");
+  fill(0,0,255*speed);
+  circle(width - 30,30,50);
+  fill("blue");
+  text('v',width - 50,100);
+
+  stroke("#ff2cb4");
+  fill("#ff2cb4");
+  circle(mouseX,mouseY,50);
+
+
+
+
+
+    document.getElementById("mainimage").style.width =  ((gyratorjson.w/100)*squaresize*(1 + v)).toString()+ "px";          
+    document.getElementById("mainimage").style.right =  (-squaresize*(gyratorjson.x/100) - (gyratorjson.w/100)*squaresize*(0.5*v)).toString()+ "px";    
+    document.getElementById("mainimage").style.top =  (-squaresize*(gyratorjson.y/100)-(gyratorjson.w/100)*squaresize*(0.5*v)).toString()+ "px";  
+ 
+//mainGVM.drawGlyph(pentagram);
+  strokeWeight(6);
+  
+  fill(0);
+  circle(0.5*width*(1 + Math.sin(2*Math.PI*v)),0.5*height*(1 - Math.cos(2*Math.PI*v)),50);  
+  fill("#ff2cb4");
+  circle(0.5*width*(1 + Math.sin(2*Math.PI*v)),0.5*height*(1 - Math.cos(2*Math.PI*v)),25);  
+ 
+   textSize(25);
+  stroke(0);
+  fill(0);
+  strokeWeight(1);
+
+   text("f1 = " + (Math.round(freq*(1 + vx))).toString() + " Hz",50,height - 50);
+   text("f2 = " + (Math.round(freq2*(1 + vy))).toString() + " Hz",0.8*width,height - 50);
+ 
+   noFill();
+  circle(width/2,height/2,width);  
+  
+  frameIndex++;
+
+  
+
+}
+
+
+
+
+function mouseClicked() {
+  
+  
+  if(mouseX > 0 && mouseX < squaresize && mouseY > 0 && mouseY < squaresize){
+      if(!oscon){
+          osc.start();
+          osc2.start();
+    
+      }
+      else{
+          osc.stop();
+          osc2.stop();
+      }
+      oscon = !oscon;
+  }
+}
+
+
+document.getElementById("localscroll").innerHTML = "<h1>LOCAL</h1>";
+upuploadImages = [];
+var httpc9 = new XMLHttpRequest();
+    httpc9.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        upuploadImages = JSON.parse(this.responseText);
+        for(var index = upuploadImages.length - 1;index >= 0;index--) {
+            
+                var newbox = document.createElement("DIV");
+                newbox.classList.add("imagebox");         
+                var newimg = document.createElement("IMG");
+                newimg.src = "trashmagic/" + upuploadImages[index];
+                newimg.classList.add("uploadimage");
+                newimg.classList.add("button");
+                newbox.appendChild(newimg);
+                newimg.onclick= function(){
+                    document.getElementById("mainimage").src = this.src;
+                }
+
+                var deletespan = document.createElement("SPAN");
+                deletespan.innerHTML = "DELETE";
+                deletespan.classList.add("deletespan");
+                deletespan.onclick = function(){
+                    //delete the parent div of the image
+                    //delete the file
+                    var filename = this.parentElement.getElementsByClassName("filelabel")[0].innerHTML; 
+                    var httpc = new XMLHttpRequest();
+                    var url = "deletefile.php";         
+                    httpc.open("POST", url, true);
+                    httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+                    httpc.send("filename=trashmagic/" + filename);//send text to deletefile.php
+                    this.parentElement.parentElement.removeChild(this.parentElement);
+                }
+                
+                newbox.appendChild(deletespan);
+        
+                var newdiv = document.createElement("DIV");
+                newdiv.innerHTML = upuploadImages[index];
+                newdiv.className = "filelabel";
+                newbox.appendChild(newdiv);
+            
+                
+                document.getElementById("localscroll").appendChild(newbox);
+
+        }
+    }
+};
+httpc9.open("GET", "dir.php?filename=trashmagic", true);
+httpc9.send();
+
+codesquaresize = 80;
+marginsize = 40;
+fontsize = 12;
+//globalurl = "http://www.trashrobot.org/qrcode.html";
+globalurl = window.location.href;
+qrcode = new QRCode(document.getElementById("qrcode"), {
+	text: globalurl,
+	width: codesquaresize,
+	height: codesquaresize,
+	colorDark : "#000000",
+	colorLight : "#ffffff",
+	correctLevel : QRCode.CorrectLevel.H
+});
+
+</script>
+<style>
+body{
+    overflow:hidden;
+    background-color:#9f8767;    
+}
+main{
+    position:absolute;
+    right:0px;
+    top:0px;
+    /*
+    border:solid;
+    border-width:5px
+    */
+}
+input{
+        background-color:black;    
+        color:#00ff00;
+        border-color:#00ff00;
+}
+#modebutton:hover{
+    background-color:#00ff0080;
+}
+#modebutton:active{
+    background-color:#FFFFCC80;
+}
+
+#modebutton{
+    border:solid;
+    border-color:#00ff00;
+    color:#00ff00;
+    cursor:pointer;
+    border-radius:10px;
+    border-width:5px;
+}
+#submitinput{
+   cursor:pointer;    
+}
+#fileToUpload{
+   cursor:pointer;    
+}
+#submitinput:hover{
+    background-color:#00ff0080;
+}
+
+#localscroll img{
+    max-width:80%;
+    display:block;
+    margin:auto;
+    margin-top:1em;
+    border:solid;
+}
+
+#globalscroll img{
+    max-width:80%;
+    display:block;
+    margin:auto;
+    margin-top:1em;
+    border:solid;
+}
+
+table,td,tr,input,form,span{
+    font-family:Comic Sans MS;
+}
+p{
+    margin:1em 1em 1em 1em;
+    font-size:1.5em;
+    font-family:Comic Sans MS;
+    overflow:scroll;
+}
+h1,h2,h3{
+    font-family:Comic Sans MS;
+    text-align:center;
+        overflow:scroll;
+
+}
+a{
+    color:blue;
+    font-family:Comic Sans MS;
+    font-size:1.5em;    
+    overflow:scroll;
+}
+#scrollbox{
+    position:absolute;
+    left:0px;
+    bottom:0px;
+    top:6em;
+    z-index:-2;
+    overflow:scroll;
+    background-color:#9f8767;    
+    padding:1em 1em 1em 1em;
+}
+#mainscroll{
+   position:absolute;    
+   left:0px;
+   top:0px;
+   overflow:scroll;
+   width:100%;
+   height:49%;
+   color:#ff2cb4;
+   background-color:black;   
+   border-bottom:solid;
+   border-width:6px;
+   border-color:#ff2cb4;
+}
+#localscroll{
+   background-color:black;
+   position:absolute;    
+   left:0px;
+   top:0px;
+   overflow:scroll;
+   bottom:0px;
+   top:50%;
+   width:50%;
+}
+#globalscroll{
+   background-color:black;
+   position:absolute;    
+   right:0px;
+   top:50%;
+   width:50%;
+   overflow:scroll;
+   bottom:0px;
+   border-left:solid;
+   border-width:6px;
+   border-color:#ff2cb4;
+}
+#globalscroll h1{
+    color:#ff2cb4;
+}
+#localscroll h1{
+    color:#ff2cb4;
+}
+
+.deletespan{
+    color:red;
+    border:solid;
+    border-color:red;
+    width:4em;
+    cursor:pointer;
+    left:0px;
+    top:0px;
+    position:relative;
+    font-family:Comic Sans MS;
+    background-color:#404040;
+}
+.deletespan:hover{
+    background-color:#ff000080;
+}
+.filelabel{
+    display:none;
+}
+.button{
+    cursor:pointer;
+}
+.button:hover{
+    background-color:green;
+}
+.button:active{
+    background-color:yellow;
+}
+.data{
+    display:none;
+}
+.imagebox{
+    border:solid;
+    border-width:15px;
+    background-color:#9f8767;
+}
+#qrcode{
+    border:solid;
+    border-color:white;
+    border-width:24px;
+    background-color:white;
+    position:absolute;
+    top:0px;
+    z-index:5;
+}
+#mainimage{
+    position:absolute;
+    right:0px;
+    top:0px;
+    z-index:-2;
+}
+#mainbox{
+    position:absolute;
+    right:0px;
+    top:0px;
+    z-index:-1;
+}
+</style>
+</body>
+</html>

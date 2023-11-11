@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+    <head>
+     <meta charset="utf-8"/>
+     <link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADf+wAA3/sAAAfgAACv9QAAoAUAAK/1AACv9QAAqBUAAK/1AACoFQAAr/UAAKAFAACv9QAAB+AAAN/7AADf+wAA" rel="icon" type="image/x-icon" />
+        
+<script src = "https://cdnjs.cloudflare.com/ajax/libs/showdown/1.8.6/showdown.js"></script>
+
+            <!--Stop Google:-->
+    <META NAME="robots" CONTENT="noindex,nofollow">
+
+    </head>
+<body>
+    
+<textarea id = "maintextarea"></textarea>
+<a id = "homelink" href = "readme.html">readme</a>
+
+<script>
+
+
+//get readme.md, convert to html and display
+var converter = new showdown.Converter();
+// for more on options see here:
+// https://github.com/showdownjs/showdown/wiki/Showdown-Options
+converter.setOption('literalMidWordUnderscores', 'true');
+converter.setOption('tables', 'true');
+
+
+currentfile = "README.md";
+
+//get readme.md, convert to html and display
+
+scroll = "";
+rawhtml = "";
+var httpc = new XMLHttpRequest();
+httpc.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        scroll = this.responseText;
+        document.getElementById("maintextarea").value = scroll;  
+    }
+};
+httpc.open("GET", "fileloader.php?filename=" + currentfile, true);
+httpc.send();
+
+document.getElementById("maintextarea").onkeyup = function() {
+    scroll = this.value;
+    data = encodeURIComponent(this.value);
+    var httpc = new XMLHttpRequest();
+    var url = "filesaver.php";        
+    httpc.open("POST", url, true);
+    httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+    httpc.send("data="+data+"&filename=" + currentfile);//send text to filesaver.php
+}
+
+
+
+</script>
+<style>
+body{
+    overflow:hidden;
+    background-color:black;
+}
+a{
+    color:#ff2cb4;
+}
+#maintextarea{
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:65%;
+    height:100%;
+    padding-left:1em;
+    padding-top:1em;
+    background-color:black;
+    color:#00ff00;
+    font-family:"Times New Roman", Times, serif;
+    font-size:1.5em;
+    overflow:scroll;
+}
+#homelink{
+    position:absolute;
+    right:0px;
+    top:0px;
+    font-size:2em;
+}
+@media only screen and (max-width: 1000px) {
+
+}
+
+        </style>
+    </body>
+</html>

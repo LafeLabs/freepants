@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <!--
+
+
+    -->
+    <link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAP//AP///wANAP8A5Dz6ABueRwAAt/8A6BonABo86AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAREREREREREREREAAAEREREREQCIgREREd3dwAAB3d3d3d3d3d3d3d3d3d3d3d3d3VVVVVVVQAFVVAAVVVQIiBRAiIBEQIAIBECAAERAgAgFgIABmYCIiBmAiIGZgIiIGYCIgZmYCIAaIAAMzMzAAiIiIiIiIiIiIiIiIiIiIiIgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rel="icon" type="image/x-icon" />
+
+    <!--Stop Google:-->
+    <META NAME="robots" CONTENT="noindex,nofollow">
+
+<script src = "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>    
+<div id = "mushroom" style = "font-size:10em;cursor:pointer;">🍄CLICK ME🍄</div>
+<a id= "toplink" href = "index.html">HOME</a>
+
+<table>
+    <tr>
+        <td>URL:</td>
+        <td><input id = "urlinput"/></td>
+        <td id = "reloadbutton" class=  "button">LOADPAGE</td>
+    </tr>
+    <tr>
+        <td>TEXT:</td>
+        <td><input id = "textinput"/></td>
+    </tr>
+</table>
+<a style = "display:none" id = "linklink"></a>
+<div style = "display:none" id = "qrcode"></div>
+<table id = "pagetable"></table>
+<script>
+
+codesquaresize = 120;
+marginsize = 40;
+fontsize = 12;
+
+//globalurl = "http://www.trashrobot.org/qrcode.html";
+globalurl = window.location.href.split("qrcode-page.html")[0];
+//globalurl = "https://www.southplatte.net";
+//urltext = globalurl;
+capsurl = globalurl.toUpperCase();
+capsurl = capsurl.replace("HTTPS://","");
+capsurl = capsurl.replace("HTTP://","");
+capsurl = capsurl.replace(/\//g,"/<BR/>");
+
+//console.log(capsurl);
+//urltext = "TRASH MAGIC<BR>HYPERSIGN<BR>SOUTHPLATTE.NET";
+urltext = "TRASH MAGIC<BR>"  + capsurl;
+
+document.getElementById("urlinput").value = "";
+document.getElementById("textinput").value = "";
+
+
+document.getElementById("urlinput").select();
+
+table = document.getElementById("pagetable");
+
+
+document.getElementById("urlinput").onchange = function(){
+    loadtable();
+}
+document.getElementById("textinput").onchange = function(){
+    loadtable();
+}
+
+
+
+
+document.getElementById("linklink").href = globalurl;
+document.getElementById("linklink").innerHTML = globalurl;
+document.getElementById("urlinput").value = globalurl;
+document.getElementById("textinput").value = globalurl;
+
+qrcode = new QRCode(document.getElementById("qrcode"), {
+	text: globalurl,
+	width: codesquaresize,
+	height: codesquaresize,
+	colorDark : "#000000",
+	colorLight : "#ffffff",
+	correctLevel : QRCode.CorrectLevel.H
+});
+
+
+pngcode = document.getElementById("qrcode").getElementsByTagName("IMG")[0].src;
+qrcode.makeCode(globalurl);
+
+document.getElementById("mushroom").onclick = function(){
+    this.style.display = "none";
+    loadtable();
+}
+
+
+document.getElementById("reloadbutton").onclick  =function(){
+    loadtable();
+}
+    
+
+function loadtable(){
+    globalurl = document.getElementById("urlinput").value;
+    urltext = document.getElementById("textinput").value;
+    qrcode.makeCode(globalurl);
+    pngcode = document.getElementById("qrcode").getElementsByTagName("IMG")[0].src;
+    document.getElementById("linklink").href = globalurl;
+    document.getElementById("linklink").innerHTML = globalurl;
+    table.innerHTML = "";
+    for(var row = 0;row < 8;row++){
+        var newtr = document.createElement("TR");
+        table.appendChild(newtr);
+        for(var col = 0;col < 8;col++){
+            var newtd = document.createElement("TD");
+            newtr.appendChild(newtd);
+            var newimg = document.createElement("img");
+            newimg.style.width = "120px";
+            newimg.src = pngcode;
+            newtd.appendChild(newimg);
+        }
+        var newtr = document.createElement("TR");
+        table.appendChild(newtr);
+        for(var col = 0;col < 8;col++){
+            var newtd = document.createElement("TD");
+            newtr.appendChild(newtd);
+            newtd.innerHTML = urltext;
+            newtd.className = "urltext";
+        }
+    }
+}
+
+</script>
+<style>
+input{
+    border:solid;
+}
+body{
+    font-family:Comic Sans MS;
+}
+canvas,img{
+}
+#toplink{
+    position:absolute;
+    right:0px;
+    top:0px;
+    font-size:2em;
+}
+a{
+    font-family:Comic Sans MS;
+    color:#ff2cb4;
+
+}
+.urltext{
+    font-size:12px;
+    font-family:Comic Sans MS;
+
+}
+.button{
+    cursor:pointer;
+    text-align:center;
+    border:solid;
+    border-radius:3px;
+}
+.button:hover{
+    background-color:green;
+}
+.button:active{
+    background-color:yellow;
+}
+</style>
+</body>
+</html>

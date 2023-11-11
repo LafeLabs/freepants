@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <!-- 
+
+        EVERYTHING IS PHYSICAL 
+        EVERYTHING IS FRACTAL
+        EVERYTHING IS RECURSIVE
+        NO MONEY 
+        MO MINING 
+        NO PROPERTY
+        LOOK AT THE INSECTS
+        LOOK AT THE FUNGI
+        LANGUAGE IS HOW THE MIND PARSES REALITY
+
+if there are more than a certain number of squares, delete squares older than a certain threshold until there are that many squares again. 
+
+how many? not that many. depends on the rate.
+
+    -->
+    <title>TRIM OLD SQUARES</title>
+
+
+<link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAZ4efAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEREREQEREREREREQABEREREQABEBEAARERABEQERABEREBARARAQEREREQEBAREREQEREAAREQEQAAAAAAAAABEBERAAEREBERERAQEBEREREBARARAQEREQAREBEQARERAAEQEQABERERERARERERERERAAEREREREREQEREREAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rel="icon" type="image/x-icon" />
+
+    <!--Stop Google:-->
+    <META NAME="robots" CONTENT="noindex,nofollow">
+<script src="trashmagic.js"></script>
+
+</head>
+<body>
+
+    <h1>TRIM SQUARES</h1>
+    
+    <a href = "index.html">HOME</a>
+
+<table>
+    <tr>
+        <td>Number of squares</td>
+        <td>
+            <input id = "numberinput"/>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            number to delete from oldest squares:
+        </td>
+        <td>
+            <input id = "triminput"/>
+        </td>
+    </tr>
+    <tr>
+        <td class = "button" id = "deletebutton">
+            DELETE!!!!  
+        </td>
+        <td></td>
+    </tr>
+</table>
+
+<div id = "feedscroll">
+</div>
+<script>
+
+
+now = Math.round((new Date().getTime())/1000).toString();
+
+
+titles = document.getElementsByTagName("H1");
+for(var index = 0;index < titles.length;index++){
+    rainbowstring(titles[index]);    
+}
+
+
+squares = [];
+
+loadsquares();
+function loadsquares(){
+    var httpc9 = new XMLHttpRequest();
+    httpc9.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            squares = JSON.parse(this.responseText);
+            document.getElementById("feedscroll").innerHTML = "";
+            document.getElementById("numberinput").value = squares.length;
+            for(var index = squares.length - 1;index >= 0;index--) {
+                
+                var newbox = document.createElement("DIV");
+                newbox.classList.add("imagebox");         
+                
+            
+                var deletespan = document.createElement("SPAN");
+                deletespan.innerHTML = "X";
+                deletespan.classList.add("deletespan");
+                deletespan.onclick = function(){
+                    //delete the parent div of the image
+                    //delete the file
+                    var filename = this.parentElement.getElementsByClassName("filelabel")[0].innerHTML; 
+                    var httpc = new XMLHttpRequest();
+                    var url = "deletefile.php";         
+                    httpc.open("POST", url, true);
+                    httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+                    httpc.send("filename=trashmagic/" + filename);//send text to deletefile.php
+                    this.parentElement.parentElement.removeChild(this.parentElement);
+                }
+                
+                newbox.appendChild(deletespan);
+        
+                var newdiv = document.createElement("DIV");
+                newdiv.innerHTML = squares[index];
+                newdiv.className = "filelabel";
+                newbox.appendChild(newdiv);
+            
+                
+                document.getElementById("feedscroll").appendChild(newbox);
+                var newimg = document.createElement("IMG");
+                newimg.src = "trashmagic/" + squares[index];
+                newimg.classList.add("uploadimage");
+                newimg.classList.add("button");
+                newbox.appendChild(newimg);
+                
+    
+            }
+        }
+    };
+    httpc9.open("GET", "dir.php?filename=trashmagic", true);
+    httpc9.send();    
+}
+
+
+
+document.getElementById("deletebutton").onclick = function(){
+    numbertodestroy = parseInt(document.getElementById("triminput").value);
+    
+    if(numbertodestroy > 0 && numbertodestroy < 1000){
+        for(var index = 0;index < numbertodestroy;index++){
+        
+            var httpc = new XMLHttpRequest();
+            var url = "deletefile.php";         
+            httpc.open("POST", url, true);
+            httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+            httpc.send("filename=trashmagic/" + squares[index]);//send text to deletefile.php
+        }        
+    }
+    loadsquares();
+}
+
+
+document.getElementById("triminput").value = "";
+    
+
+</script>
+<style>
+body{
+    overflow:hidden;
+    background-color:#9f8767;    
+}
+canvas{
+    z-index:-1;
+}
+main{
+    position:absolute;
+    left:10px;
+    top:50px;
+}
+input,table{
+    background-color:#9f8767;    
+    font-family:COMIC SANS MS;
+}
+h1{
+    text-align:center;
+    font-family:Comic Sans MS;
+    font-size:2em;
+}
+#defaultCanvas0{
+    border:solid;
+    border-radius:25px;
+    border-width:5px;
+}
+#feedscroll{
+    position:absolute;
+    right:10px;
+    bottom:10px;
+    left:10px;
+    top:50%;
+    overflow:scroll;
+    border:solid;
+    background-color:#9f8767;    
+    border-radius:25px;
+    border-width:5px;
+}
+#feedscroll a{
+    display:block;
+    font-family:Comic Sans MS;
+    font-size:2em;
+    margin:10px 10px 10px 10px;
+    border-radius:20px;
+    color:black;
+    padding-left:1em;
+    border:solid;
+}
+.imagebox{
+    margin-bottom:2em;
+    margin-top:2em;
+    padding-bottom:2em; 
+    padding-top:2em;
+    border-bottom:solid;
+}
+.deletespan{
+    color:red;
+    border:solid;
+    border-color:red;
+    border-radius:0.5em;
+    padding: 1em 1em 1em 1em;
+    cursor:pointer;
+}
+.deletespan:hover{
+    background-color:#ff000080;
+}
+#feedscroll img{
+    max-width:80%;
+    display:block;
+    margin:auto;
+    margin-top:1em;
+    border:solid;
+}
+.filelabel{
+    display:none;
+}
+.topbutton{
+    position:absolute;
+    top:0px;
+    cursor:pointer;
+    width:6em;
+    z-index:100;
+    border:solid;
+    text-align:center;
+    font-size:1.8em;
+    border-width:5px;
+    border-radius:10px;
+    font-family:COMIC SANS MS;
+}
+.topbutton:hover{
+    background-color:green;
+}
+.topbutton:active{
+    background-color:yellow;
+}
+.bottombutton{
+    position:absolute;
+    bottom:0px;
+    cursor:pointer;
+    width:6em;
+    z-index:100;
+    border:solid;
+    text-align:center;
+    font-size:1.8em;
+    border-width:5px;
+    border-radius:10px;
+    font-family:COMIC SANS MS;
+}
+.bottombutton:hover{
+    background-color:green;
+}
+.bottombutton:active{
+    background-color:yellow;
+}
+
+.button{
+    border:solid;
+    border-radius:10px;
+    border-width:4px;
+    text-align:center;
+    cursor:pointer;
+}
+.button:hover{
+    background-color:green;
+}
+.button:hover{
+    background-color:green;
+}
+
+</style>
+</body>
+</html>

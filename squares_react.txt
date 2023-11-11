@@ -1,0 +1,9 @@
+{
+    "currentsquare": "trashmagic/trash.magic.geometron.png",
+    "currentreact": [
+        "trashmagic/voice.of.the.slime.png",
+        "trashmagic/voice.of.the.slime.png",
+        "trashmagic/voice.of.the.slime.png",
+        "trashmagic/voice.of.the.slime.png"
+    ]
+}

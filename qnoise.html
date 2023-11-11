@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <!--
+
+        EVERYTHING IS PHYSICAL 
+        EVERYTHING IS FRACTAL
+        EVERYTHING IS RECURSIVE
+        NO MONEY 
+        MO MINING 
+        NO PROPERTY
+        LOOK AT THE INSECTS
+        LOOK AT THE FUNGI
+        LANGUAGE IS HOW THE MIND PARSES REALITY
+
+    -->
+        <title>QNOISE</title>
+
+<link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAZ4efAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEREREREREREREREREREREREAAAAAAAAREQEREREREBERAREREREQEREBEAAAARAREQEQEREBEBERARAQAQEQEREBEBABARAREQEQEREBEBERARAAAAEQEREBERERERAREQEREREREBERAAAAAAAAEREREREREREREREREREREREAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rel="icon" type="image/x-icon">
+
+
+    <!--Stop Google:-->
+    <META NAME="robots" CONTENT="noindex,nofollow">
+<!--geometron javascript library-->
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.7.0/lib/p5.js"></script>
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/addons/p5.sound.js"></script>
+    
+    
+</head>
+<body>
+<div id = "postbutton">POST</div>
+
+<div id = "feedscroll">
+    <h1><a style = "color:blue;text-align:center;font-family:Comic Sans MS;margin:auto" href = "index.html">HOME</a></h1>
+    
+    <h1>
+      QNOISE
+    </h1>
+
+<table>
+    <tr>
+        <td>n0:</td>
+        <td>
+            <input id = "n0input"/>
+        </td>
+    </tr>
+    <tr>
+        <td>n1:</td>
+        <td>
+            <input id = "n1input"/>
+        </td>
+    </tr>
+    <tr>
+        <td>slope:</td>
+        <td>
+            <input id = "slopeinput"/>
+        </td>
+    </tr>
+
+</table>
+
+</div>
+
+<script>
+
+n0 = 1;
+n1 = 400; 
+slope = 3.0;
+gain = 3.0;
+
+average = 0;
+previous = 0;
+powerCurve = [];
+frameIndex = 0;
+
+dropArray = [];
+
+let mic, fft;
+svgstring = "";
+
+
+squaresize = 500;
+
+if(innerWidth > innerHeight){
+    squaresize = innerHeight - 50;
+    document.getElementById("feedscroll").style.right =  squaresize.toString()+ "px";    
+}
+else{
+    squaresize = innerWidth - 50;
+    
+    document.getElementById("feedscroll").style.right =  "0px";    
+    document.getElementById("feedscroll").style.top = squaresize.toString() + "px";
+}
+
+for(var index = 0;index < squaresize;index++){
+    powerCurve.push(squaresize);
+}
+prevoius = squaresize;
+power = squaresize;
+
+function setup() {
+  createCanvas(squaresize, squaresize);    
+  mic = new p5.AudioIn();
+  mic.start();
+  fft = new p5.FFT();
+  fft.setInput(mic);
+//   background(159,135,103);
+}
+
+charsize = 50;
+
+svgopen = "<svg width=\"" + squaresize.toString() + "\" height=\"" + squaresize.toString() + "\" viewbox = \"0 0 " + squaresize.toString() + " " + squaresize.toString() + "\"  xmlns=\"http://www.w3.org/2000/svg\">\n <path d = \"M0 ";
+svgclose = " Z\" stroke = \"#000000\" stroke-width = \"3\" fill = \"#808080\" />\n</svg>";
+
+
+function draw(){
+  stroke(0);
+  strokeWeight(1);
+
+  let spectrum = fft.analyze(); 
+  background(159,135,103);
+  noFill();
+  beginShape();
+  vertex(0,height);
+  svgstring = svgopen;
+
+
+  svgstring += squaresize.toString() + " ";
+  
+  for (let i = 0; i < spectrum.length; i++) {
+    vertex(i, map(spectrum[i], 0, 255, height, 0));
+    svgstring += "L" + i.toString() + " " + (map(spectrum[i], 0, 255, height, 0)).toString() + " ";
+    
+  }
+  svgstring += "L" + squaresize.toString() + " " + squaresize.toString() + " ";  
+  vertex(width,height);
+  endShape();
+  svgstring += svgclose;
+
+  line(n0,0,n0,squaresize);
+  line(n1,0,n1,squaresize);
+
+  average = 0;
+  for(var index = n0;index < n1;index++){
+    average += map(spectrum[index], 0, 255, height, 0);  
+  }
+  average /= Math.abs(n1-n0);
+
+
+  if(average  - previous > 6){
+      dropArray.push(frameIndex);
+  }
+
+  strokeWeight(5);
+
+
+  powerCurve[frameIndex] = average;
+  beginShape();
+  for(var index = 0;index < squaresize;index++){
+      vertex(index,powerCurve[index]);
+  }   
+  endShape();
+
+  
+  stroke("red");
+  line(frameIndex,average,frameIndex - 1000,average + slope*(frameIndex + 1000));
+ 
+   strokeWeight(2);
+
+  stroke("blue");
+
+  for(var index = 0;index < dropArray.length;index++){
+      line(dropArray[index],squaresize,dropArray[index],powerCurve[dropArray[index]]);
+  }
+ 
+  stroke("green");
+  fill(0,255,0,128);
+  circle(frameIndex,average,10);
+
+
+  frameIndex++;
+  if(frameIndex > squaresize){
+     frameIndex = 0;
+     dropArray = [];
+  }
+  previous = average;
+}
+
+
+
+
+
+
+document.getElementById("postbutton").onclick = function(){
+          
+    
+    var timestamp = Math.round((new Date().getTime())/1000).toString();
+    var httpc = new XMLHttpRequest();
+    var url = "filesaver.php";        
+    httpc.open("POST", url, true);
+    httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    httpc.send("data="+encodeURIComponent(svgstring)+"&filename=trashmagic/square" + timestamp +  "-fft.svg");//send text to filesaver.php
+     //location.reload(); 
+     
+/*
+newfilename = "trashmagic/square" + timestamp +  "-fft";
+    
+    var newbox = document.createElement("DIV");
+    newbox.classList.add("imagebox");         
+    
+    var deletespan = document.createElement("SPAN");
+    deletespan.innerHTML = "X";
+    deletespan.classList.add("deletespan");
+    deletespan.onclick = function(){
+        //delete the parent div of the image
+        //delete the file
+        var filename = this.parentElement.getElementsByClassName("filelabel")[0].innerHTML; 
+        var httpc = new XMLHttpRequest();
+        var url = "deletefile.php";         
+        httpc.open("POST", url, true);
+        httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+        httpc.send("filename=trashmagic/" + filename);//send text to deletefile.php
+        this.parentElement.parentElement.removeChild(this.parentElement);
+    }
+    
+    newbox.appendChild(deletespan);
+
+    var newdiv = document.createElement("DIV");
+    newdiv.innerHTML = newfilename;
+    newdiv.className = "filelabel";
+    newbox.appendChild(newdiv);
+
+    var newimg = document.createElement("IMG");
+    newimg.src =  "trashmagic/" + newfilename;
+    newimg.classList.add("uploadimage");
+    newimg.classList.add("button");
+    newbox.appendChild(newimg);    
+
+
+    if(document.getElementById("feedscroll").getElementsByClassName("imagebox").length > 0){
+        document.getElementById("feedscroll").insertBefore(newbox,document.getElementById("feedscroll").getElementsByClassName("imagebox")[0]);        
+    }
+    else{
+        document.getElementById("feedscroll").appendChild(newbox);
+    }
+
+//     location.reload(); 
+    
+    */
+    
+}
+
+
+
+upuploadImages = [];
+var httpc9 = new XMLHttpRequest();
+    httpc9.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        upuploadImages = JSON.parse(this.responseText);
+        for(var index = upuploadImages.length - 1;index >= 0;index--) {
+            
+            if(upuploadImages[index].includes("-fft")){
+            
+                var newbox = document.createElement("DIV");
+                newbox.classList.add("imagebox");         
+                
+                var deletespan = document.createElement("SPAN");
+                deletespan.innerHTML = "X";
+                deletespan.classList.add("deletespan");
+                deletespan.onclick = function(){
+                    //delete the parent div of the image
+                    //delete the file
+                    var filename = this.parentElement.getElementsByClassName("filelabel")[0].innerHTML; 
+                    var httpc = new XMLHttpRequest();
+                    var url = "deletefile.php";         
+                    httpc.open("POST", url, true);
+                    httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+                    httpc.send("filename=trashmagic/" + filename);//send text to deletefile.php
+                    this.parentElement.parentElement.removeChild(this.parentElement);
+                }
+                
+                newbox.appendChild(deletespan);
+        
+                var newdiv = document.createElement("DIV");
+                newdiv.innerHTML = upuploadImages[index];
+                newdiv.className = "filelabel";
+                newbox.appendChild(newdiv);
+            
+                
+                document.getElementById("feedscroll").appendChild(newbox);
+                var newimg = document.createElement("IMG");
+                newimg.src = "trashmagic/" + upuploadImages[index];
+                newimg.classList.add("uploadimage");
+                newimg.classList.add("button");
+                newbox.appendChild(newimg);
+                
+            }
+            
+        }
+    }
+};
+httpc9.open("GET", "dir.php?filename=trashmagic", true);
+httpc9.send();
+
+
+document.getElementById("n0input").value = n0.toString();
+document.getElementById("n1input").value = n1.toString();
+document.getElementById("slopeinput").value = slope.toString();
+
+
+document.getElementById("n0input").onchange = function(){
+    n0 = parseInt(this.value);
+}
+document.getElementById("n1input").onchange = function(){
+    n1 = parseInt(this.value);
+}
+document.getElementById("slopeinput").onchange = function(){
+    slope = parseFloat(this.value);
+}
+
+
+</script>
+<style>
+body{
+    overflow:hidden;
+    background-color:#9f8767;    
+}
+main{
+    position:absolute;
+    right:25px;
+    top:25px;
+    border-left:solid;
+    border-width:10px
+}
+#postbutton{
+    position:absolute;
+    top:2em;
+    left:5px;
+    font-family:Comic Sans MS;
+    font-size:1.5em;
+    border:solid;
+    border-radius:10px;
+    text-align:center;
+    border-width:5px;
+    width:8em;
+    cursor:pointer;
+}
+#postbutton:hover{
+    background-color:green;
+}
+#postbutton:active{
+    background-color:yellow;
+}
+
+#feedscroll img{
+    max-width:80%;
+    display:block;
+    margin:auto;
+    margin-top:1em;
+    border:solid;
+}
+table{
+    display:block;
+    margin-bottom:4em;
+}
+td{
+   font-family:Comic Sans MS;
+}
+table input{
+    font-family:Comic Sans MS;
+    background-color:#9f8767;    
+}
+p{
+    margin:1em 1em 1em 1em;
+    font-size:1.5em;
+    font-family:Comic Sans MS;
+}
+h1,h2,h3{
+    font-family:Comic Sans MS;
+    text-align:center;
+        overflow:scroll;
+
+}
+a{
+    color:blue;
+    font-family:Comic Sans MS;
+    font-size:1.5em;    
+    overflow:scroll;
+}
+#feedscroll{
+    position:absolute;
+    left:0px;
+    bottom:0px;
+    top:6em;
+    z-index:-2;
+    overflow:scroll;
+    background-color:#9f8767;    
+    padding:1em 1em 1em 1em;
+}
+.deletespan{
+    color:red;
+    border:solid;
+    border-color:red;
+    border-radius:0.5em;
+    padding: 1em 1em 1em 1em;
+    cursor:pointer;
+}
+.deletespan:hover{
+    background-color:#ff000080;
+}
+.filelabel{
+    display:none;
+}
+.button{
+    cursor:pointer;
+}
+.button:hover{
+    background-color:green;
+}
+.button:active{
+    background-color:yellow;
+}
+.data{
+    display:none;
+}
+</style>
+</body>
+</html>

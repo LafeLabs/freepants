@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <!-- 
+
+        EVERYTHING IS PHYSICAL 
+        EVERYTHING IS FRACTAL
+        EVERYTHING IS RECURSIVE
+        NO MONEY 
+        MO MINING 
+        NO PROPERTY
+        LOOK AT THE INSECTS
+        LOOK AT THE FUNGI
+        LANGUAGE IS HOW THE MIND PARSES REALITY
+
+    -->
+    <title>SQUARES: AS ABOVE, SO BELOW.</title>
+
+
+<link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAZ4efAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEREREQEREREREREQABEREREQABEBEAARERABEQERABEREBARARAQEREREQEBAREREQEREAAREQEQAAAAAAAAABEBERAAEREBERERAQEBEREREBARARAQEREQAREBEQARERAAEQEQABERERERARERERERERAAEREREREREQEREREAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rel="icon" type="image/x-icon" />
+
+    <!--Stop Google:-->
+    <META NAME="robots" CONTENT="noindex,nofollow">
+</head>
+<body>
+
+
+<img id = "squareimage"/>
+<div id = "squarebox"></div>
+
+<div id = "scroll">
+    <div id = "squarescroll">
+        <h1>SQUARE</h1>
+    </div>
+    <div id = "reactscroll">
+        <H1>REACT</H1>
+    </div>
+</div>
+
+
+<a style = "color:blue;text-align:center;font-family:Comic Sans MS;margin:auto;top:10px;right:10px;position:absolute;font-size:3em;z-index:3" href = "index.html">HOME</a>
+
+<script>
+
+
+squaresize = 100;
+if( innerWidth > innerHeight ){
+    squaresize = innerHeight-50;
+    document.getElementById("scroll").style.left = squaresize.toString() + "px";
+    document.getElementById("scroll").style.top = "0px";    
+}
+else{
+    squaresize = innerWidth;
+    document.getElementById("scroll").style.left = "0px";
+    document.getElementById("scroll").style.top = (squaresize + 50).toString() + "px";
+//    document.getElementById("scroll").style.top = squaresize.toString() + "px";
+}
+
+document.getElementById("squareimage").style.width = squaresize.toString() + "px";
+document.getElementById("squareimage").style.height = squaresize.toString() + "px";
+document.getElementById("squarebox").style.width = squaresize.toString() + "px";
+document.getElementById("squarebox").style.height = squaresize.toString() + "px";
+
+
+squares_react = {};
+
+squares_react.currentsquare = "";
+squares_react.currentreact = [];
+
+
+var httpc = new XMLHttpRequest();
+httpc.onreadystatechange = function(){
+    if (this.readyState == 4 && this.status == 200) {
+        squares_react = JSON.parse(this.responseText);
+        document.getElementById("squareimage").src = squares_react.currentsquare;
+        for(var index = 0;index < squares_react.currentreact.length;index++){
+            
+        
+                var newbox = document.createElement("DIV");
+                newbox.className = "reactbox";
+                var newimg = document.createElement("IMG");
+                newimg.className = "react";
+                newimg.src = squares_react.currentreact[index];
+                newbox.appendChild(newimg);
+                document.getElementById("squarebox").appendChild(newbox);
+                newbox.id = "react" + (index).toString();
+                newbox.onclick = function(){
+                    //remove from the structure as well
+                    
+                    thisindex = this.id.substring(5);
+                    var tempreact = [];
+                    for(var index = 0;index < squares_react.currentreact.length;index++){
+                        if(index != thisindex){
+                            tempreact.push(squares_react.currentreact[index]);
+                        }
+                    }
+                    squares_react.currentreact = tempreact;
+                    savejson();    
+                    this.remove();
+                }
+            
+            
+        }
+    }
+};
+httpc.open("GET", "fileloader.php?filename=squares_react.txt", true);
+httpc.send();
+
+
+upuploadImages = [];
+var httpc9 = new XMLHttpRequest();
+    httpc9.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        upuploadImages = JSON.parse(this.responseText);
+        for(var index = upuploadImages.length - 1;index >= 0;index--) {
+            
+
+            var newimg = document.createElement("IMG");
+            newimg.src = "trashmagic/" + upuploadImages[index];
+            newimg.classList.add("uploadimage");
+            newimg.classList.add("button");
+            newimg.id = upuploadImages[index].split(".png")[0];
+            document.getElementById("squarescroll").appendChild(newimg);
+            
+            newimg.onclick = function(){
+                squares_react.currentsquare = "trashmagic/" + this.id + ".png";
+                document.getElementById("squareimage").src = "trashmagic/" + this.id + ".png";
+                savejson();
+
+            }
+
+            var newimg2 = document.createElement("IMG");
+            newimg2.src = "trashmagic/" + upuploadImages[index];
+            newimg2.id =  "react" +upuploadImages[index].split(".png")[0];
+
+            newimg2.classList.add("uploadimage");
+            newimg2.classList.add("button");
+
+            document.getElementById("reactscroll").appendChild(newimg2);
+            
+            newimg2.onclick = function(){
+
+                squares_react.currentreact.push("trashmagic/" + this.id.substring(5) + ".png");
+                savejson();
+        
+                var newbox = document.createElement("DIV");
+                newbox.className = "reactbox";
+                var newimg = document.createElement("IMG");
+                newimg.className = "react";
+                newimg.src = "trashmagic/" + this.id.substring(5) + ".png";
+                newbox.appendChild(newimg);
+                document.getElementById("squarebox").appendChild(newbox);
+                newbox.id = "react" + (squares_react.currentreact.length - 1).toString();
+                newbox.onclick = function(){
+                    //remove from the structure as well
+                    
+                    thisindex = this.id.substring(5);
+                    var tempreact = [];
+                    for(var index = 0;index < squares_react.currentreact.length;index++){
+                        if(index != thisindex){
+                            tempreact.push(squares_react.currentreact[index]);
+                        }
+                    }
+                    squares_react.currentreact = tempreact;
+                    savejson();        
+                    this.remove();
+                }
+            }
+
+        }
+    }
+};
+httpc9.open("GET", "dir.php?filename=trashmagic", true);
+httpc9.send();
+
+function savejson(){
+    var url = "filesaver.php";        
+    var httpc = new XMLHttpRequest();
+    httpc.open("POST", url, true);
+    httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    httpc.send("data="+encodeURIComponent(JSON.stringify(squares_react,null,"    "))+"&filename=squares_react.txt");//send text to filesaver.php
+}
+
+
+
+</script>
+<style>
+body{
+    overflow:hidden;
+    background-color:#9f8767;    
+}
+.imagebox{
+    margin-bottom:2em;
+    margin-top:2em;
+    padding-bottom:2em; 
+    padding-top:2em;
+    border-bottom:solid;
+}
+.deletespan{
+    color:red;
+    border:solid;
+    border-color:red;
+    border-radius:0.5em;
+    padding: 1em 1em 1em 1em;
+    cursor:pointer;
+}
+.deletespan:hover{
+    background-color:#ff000080;
+}
+#squarescroll{
+    position:absolute;
+    left:20px;
+    top:20px;
+    bottom:20px;
+    right:50%;
+    overflow:scroll;
+    border:solid;
+    margin:1em 1em 1em 1em;
+    border-width:5px;
+    border-radius:20px;
+}
+#reactscroll{
+    position:absolute;
+    right:20px;
+    top:20px;
+    bottom:20px;
+    left:50%;
+    overflow:scroll;
+    border:solid;
+    margin:1em 1em 1em 1em;
+    border-width:5px;
+    border-radius:20px;
+    
+}
+#scroll{
+    position:absolute;
+    right:0px;
+    bottom:0px;
+    
+}
+#scroll img{
+    max-width:80%;
+    display:block;
+    margin:auto;
+    margin-top:1em;
+    border:solid;
+}
+#squareimage{
+    position:absolute;
+    top:0px;
+    left:0px;
+    z-index:-2;
+}
+#squarebox{
+    position:absolute;
+    top:0px;
+    left:0px;
+    padding:3em 3em 3em 3em;
+    overflow:scroll;
+}
+.react{
+    width:80px;
+    height:80px;
+}
+.reactbox{
+    display:inline;
+    margin:15px 15px 15px 15px;
+}
+.delete{
+    width:25px;
+    height:25px;
+}
+.filelabel{
+    display:none;
+}
+H1{
+    text-align:center;
+    font-size:3em;
+    font-family:Comic Sans MS;
+}
+</style>
+</body>
+</html>
